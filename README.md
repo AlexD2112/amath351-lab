@@ -214,7 +214,7 @@ the entire closed contour as one global solution y(x). Points are found by
 bracketed root solving of F = C, not by numerical ODE integration. Tests verify
 the implicit level, derivatives, and branch endpoints independently.
 
-The page also gives the sufficient exactness condition on an open rectangle
+The page also gives the necessary and sufficient exactness criterion on an open rectangle
 and derives F by integrating M and recovering g(y) from N. Edits and page
 hiding pause playback; reduced motion uses discrete advances. Source and math
 helpers: **src/exact-equations.html** and **src/exact-equations-model.cjs**.
