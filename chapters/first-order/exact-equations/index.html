@@ -1,0 +1,283 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Overlay contours and a slope field, follow either solution branch, and watch a changing point keep the same value of F.">
+  <meta name="theme-color" content="#624298">
+  <title>Follow a curve. Keep F constant. · AMATH 351 Lab</title>
+  <link rel="canonical" href="https://shzhang3.github.io/amath351-lab/chapters/first-order/exact-equations/">
+  <link rel="stylesheet" href="../../../assets/lab.css">
+</head>
+<body>
+  <a class="site-skip" href="#main-content">Skip to content</a>
+  <div class="site-wrap">
+    <header class="site-header">
+      <a class="site-brand" href="../../../"><span class="site-brand-mark" aria-hidden="true">y′</span>AMATH 351 / Lab</a>
+      <nav aria-label="Main navigation"><a href="../../../">Chapters</a><a href="https://shzhang3.github.io/#teaching">Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">GitHub ↗</a></nav>
+    </header>
+<nav class="site-breadcrumbs" aria-label="Breadcrumb"><a href="../../../">All chapters</a><span aria-hidden="true">/</span><a href="../">Chapter 01: First-order equations</a><span aria-hidden="true">/</span><span aria-current="page">Follow a curve. Keep F constant.</span></nav>
+    <main id="main-content" tabindex="-1"><noscript>Enable JavaScript to use the interactive plots. Explanations and navigation remain available.</noscript><section class="lab-intro">
+  <div class="site-kicker">Section 1.6 · Exact equations</div>
+  <h1>Follow a curve. Keep F constant.</h1>
+  <p class="lab-math">[(x + y)/(1 + y²)] y′ = −x − arctan y</p>
+  <p>The slope field tells us how to move. A level curve tells us what stays unchanged. For this equation, both describe the same local solution.</p>
+</section>
+<section id="ex-explorer" class="lab-interactive" aria-labelledby="ex-heading">
+  <h2 id="ex-heading">The solution follows a contour of F</h2>
+  <p class="lab-math ex-formula">F(x, y) = ½x² + x arctan y + ½ ln(1 + y²)</p>
+  <div class="ex-workspace">
+    <div class="ex-controls">
+      <label class="lab-label" for="ex-level">Choose a level C: <span id="ex-level-value" class="lab-numbers">0.50</span>
+        <input class="lab-slider" id="ex-level" type="range" min="0.1" max="1" step="0.05" value="0.5">
+      </label>
+      <p class="lab-small">Changing C selects a different level curve. Moving along the selected curve keeps C fixed.</p>
+      <div class="lab-controls" role="group" aria-label="Choose a graph branch">
+        <button class="lab-button lab-stage-button" type="button" data-ex-branch="upper" aria-pressed="true">Upper arc</button>
+        <button class="lab-button lab-stage-button" type="button" data-ex-branch="lower" aria-pressed="false">Lower arc</button>
+      </div>
+      <label class="lab-label" for="ex-progress">Position along the arc: <span id="ex-progress-value" class="lab-numbers">50%</span>
+        <input class="lab-slider" id="ex-progress" type="range" min="0" max="100" step="0.1" value="50">
+      </label>
+      <div class="lab-controls">
+        <button class="lab-button lab-primary" id="ex-play" type="button">Follow solution</button>
+        <button class="lab-button" id="ex-start" type="button">Back to left end</button>
+      </div>
+      <div class="ex-toggles">
+        <label><input type="checkbox" id="ex-field" checked> Show slope field</label>
+        <label><input type="checkbox" id="ex-contours" checked> Show other level curves</label>
+      </div>
+      <button class="lab-button" id="ex-reset" type="button">Reset exploration</button>
+      <p class="lab-small">The point moves toward increasing x and stops at the right endpoint. Switch arcs to inspect the other solution branch.</p>
+    </div>
+    <div class="ex-visual">
+      <div class="ex-readout">
+        <div><span class="lab-small">Recomputed at the moving point</span><p id="ex-f-value" class="lab-math lab-numbers"></p></div>
+        <div class="lab-small lab-numbers"><p id="ex-target"></p><p id="ex-error"></p></div>
+      </div>
+      <svg id="ex-plot" role="img" aria-label="Level curves with a slope field and a moving point"></svg>
+      <div class="lab-row lab-small ex-legend">
+        <span><i class="ex-field-key"></i>Slope field</span>
+        <span><i class="ex-selected-key"></i>Selected y(x) arc</span>
+        <span><i class="ex-other-key"></i>Other arc, same C</span>
+        <span><i class="ex-tangent-key"></i>Current tangent</span>
+      </div>
+      <p class="lab-small">Open circles mark vertical tangencies. Each arc between them is a graph y(x); the whole closed contour is not one global graph.</p>
+      <p id="ex-status" class="ex-status" aria-live="polite"></p>
+    </div>
+  </div>
+  <div class="ex-values">
+    <div><h3>The point moves</h3><p id="ex-point" class="lab-numbers"></p><p id="ex-slope" class="lab-numbers"></p><p id="ex-interval" class="lab-small"></p></div>
+    <div><h3>The terms change</h3><p id="ex-term-x" class="lab-numbers"></p><p id="ex-term-mixed" class="lab-numbers"></p><p id="ex-term-y" class="lab-numbers"></p></div>
+    <div><h3>The total stays fixed</h3><p class="lab-math">dF/dx = Fₓ + Fᵧ y′</p><p id="ex-balance" class="lab-numbers"></p><p class="lab-small">Follow the orange tangent: the contributions to the change in F cancel.</p></div>
+  </div>
+</section>
+<section class="lab-explanation">
+  <h2>Why does the field follow these contours?</h2>
+  <p class="lab-math">M = x + arctan y, &nbsp; N = (x + y)/(1 + y²)</p>
+  <p>Both have continuous first partial derivatives on the whole plane, and Mᵧ = Nₓ = 1/(1 + y²). The exactness criterion applies. Here Fₓ = M and Fᵧ = N, so along any solution:</p>
+  <p class="lab-math">dF/dx = M + N y′ = 0 &nbsp; ⟹ &nbsp; F(x, y) = C.</p>
+  <p>At a point where N ≠ 0, the slope of the contour is y′ = −M/N, exactly the slope prescribed by the ODE. An initial condition (x₀, y₀) selects the level C = F(x₀, y₀).</p>
+</section>
+<details class="lab-explanation">
+  <summary>The sufficient condition: when does Mᵧ = Nₓ guarantee exactness?</summary>
+  <p>Let M and N have continuous first partial derivatives on an open rectangle R. If Mᵧ = Nₓ throughout R, then there is a function F on R with Fₓ = M and Fᵧ = N. Thus M dx + N dy = dF, and the equation is exact.</p>
+  <p>The test is also necessary under these smoothness assumptions. A level curve F = C locally defines a solution y(x) wherever N = Fᵧ ≠ 0.</p>
+</details>
+<details class="lab-explanation">
+  <summary>Recover F from the equation</summary>
+  <p>First integrate Fₓ = x + arctan y with respect to x:</p>
+  <p class="lab-math">F = ½x² + x arctan y + g(y).</p>
+  <p>The missing part may be any function of y, since its partial derivative with respect to x is zero. Now match Fᵧ to N:</p>
+  <p class="lab-math">x/(1 + y²) + g′(y) = (x + y)/(1 + y²).</p>
+  <p>Therefore g′(y) = y/(1 + y²), so g(y) = ½ ln(1 + y²), up to a constant absorbed into C.</p>
+</details>
+<details class="lab-explanation">
+  <summary>What happens at the endpoints, and how is the animation computed?</summary>
+  <p>At the two marked endpoints, N = 0 while M ≠ 0. The contour has a vertical tangent, and M + N y′ = 0 cannot hold for a finite derivative y′ there. These points are limits of the displayed y(x) branches, not included endpoints of their intervals of solution. No slope-field segment is assigned where N = 0.</p>
+  <p>The closed contour consists of two graph branches sharing these limiting endpoints. Playback stays on one branch and stops; it does not continue through a vertical tangent as a single y(x).</p>
+  <p>Each displayed point is found by solving the implicit relation F(x, y) = C. The readout independently evaluates F at that point; the small residual |F − C| reflects numerical rounding. This illustrates the exact solution relation, rather than testing an ODE time-stepping method.</p>
+</details>
+<style>
+  #ex-explorer .ex-workspace{display:grid;grid-template-columns:235px minmax(0,1fr);gap:26px;align-items:start;}
+  #ex-explorer .ex-workspace>div{min-width:0;}
+  #ex-explorer .ex-formula{margin-bottom:24px;}
+  #ex-explorer .ex-toggles{display:grid;gap:12px;margin:20px 0;font-size:13px;}
+  #ex-explorer .ex-toggles label{display:flex;align-items:center;gap:8px;}
+  #ex-explorer input[type=checkbox]{accent-color:var(--site-purple);width:16px;height:16px;}
+  #ex-explorer .ex-readout{display:flex;justify-content:space-between;gap:12px;align-items:center;background:var(--site-soft);border-radius:8px;padding:12px 17px;}
+  #ex-explorer .ex-readout p{margin:3px 0;}
+  #ex-explorer #ex-f-value{font-size:25px;color:var(--site-purple);}
+  #ex-explorer svg{display:block;width:100%;margin-top:12px;}
+  #ex-explorer svg text{fill:var(--site-ink);font-size:12px;}
+  #ex-explorer .ex-legend{gap:8px 18px;margin-top:8px;}
+  #ex-explorer .ex-legend span{display:inline-flex;align-items:center;gap:7px;}
+  #ex-explorer .ex-legend i{width:20px;border-top:1px solid var(--site-muted);}
+  #ex-explorer .ex-legend .ex-selected-key{border-color:var(--site-purple);border-top-width:3px;}
+  #ex-explorer .ex-legend .ex-other-key{border-color:var(--site-purple);border-top-style:dashed;}
+  #ex-explorer .ex-legend .ex-tangent-key{border-color:var(--site-orange);border-top-width:3px;}
+  #ex-explorer .ex-status{background:var(--site-soft);border-left:3px solid var(--site-purple);padding:12px 15px;}
+  #ex-explorer .ex-values{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:24px;border-top:1px solid var(--site-line);margin-top:24px;padding-top:20px;}
+  #ex-explorer .ex-values h3{font-size:15px;margin:0 0 12px;}
+  #ex-explorer .ex-values p{margin:7px 0;}
+  @media(max-width:760px){#ex-explorer .ex-workspace,#ex-explorer .ex-values{grid-template-columns:minmax(0,1fr);}#ex-explorer .ex-readout{flex-wrap:wrap;}#ex-explorer #ex-f-value{font-size:22px;}}
+</style>
+<script src="../../../assets/vendor/d3.v7.9.0.min.js"></script>
+<script>// Section 1.6: (x + atan y) dx + (x+y)/(1+y^2) dy = 0.
+(function(root){
+  const M=(x,y)=>x+Math.atan(y);
+  const N=(x,y)=>(x+y)/(1+y*y);
+  const terms=(x,y)=>[x*x/2,x*Math.atan(y),Math.log1p(y*y)/2];
+  const potential=(x,y)=>terms(x,y).reduce((a,b)=>a+b,0);
+  const slope=(x,y)=>Math.abs(N(x,y))<1e-10?null:-M(x,y)/N(x,y);
+  function bisectIncreasing(fn,target,lo,hi){
+    for(let i=0;i<64;i++){const mid=(lo+hi)/2;if(fn(mid)<target)lo=mid;else hi=mid;}
+    return (lo+hi)/2;
+  }
+  function bounds(c){
+    if(!Number.isFinite(c)||c<.1||c>1)throw new RangeError('Choose 0.1 <= C <= 1.');
+    // F(x,.) has its minimum at y=-x. These are the vertical tangencies.
+    const a=bisectIncreasing(x=>potential(x,-x),c,0,3);
+    // Completing the square in x gives the largest |y| on the contour.
+    const ymax=bisectIncreasing(y=>(Math.log1p(y*y)-Math.atan(y)**2)/2,c,0,9);
+    return {a,ymax};
+  }
+  function ordinate(x,c,branch,b=bounds(c)){
+    if(!Number.isFinite(x)||Math.abs(x)>b.a+1e-12)return null;
+    if(Math.abs(Math.abs(x)-b.a)<1e-12)return -x;
+    const center=-x;
+    // On the upper arc F increases with y; on the lower arc it increases
+    // with distance below -x. Solve F=C rather than accumulating ODE drift.
+    if(branch==='lower')return center-bisectIncreasing(d=>potential(x,center-d),c,0,center+b.ymax);
+    return bisectIncreasing(y=>potential(x,y),c,center,b.ymax);
+  }
+  function point(c,branch,progress,b=bounds(c)){
+    const t=Math.max(0,Math.min(1,progress));
+    const x=-b.a*Math.cos(Math.PI*t),y=ordinate(x,c,branch,b);
+    return {x,y,endpoint:Math.abs(Math.abs(x)-b.a)<1e-12};
+  }
+  function curve(c,branch,count=301){
+    const b=bounds(c);
+    return Array.from({length:count},(_,i)=>point(c,branch,i/(count-1),b));
+  }
+  const fresh=()=>({level:.5,branch:'upper',progress:.5,field:true,contours:true});
+  function restore(raw){
+    const s=fresh();if(raw?.version!==1)return s;
+    if(Number.isFinite(raw.level))s.level=Math.round(Math.max(.1,Math.min(1,raw.level))*20)/20;
+    if(raw.branch==='upper'||raw.branch==='lower')s.branch=raw.branch;
+    if(Number.isFinite(raw.progress))s.progress=Math.max(0,Math.min(1,raw.progress));
+    for(const k of ['field','contours'])if(typeof raw[k]==='boolean')s[k]=raw[k];
+    return s;
+  }
+  const api=Object.freeze({M,N,terms,potential,slope,bounds,ordinate,point,curve,fresh,restore});
+  if(typeof module==='object'&&module.exports)module.exports=api;else root.Amath351Exact=api;
+})(globalThis);
+</script>
+<script>
+(()=>{
+  const root=document.getElementById('ex-explorer'),el=id=>root.querySelector('#ex-'+id),m=Amath351Exact,key='amath351:exact:v1';
+  let state=m.fresh();try{state=m.restore(JSON.parse(window.localStorage.getItem(key)));}catch(_){}
+  const reduced=window.matchMedia('(prefers-reduced-motion: reduce)'),cache=new Map();
+  let playing=false,frame=0,last=null,chart=null,bounds=m.bounds(state.level);
+  const fmt=(n,k=4)=>(Math.abs(n)<1e-10?0:n).toFixed(k);
+  const save=()=>{try{window.localStorage.setItem(key,JSON.stringify({version:1,...state}));}catch(_){}};
+  const curve=(c,branch)=>{const k=c+branch;if(!cache.has(k))cache.set(k,m.curve(c,branch));return cache.get(k);};
+  function pause(){playing=false;last=null;cancelAnimationFrame(frame);}
+  function sync(announce=true){
+    const p=m.point(state.level,state.branch,state.progress,bounds),f=m.potential(p.x,p.y),s=m.slope(p.x,p.y),v=m.terms(p.x,p.y);
+    el('level').value=state.level;el('level-value').textContent=fmt(state.level,2);
+    el('progress').value=100*state.progress;el('progress-value').textContent=Math.round(100*state.progress)+'%';
+    for(const k of ['field','contours'])el(k).checked=state[k];
+    root.querySelectorAll('[data-ex-branch]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.exBranch===state.branch)));
+    el('play').textContent=playing?'Pause':reduced.matches?'Advance along arc':state.progress===1?'Replay solution':'Follow solution';
+    el('f-value').textContent=`F(x, y) = ${fmt(f,6)}`;
+    el('target').textContent=`Selected C = ${fmt(state.level,2)}`;
+    el('error').textContent=`|F − C| = ${Math.abs(f-state.level).toExponential(1)}`;
+    el('point').textContent=`x = ${fmt(p.x)} · y = ${fmt(p.y)}`;
+    el('slope').textContent=p.endpoint?'y′ undefined · vertical tangent':`y′ = −M/N = ${fmt(s)}`;
+    el('interval').textContent=`This branch: −${fmt(bounds.a,3)} < x < ${fmt(bounds.a,3)} (endpoints rounded).`;
+    el('term-x').textContent=`½x² = ${fmt(v[0],6)}`;
+    el('term-mixed').textContent=`x arctan y = ${fmt(v[1],6)}`;
+    el('term-y').textContent=`½ ln(1 + y²) = ${fmt(v[2],6)}`;
+    el('balance').textContent=p.endpoint?'The y(x) chain-rule calculation applies inside the open interval.':`${fmt(m.M(p.x,p.y))} ${m.N(p.x,p.y)*s<0?'−':'+'} ${fmt(Math.abs(m.N(p.x,p.y)*s))} = ${fmt(m.M(p.x,p.y)+m.N(p.x,p.y)*s)}.`;
+    el('status').setAttribute('aria-live',announce?'polite':'off');
+    el('status').textContent=p.endpoint?`${state.progress===0?'Left':'Right'} endpoint limit: F still tends to C, but the tangent is vertical. ${state.progress===0?'Move into the arc to inspect y(x).':'Playback stops here; switch arcs to explore the other branch.'}`:`On the ${state.branch} arc, x and y change while F stays at ${fmt(state.level,2)}. The orange tangent agrees with the local slope field.`;
+    return p;
+  }
+  function plot(){
+    const node=el('plot'),w=Math.max(250,node.parentElement.getBoundingClientRect().width),h=w<430?420:540;
+    const b={left:43,right:w-15,top:26,bottom:h-42};
+    const xs=d3.scaleLinear().domain([-2.7,2.7]).range([b.left,b.right]),ys=d3.scaleLinear().domain([-8.2,8.2]).range([b.bottom,b.top]);
+    const svg=d3.select(node).attr('viewBox',`0 0 ${w} ${h}`).attr('height',h);svg.selectAll('*').remove();
+    svg.append('defs').append('clipPath').attr('id','ex-clip').append('rect').attr('x',b.left).attr('y',b.top).attr('width',b.right-b.left).attr('height',b.bottom-b.top);
+    const marks=svg.append('g').attr('clip-path','url(#ex-clip)');
+    for(const x of [-2,-1,0,1,2])marks.append('path').attr('d',`M${xs(x)},${b.top}V${b.bottom}`).attr('stroke','var(--site-line)');
+    for(const y of [-8,-6,-4,-2,0,2,4,6,8])marks.append('path').attr('d',`M${b.left},${ys(y)}H${b.right}`).attr('stroke','var(--site-line)');
+    const line=d3.line().x(p=>xs(p.x)).y(p=>ys(p.y));
+    if(state.contours)for(const c of [.1,.3,.5,.7,1]){
+      if(Math.abs(c-state.level)<1e-8)continue;
+      for(const branch of ['upper','lower'])marks.append('path').datum(curve(c,branch)).attr('d',line).attr('fill','none').attr('stroke','var(--site-teal)').attr('stroke-opacity',.38).attr('stroke-width',1.3).attr('data-contour-level',c);
+      const ymax=m.bounds(c).ymax;svg.append('text').attr('x',xs(-Math.atan(ymax))+5).attr('y',ys(ymax)-5).attr('font-size',10).attr('fill','var(--site-teal)').text(`C=${c.toFixed(1)}`);
+    }
+    const sx=xs(1)-xs(0),sy=ys(0)-ys(1);
+    function tangent(x,y,len){const vx=sx*m.N(x,y),vy=sy*m.M(x,y),norm=Math.hypot(vx,vy);if(norm<1e-12)return '';const dx=len*vx/norm/2,dy=len*vy/norm/2;return `M${xs(x)-dx},${ys(y)-dy}L${xs(x)+dx},${ys(y)+dy}`;}
+    if(state.field){
+      const nx=w<430?15:23,ny=23,len=Math.min(19,(b.right-b.left)/nx*.72,(b.bottom-b.top)/ny*.72);
+      for(let i=0;i<nx;i++)for(let j=0;j<ny;j++){
+        const x=-2.6+5.2*i/(nx-1),y=-8+16*j/(ny-1);if(m.slope(x,y)===null)continue;
+        marks.append('path').attr('d',tangent(x,y,len)).attr('stroke','var(--site-muted)').attr('stroke-opacity',.68).attr('stroke-width',1).attr('data-field-slope',m.slope(x,y)).attr('data-x',x).attr('data-y',y);
+      }
+    }
+    for(const branch of ['upper','lower'])marks.append('path').datum(curve(state.level,branch)).attr('d',line).attr('fill','none').attr('stroke','var(--site-purple)').attr('stroke-width',branch===state.branch?3:1.8).attr('stroke-dasharray',branch===state.branch?null:'6 5').attr('stroke-opacity',branch===state.branch?1:.55).attr('data-solution-branch',branch);
+    for(const x of [-bounds.a,bounds.a])marks.append('circle').attr('cx',xs(x)).attr('cy',ys(-x)).attr('r',5).attr('fill','var(--site-paper)').attr('stroke','var(--site-orange)').attr('stroke-width',1.8).attr('data-endpoint','');
+    const guide=marks.append('path').attr('stroke','var(--site-orange)').attr('stroke-opacity',.25).attr('stroke-dasharray','3 4');
+    const tan=marks.append('path').attr('stroke','var(--site-orange)').attr('stroke-width',3).attr('data-current-tangent','');
+    const dot=marks.append('circle').attr('r',5).attr('stroke','var(--site-orange)').attr('stroke-width',2).attr('data-current-point','');
+    const xa=svg.append('g').attr('transform',`translate(0,${b.bottom})`).call(d3.axisBottom(xs).tickValues([-2,-1,0,1,2]).tickSize(0).tickPadding(9));
+    const ya=svg.append('g').attr('transform',`translate(${b.left},0)`).call(d3.axisLeft(ys).tickValues([-8,-6,-4,-2,0,2,4,6,8]).tickSize(0).tickPadding(9));
+    xa.select('.domain').remove();ya.select('.domain').remove();
+    svg.append('rect').attr('x',b.left).attr('y',b.top).attr('width',b.right-b.left).attr('height',b.bottom-b.top).attr('fill','none').attr('stroke','var(--site-line)');
+    svg.append('text').attr('x',b.left).attr('y',15).text('y');
+    svg.append('text').attr('x',b.right).attr('y',15).attr('text-anchor','end').text(`Selected F = ${fmt(state.level,2)}`);
+    svg.append('text').attr('x',b.right).attr('y',h-6).attr('text-anchor','end').text('x');
+    chart={svg,guide,tan,dot,xs,ys,b,tangent,w};
+  }
+  function move(p){
+    const {svg,guide,tan,dot,xs,ys,b,tangent,w}=chart;
+    guide.attr('d',`M${xs(p.x)},${b.top}V${b.bottom}`);
+    tan.attr('d',tangent(p.x,p.y,w<430?36:50));
+    dot.attr('cx',xs(p.x)).attr('cy',ys(p.y)).attr('fill',p.endpoint?'var(--site-paper)':'var(--site-orange)').attr('data-x',p.x).attr('data-y',p.y).attr('data-f',m.potential(p.x,p.y)).attr('data-endpoint',String(p.endpoint));
+    svg.attr('aria-label',`Slope field and level curves of F. Selected C=${state.level}, ${state.branch} arc. Moving point x=${fmt(p.x)}, y=${fmt(p.y)}, F=${fmt(m.potential(p.x,p.y),6)}. ${p.endpoint?'Vertical tangent at an excluded endpoint.':'The tangent follows the field.'}`);
+  }
+  function render(rebuild=false,announce=true){if(rebuild){bounds=m.bounds(state.level);plot();}move(sync(announce));}
+  for(const k of ['level','progress']){
+    el(k).addEventListener('input',()=>{pause();state[k]=Number(el(k).value)/(k==='progress'?100:1);render(k==='level');});el(k).addEventListener('change',save);
+  }
+  for(const k of ['field','contours'])el(k).addEventListener('change',()=>{pause();state[k]=el(k).checked;render(true);save();});
+  root.querySelectorAll('[data-ex-branch]').forEach(b=>b.addEventListener('click',()=>{pause();state.branch=b.dataset.exBranch;render(true);save();}));
+  el('start').addEventListener('click',()=>{pause();state.progress=0;render();save();});
+  el('reset').addEventListener('click',()=>{pause();state=m.fresh();render(true);save();});
+  function tick(stamp){
+    if(!playing)return;
+    if(last!==null)state.progress=Math.min(1,state.progress+Math.min((stamp-last)/1000,.1)*.09);
+    last=stamp;render(false,false);
+    if(state.progress===1){pause();render();save();}else frame=requestAnimationFrame(tick);
+  }
+  el('play').addEventListener('click',()=>{
+    if(playing){pause();render();save();return;}
+    if(state.progress===1)state.progress=0;
+    if(reduced.matches){state.progress=Math.min(1,state.progress+.05);render();save();return;}
+    playing=true;last=null;render(false,false);frame=requestAnimationFrame(tick);
+  });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();render();save();}});
+  reduced.addEventListener('change',()=>{pause();render();});
+  new ResizeObserver(()=>render(true,false)).observe(root);render(true);
+})();
+</script>
+</main>
+<nav class="site-example-nav" aria-label="Example navigation"><a href="../integrating-factors/"><small>Previous example</small>← What does an integrating factor change?</a><a class="site-all-examples" href="../">All chapter examples</a><span></span></nav>
+    <footer class="site-footer"><span>University of Washington · Autumn 2026</span><div><a href="https://shzhang3.github.io/#teaching">Shiheng Zhang · Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">Contribute on GitHub ↗</a></div></footer>
+  </div>
+
+</body>
+</html>

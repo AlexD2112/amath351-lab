@@ -195,6 +195,30 @@ is valid on either interval (a constant multiple of |x|⁻³ on the left).
 Source and exact helpers are **src/integrating-factors.html** and
 **src/integrating-factor-model.cjs**.
 
+## Section 1.6: exact equations and level curves
+
+[Follow a curve. Keep F constant.](https://shzhang3.github.io/amath351-lab/chapters/first-order/exact-equations/)
+overlays a slope field and contours for the lecture example
+(x + arctan y) + [(x + y)/(1 + y²)] y′ = 0. Its potential is
+F = ½x² + x arctan y + ½ ln(1 + y²).
+
+Choose a level C, then follow either graph branch. The moving tangent matches
+the field; F and its three changing terms are recomputed at every point.
+The residual and chain-rule cancellation make conservation visible. Layer
+toggles let students compare the slope field with the level curves.
+
+Positive levels are closed contours with two graph branches. Playback follows
+increasing x along one branch and stops at a vertical tangent, where N = 0
+and M ≠ 0. Open circles mark the excluded endpoints; the page does not present
+the entire closed contour as one global solution y(x). Points are found by
+bracketed root solving of F = C, not by numerical ODE integration. Tests verify
+the implicit level, derivatives, and branch endpoints independently.
+
+The page also gives the sufficient exactness condition on an open rectangle
+and derives F by integrating M and recovering g(y) from N. Edits and page
+hiding pause playback; reduced motion uses discrete advances. Source and math
+helpers: **src/exact-equations.html** and **src/exact-equations-model.cjs**.
+
 ## Edit and build
 
 **src/catalog.json** defines the three chapters and their example lists. An
@@ -203,7 +227,8 @@ Add an example's source fragment and its catalog entry to extend the lab.
 
 The experiment sources are **src/experiment.html**, **src/prologue.html**,
 **src/velocity.html**, **src/planet-gzyx.html**, **src/slope-fields.html**,
-**src/separable.html**, **src/separable-examples.html**, and **src/integrating-factors.html**.
+**src/separable.html**, **src/separable-examples.html**, **src/integrating-factors.html**,
+and **src/exact-equations.html**.
 Exact mathematical helpers live in the **-model.cjs** files, embedded during the
 build; the two Section 1.2 experiments share **src/motion-model.cjs**, and Section
 1.3 uses **src/slope-field-model.cjs**. **src/page.html** and
