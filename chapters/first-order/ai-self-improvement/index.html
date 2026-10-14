@@ -70,6 +70,7 @@
       <svg id="ag-phase-plot" role="img" aria-label="Phase line showing the direction of change in capacity"></svg>
       <div class="ag-plot-heading"><h3>2. The result: capacity A(t)</h3><button type="button" id="ag-reveal" class="lab-button lab-primary">Reveal solution</button></div>
       <svg id="ag-solution-plot" role="img" aria-label="Predict the trajectory from the initial condition before revealing it"></svg>
+      <p id="ag-growth-note" class="lab-small" hidden></p>
       <div class="lab-controls">
         <button type="button" class="lab-button lab-primary" id="ag-play">Follow solution</button>
         <button type="button" class="lab-button" id="ag-start">Back to t = 0</button>
@@ -81,7 +82,7 @@
     </div>
   </div>
   <div id="ag-readouts" class="ag-readouts" aria-label="Current capacity and growth rates"></div>
-  <p class="lab-small">The axes remain fixed during playback. Curves leaving the plot continue in the numeric readouts. For A &gt; 0, the sign of k(A) gives the direction of change; A = 0 is an equilibrium even when k(0) ≠ 0.</p>
+  <p class="lab-small">The exponential view fits the entire selected time interval. The axes remain fixed during playback; choosing a longer interval expands the scale. In other views, curves leaving the plot continue in the numeric readouts. For A &gt; 0, the sign of k(A) gives the direction of change; A = 0 is an equilibrium even when k(0) ≠ 0.</p>
 </section>
 <section class="lab-explanation">
   <h2>One feedback loop, three assumptions</h2>
@@ -214,6 +215,12 @@
     return Array.from({length:count},(_,i)=>{const t=end*i/(count-1);return {t,a:value(c,t)};});
   }
   function bounds(s){
+    if(s.mode==='exponential'){
+      // Fit the whole selected time interval, with headroom and a rounded limit.
+      // Keep this scale fixed while playing so motion is not hidden by rescaling.
+      const peak=1.08*value(s,s.window),unit=10**Math.floor(Math.log10(peak));
+      return Math.ceil(peak/unit)*unit;
+    }
     if(s.mode==='compare')return 6*s.a0;
     return Math.max(4,Math.ceil(1.3*Math.max(s.a0,level(s)||0)));
   }
@@ -253,6 +260,8 @@
     el('progress').disabled=!state.revealed;el('progress').value=state.progress*1000;
     el('time-value').textContent='t = '+fmt(t,5)+' years';
     el('reveal').textContent=state.revealed?'Hide solution':'Reveal solution';
+    el('growth-note').hidden=state.mode!=='exponential'||!state.revealed;
+    if(state.mode==='exponential')el('growth-note').textContent=`At t = ${state.window} years, A(t) = ${fmt(m.value(state,state.window))}. Growth continues beyond this window: A(t) → ∞ as t → ∞.`+(state.window<16?' Choose a longer time window to see larger values.':'');
     el('play').textContent=playing?'Pause':reduced.matches?'Advance time':state.progress===1?'Replay solution':'Follow solution';
     const T=state.mode==='compare'?Infinity:m.blowup(configs[0]);
     el('time-note').textContent=T<=state.window?`Playback stops just before T* = ${fmt(T,5)} years; the value at T* is undefined.`:state.mode==='compare'?'Time continues for the other models after the threshold solution ends.':'Scrub time or follow the point. Parameter changes return to t = 0.';
@@ -279,8 +288,9 @@
     const clip='ag-clip-'+id;svg.append('defs').append('clipPath').attr('id',clip).append('rect').attr('x',b.l).attr('y',b.t).attr('width',b.r-b.l).attr('height',b.b-b.t);
     const marks=svg.append('g').attr('clip-path',`url(#${clip})`);
     for(const v of y.ticks(4))marks.append('path').attr('d',`M${b.l},${y(v)}H${b.r}`).attr('stroke','var(--site-line)');
-    svg.append('g').attr('transform',`translate(0,${b.b})`).call(d3.axisBottom(x).ticks(w<400?4:6).tickSize(0).tickPadding(8)).select('.domain').attr('stroke','var(--site-line)');
-    svg.append('g').attr('transform',`translate(${b.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(0).tickPadding(7)).select('.domain').attr('stroke','var(--site-line)');
+    const tickNumber=v=>Math.abs(v)>=1e4?d3.format('.2~e')(v).replace('e+','e'):d3.format('~g')(v);
+    svg.append('g').attr('transform',`translate(0,${b.b})`).call(d3.axisBottom(x).ticks(w<400?4:6).tickFormat(tickNumber).tickSize(0).tickPadding(8)).select('.domain').attr('stroke','var(--site-line)');
+    svg.append('g').attr('transform',`translate(${b.l},0)`).call(d3.axisLeft(y).ticks(4).tickFormat(tickNumber).tickSize(0).tickPadding(7)).select('.domain').attr('stroke','var(--site-line)');
     svg.append('text').attr('x',b.l).attr('y',14).text(yLabel);svg.append('text').attr('x',b.r).attr('y',height-5).attr('text-anchor','end').text(xLabel);
     return {svg,marks,x,y,b,w,height};
   }

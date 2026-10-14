@@ -237,7 +237,9 @@ supported.
 The threshold solution stops before its finite singular time. In comparison
 mode, the other two trajectories continue while the ended solution is labeled
 undefined. Fixed plot limits and numeric readouts distinguish leaving the plot
-from reaching infinity. All trajectories use analytic formulas. Explanations
+from reaching infinity. The exponential view fits its entire selected time
+interval, with a fixed scale during playback; extending the time window expands
+the capacity range and shows its continuing growth. All trajectories use analytic formulas. Explanations
 separate effective research capacity from accumulated knowledge and distinguish
 model consequences from forecasts. Counterexamples show that increasing relative
 growth alone does not imply finite-time blow-up, and diminishing returns alone

@@ -63,6 +63,12 @@
     return Array.from({length:count},(_,i)=>{const t=end*i/(count-1);return {t,a:value(c,t)};});
   }
   function bounds(s){
+    if(s.mode==='exponential'){
+      // Fit the whole selected time interval, with headroom and a rounded limit.
+      // Keep this scale fixed while playing so motion is not hidden by rescaling.
+      const peak=1.08*value(s,s.window),unit=10**Math.floor(Math.log10(peak));
+      return Math.ceil(peak/unit)*unit;
+    }
     if(s.mode==='compare')return 6*s.a0;
     return Math.max(4,Math.ceil(1.3*Math.max(s.a0,level(s)||0)));
   }

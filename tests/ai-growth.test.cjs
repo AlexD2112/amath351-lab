@@ -21,6 +21,16 @@ test('logistic equilibria and both sides of the limiting level are preserved',()
     close(m.value(c,100),6);
   }
 });
+test('exponential display includes the full time window without changing scale during playback',()=>{
+  for(const a0 of [.01,1,16])for(const r of [.1,.5,1.5])for(const window of [4,8,16]){
+    const c=config('exponential',{a0,r,window}),top=m.bounds(c),end=m.value(c,window);
+    assert(Number.isFinite(top)&&top>end&&top<2*end);
+    assert(m.curve(c,window).every(p=>p.a>=0&&p.a<top));
+    assert.equal(m.bounds({...c,progress:1}),top);
+    assert(m.bounds({...c,window:2*window})>top);
+  }
+  assert.equal(m.bounds(config('exponential')),60);
+});
 test('threshold equilibrium, asymptotic decay and finite-time blow-up are distinct',()=>{
   const low=config('threshold',{a0:1}),at=config('threshold',{a0:2}),high=config('threshold',{a0:3});
   assert.equal(m.blowup(low),Infinity);assert(m.value(low,40)<1e-8);
