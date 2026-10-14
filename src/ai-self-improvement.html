@@ -1,0 +1,287 @@
+<section class="lab-intro">
+  <div class="site-kicker">Section 2.1 · Growth models</div>
+  <h1>AI Self-Improvement Simulator</h1>
+  <p>As AI becomes more capable, does each unit of research capacity become better or worse at producing further improvement?</p>
+  <p class="lab-math">A′ = A k(A)</p>
+  <p class="lab-small">A is a normalized index of effective research capacity. These are hypothetical models of a feedback process, not forecasts of real AI progress.</p>
+</section>
+<section class="lab-interactive" id="ag-explorer" aria-labelledby="ag-title">
+  <h2 id="ag-title">Change the assumption. Watch the consequences.</h2>
+  <div class="ag-models" role="group" aria-label="Choose the self-improvement assumption">
+    <button type="button" class="lab-button lab-stage-button" data-ag-mode="exponential" aria-pressed="true"><strong>Constant efficiency</strong><span>Exponential · k(A) = r</span></button>
+    <button type="button" class="lab-button lab-stage-button" data-ag-mode="logistic" aria-pressed="false"><strong>Diminishing efficiency</strong><span>Logistic · k(A) = r(1 − A/K)</span></button>
+    <button type="button" class="lab-button lab-stage-button" data-ag-mode="threshold" aria-pressed="false"><strong>A minimum threshold</strong><span>Extinction–explosion · k(A) = αA − δ</span></button>
+    <button type="button" class="lab-button lab-stage-button" data-ag-mode="compare" aria-pressed="false"><strong>Compare the three</strong><span>Same start and initial growth rate</span></button>
+  </div>
+  <p id="ag-assumption" class="ag-assumption"></p>
+  <div class="ag-workspace">
+    <div class="ag-settings">
+      <label class="lab-label" for="ag-a0">Initial capacity A₀ <output id="ag-a0-value" class="lab-numbers"></output></label>
+      <input id="ag-a0" class="lab-slider" type="range" min="0.01" max="16" step="any" value="1">
+      <div id="ag-r-control">
+        <label class="lab-label" for="ag-r"><span id="ag-r-name">Relative rate r</span> <output id="ag-r-value" class="lab-numbers"></output></label>
+        <input id="ag-r" class="lab-slider" type="range" min="0.1" max="1.5" step="0.05" value="0.5">
+      </div>
+      <div id="ag-K-control" hidden>
+        <label class="lab-label" for="ag-K">Limiting capacity K <output id="ag-K-value" class="lab-numbers"></output></label>
+        <input id="ag-K" class="lab-slider" type="range" min="1" max="12" step="0.25" value="6">
+      </div>
+      <div id="ag-threshold-controls" hidden>
+        <label class="lab-label" for="ag-alpha">Feedback coefficient α <output id="ag-alpha-value" class="lab-numbers"></output></label>
+        <input id="ag-alpha" class="lab-slider" type="range" min="0.1" max="1.2" step="0.05" value="0.25">
+        <label class="lab-label" for="ag-delta">Loss rate δ <output id="ag-delta-value" class="lab-numbers"></output></label>
+        <input id="ag-delta" class="lab-slider" type="range" min="0" max="1.2" step="0.05" value="0.5">
+        <p id="ag-threshold" class="lab-math"></p>
+        <div class="ag-presets" role="group" aria-label="Place initial capacity relative to the threshold">
+          <button type="button" class="lab-button" data-ag-ratio="0.8">Below A꜀</button>
+          <button type="button" class="lab-button" data-ag-ratio="1">At A꜀</button>
+          <button type="button" class="lab-button" data-ag-ratio="1.2">Above A꜀</button>
+        </div>
+      </div>
+      <label class="lab-label" for="ag-window">Time window (years)</label>
+      <select class="lab-select" id="ag-window"><option value="4">0–4</option><option value="8" selected>0–8</option><option value="16">0–16</option></select>
+      <label class="lab-check" id="ag-field-control"><input type="checkbox" id="ag-field" checked> Show slope field</label>
+      <button type="button" class="lab-button" id="ag-reset">Reset exploration</button>
+      <p class="lab-small">First read k(A) and the phase line. Predict whether capacity will decline, approach a limit, or keep growing.</p>
+    </div>
+    <div class="ag-visual">
+      <div id="ag-legend" class="ag-legend lab-small"></div>
+      <div class="ag-plot-heading"><h3>1. The rule: relative growth k(A)</h3><span class="lab-small">Positive → growth · negative → decline</span></div>
+      <svg id="ag-rate-plot" role="img" aria-label="Relative growth rate as a function of capacity"></svg>
+      <svg id="ag-phase-plot" role="img" aria-label="Phase line showing the direction of change in capacity"></svg>
+      <div class="ag-plot-heading"><h3>2. The result: capacity A(t)</h3><button type="button" id="ag-reveal" class="lab-button lab-primary">Reveal solution</button></div>
+      <svg id="ag-solution-plot" role="img" aria-label="Predict the trajectory from the initial condition before revealing it"></svg>
+      <div class="lab-controls">
+        <button type="button" class="lab-button lab-primary" id="ag-play">Follow solution</button>
+        <button type="button" class="lab-button" id="ag-start">Back to t = 0</button>
+      </div>
+      <label class="lab-label" for="ag-progress">Time <output id="ag-time-value" class="lab-numbers"></output></label>
+      <input id="ag-progress" class="lab-slider" type="range" min="0" max="1000" step="1" value="0" disabled>
+      <p id="ag-time-note" class="lab-small"></p>
+      <p id="ag-status" class="ag-status" aria-live="polite"></p>
+    </div>
+  </div>
+  <div id="ag-readouts" class="ag-readouts" aria-label="Current capacity and growth rates"></div>
+  <p class="lab-small">The axes remain fixed during playback. Curves leaving the plot continue in the numeric readouts. For A &gt; 0, the sign of k(A) gives the direction of change; A = 0 is an equilibrium even when k(0) ≠ 0.</p>
+</section>
+<section class="lab-explanation">
+  <h2>One feedback loop, three assumptions</h2>
+  <div class="ag-table-wrap"><table class="ag-table"><thead><tr><th>Model</th><th>Relative rate k(A)</th><th>Consequence for A₀ &gt; 0</th></tr></thead><tbody>
+    <tr><td>Exponential</td><td>r</td><td>Unbounded as t → ∞; constant doubling time.</td></tr>
+    <tr><td>Logistic</td><td>r(1 − A/K)</td><td>Approach the stable equilibrium K.</td></tr>
+    <tr><td>Extinction–explosion</td><td>αA − δ</td><td>Decay below A꜀, equilibrium at A꜀, finite-time blow-up above it.</td></tr>
+  </tbody></table></div>
+  <p>The threshold is A꜀ = δ/α. Here “extinction” means effective research activity fading as capacity is lost. It does not mean an AI's learned knowledge is erased. K is a hypothetical limit under fixed conditions.</p>
+</section>
+<details class="lab-explanation">
+  <summary>Exact solutions and the end of a trajectory</summary>
+  <p>For exponential growth, A(t) = A₀ exp(rt). For logistic growth, A(t) = K / [1 + (K/A₀ − 1) exp(−rt)].</p>
+  <p>For the threshold model with δ &gt; 0,</p>
+  <p class="lab-math">A(t) = A꜀ A₀ / [A₀ + (A꜀ − A₀) exp(δt)].</p>
+  <p>If A₀ &gt; A꜀, the denominator first vanishes at T* = ln[A₀/(A₀ − A꜀)] / δ. The solution is defined only for t &lt; T*. The displayed branch is never continued through its singularity.</p>
+  <p>With δ = 0, A′ = αA² and A(t) = A₀/(1 − αA₀t), ending at T* = 1/(αA₀). All curves are evaluated from these formulas; no numerical ODE integration is used.</p>
+</details>
+<details class="lab-explanation">
+  <summary>What is held equal in “Compare the three”?</summary>
+  <p>Each model starts at the same A₀ and has the same initial relative rate q, so A′(0) = qA₀ for all three. We use exponential r = q; logistic K = 5A₀ and r = 5q/4; and threshold α = 2q/A₀ with δ = q. The threshold is A₀/2.</p>
+  <p>The starting value and tangent agree. Later, the relative rates diverge. In comparison mode, time continues after the threshold trajectory ends so you can follow the other two solutions.</p>
+</details>
+<details class="lab-explanation">
+  <summary>Can early observations reveal the long-term mechanism?</summary>
+  <p>Suppose we know only A(0) = 1 and A(3) = 8. Both A(t) = 2ᵗ and the logistic curve A(t) = 10 / [1 + 9 exp(−rt)], with r = ln(36)/3, match those observations. At t = 6, they predict 64 and approximately 9.93 respectively.</p>
+  <p>Matching a small number of observations does not identify a unique growth law.</p>
+</details>
+<details class="lab-explanation">
+  <summary>Do “strong RSI” and “diminishing returns” determine an equation?</summary>
+  <p>An increasing relative rate does not by itself guarantee finite-time blow-up. For A′ = A ln A with A₀ &gt; 1, k′(A) = 1/A &gt; 0, but A(t) = A₀<sup>exp(t)</sup> stays finite at every finite time.</p>
+  <p>Diminishing returns do not necessarily imply a ceiling either. For A′ = rA/(1 + A/K), relative growth falls, while absolute growth approaches rK. The solution remains unbounded and becomes approximately linear.</p>
+  <p>For a smooth positive growth law f(A) along the entire path A ≥ A₀, the time to unbounded growth is the improper integral ∫<sub>A₀</sub><sup>∞</sup> dA/f(A). Whether this integral is finite depends on how fast f grows.</p>
+  <p>Actual AI development also depends on compute, data, human research, and the choice of capability measure. These experiments explore the consequences of assumptions.</p>
+</details>
+<style>
+  #ag-explorer .ag-models{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px;}
+  #ag-explorer .ag-models button{text-align:left;padding:12px;}
+  #ag-explorer .ag-models strong,#ag-explorer .ag-models span{display:block;}
+  #ag-explorer .ag-models strong{font-size:13px;font-weight:600;}
+  #ag-explorer .ag-models span{font-size:11px;margin-top:5px;line-height:1.5;}
+  #ag-explorer .ag-assumption{margin:19px 0 24px;color:var(--site-muted);max-width:900px;}
+  #ag-explorer .ag-workspace{display:grid;grid-template-columns:220px minmax(0,1fr);gap:28px;align-items:start;}
+  #ag-explorer .ag-workspace>div{min-width:0;}
+  #ag-explorer .ag-settings .lab-label{font-size:13px;}
+  #ag-explorer output{float:right;font-weight:400;}
+  #ag-explorer .ag-settings .lab-select{margin-bottom:16px;}
+  #ag-explorer .ag-presets{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 20px;}
+  #ag-explorer .ag-presets button{font-size:12px;padding:7px 9px;}
+  #ag-explorer .ag-plot-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap;}
+  #ag-explorer h3{font-size:14px;font-weight:500;margin:0;}
+  #ag-explorer svg{display:block;width:100%;overflow:visible;}
+  #ag-explorer svg text{font-family:inherit;fill:var(--site-ink);font-size:11px;}
+  #ag-explorer .ag-status{background:var(--site-soft);border-left:3px solid var(--site-purple);padding:12px 15px;min-height:72px;}
+  #ag-explorer .ag-legend{display:flex;gap:8px 18px;flex-wrap:wrap;margin-bottom:14px;}
+  #ag-explorer .ag-legend span{display:inline-flex;align-items:center;gap:7px;}
+  #ag-explorer .ag-legend i{width:23px;border-top:3px solid;}
+  #ag-explorer .ag-readouts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;border-top:1px solid var(--site-line);padding-top:20px;margin-top:20px;}
+  #ag-explorer .ag-readout h3{color:var(--site-purple);margin-bottom:10px;}
+  #ag-explorer .ag-readout p{margin:5px 0;}
+  .ag-table-wrap{overflow-x:auto;}
+  .ag-table{border-collapse:collapse;width:100%;font-size:13px;}
+  .ag-table th,.ag-table td{text-align:left;padding:12px 14px 12px 0;border-bottom:1px solid var(--site-line);}
+  @media(max-width:900px){#ag-explorer .ag-models{grid-template-columns:repeat(2,minmax(0,1fr));}#ag-explorer .ag-workspace{grid-template-columns:190px minmax(0,1fr);gap:20px;}}
+  @media(max-width:700px){#ag-explorer .ag-workspace{grid-template-columns:minmax(0,1fr);}#ag-explorer .ag-settings{display:grid;grid-template-columns:minmax(0,1fr);}#ag-explorer .ag-readouts{grid-template-columns:minmax(0,1fr);}#ag-explorer .ag-models strong{font-size:12px;}}
+</style>
+<script src="{{D3_URL}}"></script>
+<script>{{AI_GROWTH_MODEL}}</script>
+<script>
+(()=>{
+  const root=document.getElementById('ag-explorer'),el=id=>root.querySelector('#ag-'+id),m=Amath351Growth;
+  const key='amath351:ai-growth:v1',reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const names={exponential:'Exponential',logistic:'Logistic',threshold:'Extinction–explosion'};
+  const colors={exponential:'var(--site-purple)',logistic:'var(--site-teal)',threshold:'var(--site-orange)'};
+  const dashes={exponential:null,logistic:'7 4',threshold:'3 3'};
+  let state=m.fresh();try{state=m.restore(JSON.parse(localStorage.getItem(key)));}catch(_){}
+  let playing=false,frame=0,last=null,charts={},configs=[];
+  const fmt=(x,n=3)=>x===null?'undefined':Math.abs(x)>1e5?x.toExponential(3):Math.abs(x)>0&&Math.abs(x)<.001?x.toExponential(3):Number(x.toFixed(n)).toString();
+  const save=()=>{try{localStorage.setItem(key,JSON.stringify({version:1,...state}));}catch(_){}};
+  function pause(){playing=false;last=null;cancelAnimationFrame(frame);}
+  function sync(announce=true){
+    configs=m.configurations(state);const t=state.revealed?m.time(state):0;
+    const explanations={
+      exponential:'Constant per-unit efficiency: more capacity produces a larger total improvement, while the relative rate stays fixed.',
+      logistic:'Diminishing per-unit efficiency: k(A) falls toward zero at the assumed limit K. Above K, this model predicts a decline.',
+      threshold:'Increasing per-unit gains must first overcome losses. Changing A₀ across A꜀ changes which process dominates.',
+      compare:'All three start with the same capacity and tangent. Only the way the relative rate changes with capacity is different.'
+    };
+    el('assumption').textContent=explanations[state.mode];
+    root.querySelectorAll('[data-ag-mode]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.agMode===state.mode)));
+    for(const k of ['a0','r','K','alpha','delta']){el(k).value=state[k];el(k+'-value').textContent=fmt(state[k]);}
+    el('r-control').hidden=state.mode==='threshold';el('K-control').hidden=state.mode!=='logistic';el('threshold-controls').hidden=state.mode!=='threshold';
+    el('r-name').textContent=state.mode==='compare'?'Initial relative rate q':'Relative rate r';
+    el('threshold').textContent='A꜀ = δ/α = '+fmt(state.delta/state.alpha);
+    root.querySelectorAll('[data-ag-ratio]').forEach(b=>b.disabled=state.delta===0);
+    el('field-control').hidden=state.mode==='compare';el('field').checked=state.field;el('window').value=state.window;
+    el('progress').disabled=!state.revealed;el('progress').value=state.progress*1000;
+    el('time-value').textContent='t = '+fmt(t,5)+' years';
+    el('reveal').textContent=state.revealed?'Hide solution':'Reveal solution';
+    el('play').textContent=playing?'Pause':reduced.matches?'Advance time':state.progress===1?'Replay solution':'Follow solution';
+    const T=state.mode==='compare'?Infinity:m.blowup(configs[0]);
+    el('time-note').textContent=T<=state.window?`Playback stops just before T* = ${fmt(T,5)} years; the value at T* is undefined.`:state.mode==='compare'?'Time continues for the other models after the threshold solution ends.':'Scrub time or follow the point. Parameter changes return to t = 0.';
+    const status=el('status');status.setAttribute('aria-live',announce?'polite':'off');
+    status.textContent=!state.revealed?'Predict first: use the sign of k(A₀) to decide the initial direction. Does that sign determine the long-term outcome?':state.mode==='compare'?'The initial values and initial slopes agree. Constant, falling, and rising relative rates lead to different futures.':m.outcome(configs[0]).text+(T<=state.window&&state.progress===1?' Stopped before T*; there is no continuation through the singularity.':'');
+    el('legend').replaceChildren();el('readouts').replaceChildren();
+    for(const c of configs){
+      const legend=document.createElement('span'),swatch=document.createElement('i');swatch.style.borderColor=colors[c.mode];swatch.style.borderTopStyle=c.mode==='logistic'?'dashed':c.mode==='threshold'?'dotted':'solid';legend.append(swatch,document.createTextNode(names[c.mode]));el('legend').append(legend);
+      const readout=document.createElement('div');readout.className='ag-readout lab-numbers';readout.dataset.mode=c.mode;
+      const heading=document.createElement('h3');heading.textContent=names[c.mode];heading.style.color=colors[c.mode];readout.append(heading);
+      const a=m.value(c,t),T=m.blowup(c);
+      const lines=a===null?[`No solution at t ≥ T* (${fmt(T,5)} years).`]:[`A(t) = ${fmt(a)}`,`k(A(t)) = ${fmt(m.relative(c,a))} / year`,`A′(t) = ${fmt(m.slope(c,a))} units / year`];
+      if(a!==null&&a>m.bounds(state))lines.push('Capacity is above the displayed plot window.');
+      if(state.revealed&&Number.isFinite(T))lines.push(`T* = ${fmt(T,5)} years`);
+      for(const line of lines){const p=document.createElement('p');p.textContent=line;readout.append(p);}
+      el('readouts').append(readout);
+    }
+    return t;
+  }
+  function axes(id,height,xDomain,yDomain,xLabel,yLabel){
+    const node=el(id),w=Math.max(250,node.parentElement.getBoundingClientRect().width),b={l:46,r:w-18,t:24,b:height-39};
+    const svg=d3.select(node).attr('viewBox',`0 0 ${w} ${height}`).attr('height',height);svg.selectAll('*').remove();
+    const x=d3.scaleLinear().domain(xDomain).range([b.l,b.r]),y=d3.scaleLinear().domain(yDomain).range([b.b,b.t]);
+    const clip='ag-clip-'+id;svg.append('defs').append('clipPath').attr('id',clip).append('rect').attr('x',b.l).attr('y',b.t).attr('width',b.r-b.l).attr('height',b.b-b.t);
+    const marks=svg.append('g').attr('clip-path',`url(#${clip})`);
+    for(const v of y.ticks(4))marks.append('path').attr('d',`M${b.l},${y(v)}H${b.r}`).attr('stroke','var(--site-line)');
+    svg.append('g').attr('transform',`translate(0,${b.b})`).call(d3.axisBottom(x).ticks(w<400?4:6).tickSize(0).tickPadding(8)).select('.domain').attr('stroke','var(--site-line)');
+    svg.append('g').attr('transform',`translate(${b.l},0)`).call(d3.axisLeft(y).ticks(4).tickSize(0).tickPadding(7)).select('.domain').attr('stroke','var(--site-line)');
+    svg.append('text').attr('x',b.l).attr('y',14).text(yLabel);svg.append('text').attr('x',b.r).attr('y',height-5).attr('text-anchor','end').text(xLabel);
+    return {svg,marks,x,y,b,w,height};
+  }
+  function build(){
+    configs=m.configurations(state);const amax=m.bounds(state);
+    const kr=configs.flatMap(c=>[m.relative(c,0),m.relative(c,amax)]),lo=Math.min(-.1,...kr),hi=Math.max(.1,...kr),pad=.12*(hi-lo);
+    const rate=axes('rate-plot',215,[0,amax],[lo-pad,hi+pad],'capacity A','k(A) / year');
+    rate.marks.append('rect').attr('x',rate.b.l).attr('width',rate.b.r-rate.b.l).attr('y',rate.b.t).attr('height',rate.y(0)-rate.b.t).attr('fill','var(--site-teal)').attr('opacity',.055);
+    rate.marks.append('path').attr('d',`M${rate.b.l},${rate.y(0)}H${rate.b.r}`).attr('stroke','var(--site-muted)').attr('stroke-dasharray','3 4');
+    rate.dots=[];
+    for(const c of configs){
+      rate.marks.append('path').attr('d',`M${rate.x(0)},${rate.y(m.relative(c,0))}L${rate.x(amax)},${rate.y(m.relative(c,amax))}`).attr('fill','none').attr('stroke',colors[c.mode]).attr('stroke-width',2.4).attr('stroke-dasharray',dashes[c.mode]);
+      const boundary=m.level(c);
+      if(boundary!==null&&boundary>0){rate.marks.append('path').attr('d',`M${rate.x(boundary)},${rate.b.t}V${rate.b.b}`).attr('stroke',colors[c.mode]).attr('stroke-opacity',.3).attr('stroke-dasharray','2 4');rate.svg.append('text').attr('x',rate.x(boundary)+5).attr('y',rate.b.t+12).text((c.mode==='logistic'?'K':'A꜀')+' = '+fmt(boundary));}
+      rate.dots.push(rate.marks.append('circle').attr('r',5).attr('fill',colors[c.mode]).attr('stroke','var(--site-paper)').attr('stroke-width',1.5));
+    }
+    const ph=d3.select(el('phase-plot')),pw=rate.w,phHeight=state.mode==='compare'?116:68;
+    ph.attr('viewBox',`0 0 ${pw} ${phHeight}`).attr('height',phHeight);ph.selectAll('*').remove();
+    ph.append('defs').append('marker').attr('id','ag-arrow').attr('viewBox','0 0 10 10').attr('refX',9).attr('refY',5).attr('markerWidth',5).attr('markerHeight',5).attr('orient','auto-start-reverse').append('path').attr('d','M0,0L10,5L0,10Z').attr('fill','var(--site-muted)');
+    configs.forEach((c,i)=>{
+      const y=20+i*26,lev=m.level(c);ph.append('path').attr('d',`M${rate.b.l},${y}H${rate.b.r}`).attr('stroke',colors[c.mode]).attr('stroke-opacity',.45).attr('stroke-dasharray',dashes[c.mode]);
+      for(let j=0;j<10;j++){
+        const a=amax*(j+.5)/10,k=m.relative(c,a);if(Math.abs(k)<1e-10)continue;
+        const x=rate.x(a),dx=(rate.b.r-rate.b.l)/10*.22*(k>0?1:-1);
+        ph.append('path').attr('d',`M${x-dx},${y}H${x+dx}`).attr('stroke','var(--site-muted)').attr('stroke-width',1.5).attr('marker-end','url(#ag-arrow)');
+      }
+      ph.append('circle').attr('cx',rate.x(0)).attr('cy',y).attr('r',3).attr('fill',c.mode==='threshold'&&c.delta>0?colors[c.mode]:'var(--site-paper)').attr('stroke',colors[c.mode]);
+      if(lev!==null&&lev>0)ph.append('circle').attr('cx',rate.x(lev)).attr('cy',y).attr('r',4).attr('fill',c.mode==='logistic'?colors[c.mode]:'var(--site-paper)').attr('stroke',colors[c.mode]).attr('stroke-width',2);
+    });
+    ph.append('text').attr('x',rate.b.l).attr('y',phHeight-19).text('Phase line: direction of change in A.');
+    const solution=axes('solution-plot',380,[0,state.window],[0,amax],'time t (years)','capacity A(t)');
+    const sx=solution.x(1)-solution.x(0),sy=solution.y(0)-solution.y(1);
+    solution.tangent=(t,a,s,len=32)=>{const norm=Math.hypot(sx,sy*s),dx=len*sx/norm/2,dy=-len*sy*s/norm/2;return `M${solution.x(t)-dx},${solution.y(a)-dy}L${solution.x(t)+dx},${solution.y(a)+dy}`;};
+    if(state.field&&state.mode!=='compare')for(let i=0;i<17;i++)for(let j=0;j<15;j++){
+      const t=state.window*i/16,a=amax*j/14;solution.marks.append('path').attr('d',solution.tangent(t,a,m.slope(configs[0],a),13)).attr('stroke','var(--site-muted)').attr('opacity',.35).attr('data-field','');
+    }
+    solution.dots=[];solution.tangents=[];solution.arrows=[];
+    for(const c of configs){
+      const boundary=m.level(c),T=m.blowup(c);
+      if(boundary!==null&&boundary>0)solution.marks.append('path').attr('d',`M${solution.b.l},${solution.y(boundary)}H${solution.b.r}`).attr('stroke',colors[c.mode]).attr('stroke-opacity',.3).attr('stroke-dasharray','4 5');
+      if(state.revealed){
+        const line=d3.line().defined(p=>p.a!==null&&Number.isFinite(p.a)).x(p=>solution.x(p.t)).y(p=>solution.y(p.a));
+        solution.marks.append('path').datum(m.curve(c,state.window)).attr('d',line).attr('fill','none').attr('stroke',colors[c.mode]).attr('stroke-width',2.7).attr('stroke-dasharray',dashes[c.mode]).attr('data-trajectory',c.mode);
+        if(T<=state.window){solution.marks.append('path').attr('d',`M${solution.x(T)},${solution.b.t}V${solution.b.b}`).attr('stroke',colors[c.mode]).attr('stroke-dasharray','5 4').attr('data-singular-time',T);solution.svg.append('text').attr('x',Math.min(solution.b.r-55,solution.x(T)+5)).attr('y',solution.b.t+13).text('T* = '+fmt(T));}
+      }
+      solution.tangents.push(solution.marks.append('path').attr('stroke',colors[c.mode]).attr('stroke-width',2));
+      solution.dots.push(solution.marks.append('circle').attr('r',5).attr('fill',colors[c.mode]).attr('stroke','var(--site-paper)').attr('stroke-width',1.5).attr('data-moving-point',c.mode));
+      solution.arrows.push(solution.marks.append('path').attr('fill',colors[c.mode]));
+    }
+    if(!state.revealed)solution.svg.append('text').attr('x',(solution.b.l+solution.b.r)/2).attr('y',solution.b.t+30).attr('text-anchor','middle').text('Predict first, then reveal the solution.');
+    solution.guide=solution.marks.append('path').attr('stroke','var(--site-muted)').attr('stroke-opacity',.3).attr('stroke-dasharray','3 4');
+    charts={rate,solution,amax};
+  }
+  function move(t){
+    const {rate,solution,amax}=charts;
+    solution.guide.attr('d',`M${solution.x(t)},${solution.b.t}V${solution.b.b}`);
+    configs.forEach((c,i)=>{
+      const a=m.value(c,t),inside=a!==null&&a<=amax;
+      rate.dots[i].attr('display',inside?null:'none');solution.dots[i].attr('display',inside?null:'none').attr('data-time',t).attr('data-capacity',a);
+      solution.tangents[i].attr('display',inside?null:'none');solution.arrows[i].attr('display',a!==null&&!inside?null:'none');
+      if(inside){rate.dots[i].attr('cx',rate.x(a)).attr('cy',rate.y(m.relative(c,a)));solution.dots[i].attr('cx',solution.x(t)).attr('cy',solution.y(a));solution.tangents[i].attr('d',solution.tangent(t,a,m.slope(c,a)));}
+      else if(a!==null){const x=solution.x(t),y=solution.b.t;solution.arrows[i].attr('d',`M${x},${y+1}l-5,9h10Z`);}
+    });
+    el('rate-plot').setAttribute('aria-label',`Relative growth law for ${state.mode}. Positive values imply increasing capacity for A greater than zero. Current time ${fmt(t)} years.`);
+    el('solution-plot').setAttribute('aria-label',`${state.revealed?'Exact solution curves':'Slope field and initial condition; solution hidden'}. Time ${fmt(t)} years. ${configs.map(c=>names[c.mode]+': '+(m.value(c,t)===null?'solution has ended':'A='+fmt(m.value(c,t)))).join('. ')}`);
+  }
+  function render(rebuild=false,announce=true){const t=sync(announce);if(rebuild)build();move(t);}
+  function edited(rebuild=true){pause();state.progress=0;render(rebuild);save();}
+  root.querySelectorAll('[data-ag-mode]').forEach(b=>b.addEventListener('click',()=>{state.mode=b.dataset.agMode;edited();}));
+  for(const k of ['a0','r','K','alpha','delta'])el(k).addEventListener('input',()=>{state[k]=Number(el(k).value);edited();});
+  root.querySelectorAll('[data-ag-ratio]').forEach(b=>b.addEventListener('click',()=>{state.a0=Number(b.dataset.agRatio)*state.delta/state.alpha;edited();}));
+  el('window').addEventListener('change',()=>{state.window=Number(el('window').value);edited();});
+  el('field').addEventListener('change',()=>{state.field=el('field').checked;pause();render(true);save();});
+  el('reveal').addEventListener('click',()=>{state.revealed=!state.revealed;edited();});
+  el('start').addEventListener('click',()=>edited(false));
+  el('reset').addEventListener('click',()=>{state=m.fresh();edited();});
+  el('progress').addEventListener('input',()=>{pause();state.progress=Number(el('progress').value)/1000;render();save();});
+  function tick(stamp){
+    if(!playing)return;
+    if(last!==null)state.progress=Math.min(1,state.progress+Math.min((stamp-last)/1000,.1)/18);
+    last=stamp;render(false,false);
+    if(state.progress===1){pause();render();save();}else frame=requestAnimationFrame(tick);
+  }
+  el('play').addEventListener('click',()=>{
+    if(playing){pause();render();save();return;}
+    const reveal=!state.revealed;state.revealed=true;if(state.progress===1)state.progress=0;
+    if(reduced.matches){state.progress=Math.min(1,state.progress+.05);render(reveal);save();return;}
+    playing=true;last=null;render(reveal,false);frame=requestAnimationFrame(tick);
+  });
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){pause();render();save();}});
+  reduced.addEventListener('change',()=>{pause();render();});
+  let width=0;new ResizeObserver(entries=>{const next=entries[0].contentRect.width;if(Math.abs(next-width)>.5){width=next;render(true,false);}}).observe(root);
+  render(true);
+})();
+</script>

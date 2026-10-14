@@ -17,7 +17,7 @@ The site follows **chapter index → chapter's examples → individual experimen
 
 Chapter 1 currently includes the fluid-motion opening, direction fields,
 position/velocity/acceleration, Planet Gzyx, the tangent-to-slope-field exploration,
-and separable equations.
+separable and exact equations, and the AI self-improvement growth models.
 The other examples are explicitly labeled as planned and
 have no inactive or broken experiment links. Chapter groupings follow the
 Autumn 2026 syllabus, rather than the textbook's chapter numbering.
@@ -219,6 +219,31 @@ and derives F by integrating M and recovering g(y) from N. Edits and page
 hiding pause playback; reduced motion uses discrete advances. Source and math
 helpers: **src/exact-equations.html** and **src/exact-equations-model.cjs**.
 
+## Section 2.1: AI self-improvement and growth models
+
+[AI Self-Improvement Simulator](https://shzhang3.github.io/amath351-lab/chapters/first-order/ai-self-improvement/)
+connects three hypothetical assumptions through `A′ = A k(A)`: constant relative
+efficiency (exponential), diminishing efficiency with a zero at K (logistic),
+and increasing gains minus losses (extinction–explosion).
+
+Read the relative-rate graph, predict from the phase line, then reveal the exact
+solution in its slope field. Change the initial capacity and model parameters,
+or use presets below, at, and above the threshold. Comparison mode matches the
+initial capacity and initial slope of all three models, exposing how their later
+behavior depends on the growth law. Playback pauses on parameter changes; time
+and keyboard-accessible sliders, reduced motion, and browser-local storage are
+supported.
+
+The threshold solution stops before its finite singular time. In comparison
+mode, the other two trajectories continue while the ended solution is labeled
+undefined. Fixed plot limits and numeric readouts distinguish leaving the plot
+from reaching infinity. All trajectories use analytic formulas. Explanations
+separate effective research capacity from accumulated knowledge and distinguish
+model consequences from forecasts. Counterexamples show that increasing relative
+growth alone does not imply finite-time blow-up, and diminishing returns alone
+do not imply saturation. Source and helpers: **src/ai-self-improvement.html** and
+**src/ai-growth-model.cjs**.
+
 ## Edit and build
 
 **src/catalog.json** defines the three chapters and their example lists. An
@@ -228,7 +253,7 @@ Add an example's source fragment and its catalog entry to extend the lab.
 The experiment sources are **src/experiment.html**, **src/prologue.html**,
 **src/velocity.html**, **src/planet-gzyx.html**, **src/slope-fields.html**,
 **src/separable.html**, **src/separable-examples.html**, **src/integrating-factors.html**,
-and **src/exact-equations.html**.
+**src/exact-equations.html**, and **src/ai-self-improvement.html**.
 Exact mathematical helpers live in the **-model.cjs** files, embedded during the
 build; the two Section 1.2 experiments share **src/motion-model.cjs**, and Section
 1.3 uses **src/slope-field-model.cjs**. **src/page.html** and

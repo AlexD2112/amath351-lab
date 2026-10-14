@@ -151,6 +151,8 @@ def main():
                 replacements = {"INTEGRATING_FACTOR_MODEL":(SOURCE / "integrating-factor-model.cjs").read_text(), "D3_URL":href(path,"assets/vendor/d3.v7.9.0.min.js")}
             elif example["slug"] == "exact-equations":
                 replacements = {"EXACT_EQUATIONS_MODEL":(SOURCE / "exact-equations-model.cjs").read_text(), "D3_URL":href(path,"assets/vendor/d3.v7.9.0.min.js")}
+            elif example["slug"] == "ai-self-improvement":
+                replacements = {"AI_GROWTH_MODEL":(SOURCE / "ai-growth-model.cjs").read_text(), "D3_URL":href(path,"assets/vendor/d3.v7.9.0.min.js")}
             fragment = replace(fragment, **replacements)
             page(path, example["title"], example["description"], fragment, chapter=chapter, example=example, index=i)
 
