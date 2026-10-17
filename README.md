@@ -246,9 +246,30 @@ growth alone does not imply finite-time blow-up, and diminishing returns alone
 do not imply saturation. Source and helpers: **src/ai-self-improvement.html** and
 **src/ai-growth-model.cjs**.
 
+## Student-submitted labs
+
+The home page has a **Student-submitted labs** section for experiments built by
+students in the course. Each lab gets its own page under **student-labs/**, with
+breadcrumbs back to the section and previous/next links between student labs.
+
+- [Michaelis–Menten enzyme kinetics](https://shzhang3.github.io/amath351-lab/student-labs/michaelis-menten/)
+  (by Roan) applies separable equations to `[S]' = -Vmax [S]/(K_M + [S])`.
+  Exact implicit solutions `K_M ln(S/S0) + S - S0 = -Vmax t` are drawn over the
+  slope field and linked to the saturation curve and the Lineweaver–Burk line.
+  An optional overlay integrates the full mass-action model (k1 = 1) with RK4 and
+  shows the reduced model failing as `E0/(S0 + K_M)` grows. Source and helpers:
+  **src/michaelis-menten.html** and **src/michaelis-menten-model.cjs**.
+
+To add a student lab, put its page fragment in **src/** and add an entry to
+**src/student-labs.json** with `slug`, `title`, `description`, `section`, `label`,
+`author`, and `source`. An optional `model` file is embedded where the fragment
+writes `{{MODEL}}`; keep the math there so it can be tested in **tests/**.
+The fragment should contain exactly one `h1` and use the shared `site-` and
+`lab-` styles. Then rebuild and run the checks below.
+
 ## Edit and build
 
-**src/catalog.json** defines the three chapters and their example lists. An
+**src/catalog.json** defines the three chapters and their example lists. **src/student-labs.json** lists the student-submitted labs. An
 example with a `source` is published; an example without one is shown as planned.
 Add an example's source fragment and its catalog entry to extend the lab.
 
@@ -262,7 +283,7 @@ build; the two Section 1.2 experiments share **src/motion-model.cjs**, and Secti
 **src/site.css** supply shared navigation and styles.
 
 **build.py** generates **index.html**, chapter indexes and individual example
-pages under **chapters/**, and **assets/lab.css**. Do not edit generated output
+pages under **chapters/**, student lab pages under **student-labs/**, and **assets/lab.css**. Do not edit generated output
 directly. All runtime assets are served locally, with no third-party CDN or
 background network requests. The Section 1.2 and 1.3 plots use the vendored D3 7.9.0
 bundle in **src/vendor/**; the build copies it and its license to **assets/vendor/**.
