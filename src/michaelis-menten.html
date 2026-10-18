@@ -1,8 +1,10 @@
 <section class="lab-intro">
   <div class="site-kicker">Student lab · Enzyme kinetics · Separable equations</div>
   <h1>Michaelis–Menten</h1>
-  <p class="lab-math" role="math" aria-label="S prime equals minus V max S over K M plus S">[S]′ = −V<sub>max</sub>[S] / (K<sub>M</sub> + [S])</p>
-  <p>How fast does an enzyme use up its substrate? The equation is separable, so its solutions satisfy K<sub>M</sub> ln([S]/[S]₀) + [S] − [S]₀ = −V<sub>max</sub>t exactly. Change the parameters to see the slope field, the saturation curve, and the double-reciprocal line respond together, then compare with the full two-equation model it comes from.</p>
+  <div class="mm-equation mm-equation-primary"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="S prime equals minus V max times S divided by K M plus S"><msup><mtext>[S]</mtext><mo>′</mo></msup><mo>=</mo><mo>−</mo><mfrac><mrow><msub><mi>V</mi><mtext>max</mtext></msub><mtext>[S]</mtext></mrow><mrow><msub><mi>K</mi><mtext>M</mtext></msub><mo>+</mo><mtext>[S]</mtext></mrow></mfrac></math></div>
+  <p>How fast does an enzyme use up its substrate? The equation is separable, so its solutions satisfy</p>
+  <div class="mm-equation "><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="K M times log of S over initial S, plus S minus initial S, equals minus V max times t"><msub><mi>K</mi><mtext>M</mtext></msub><mi mathvariant="normal">ln</mi><mo>(</mo><mfrac><mrow><mtext>[S]</mtext></mrow><mrow><msub><mtext>[S]</mtext><mn>0</mn></msub></mrow></mfrac><mo>)</mo><mo>+</mo><mtext>[S]</mtext><mo>−</mo><msub><mtext>[S]</mtext><mn>0</mn></msub><mo>=</mo><mo>−</mo><msub><mi>V</mi><mtext>max</mtext></msub><mi>t</mi></math></div>
+  <p>Change the parameters to see the slope field, the saturation curve, and the double-reciprocal line respond together, then compare with the full two-equation model it comes from.</p>
   <p class="lab-small">Submitted by <a href="https://github.com/roam-git" target="_blank" rel="noopener">Roan</a>.</p>
 </section>
 
@@ -10,18 +12,22 @@
   <section>
     <h2>Where it comes from</h2>
     <p>An enzyme E binds substrate S into a complex C, which releases product P:</p>
-    <p class="mm-steps">E + S ⇌ C → E + P &nbsp;<span class="mm-rates">(rates k₁, k₋₁, k₂)</span></p>
-    <p>Mass action gives <span class="mm-m">[S]′ = −k₁[E][S] + k₋₁[C]</span> and <span class="mm-m">[C]′ = k₁[E][S] − (k₋₁ + k₂)[C]</span>, with free enzyme <span class="mm-m">[E] = E₀ − [C]</span>.</p>
-    <p>If the complex settles quickly (quasi-steady state), <span class="mm-m">[C]′ ≈ 0</span>, so <span class="mm-m">[C] ≈ E₀[S]/(K<sub>M</sub> + [S])</span> and <span class="mm-m">[S]′ = −k₂[C]</span>: the equation above.</p>
+    <div class="mm-reaction" role="math" aria-label="E plus S reversibly forms C with forward rate k one and reverse rate k minus one; C forms E plus P with rate k two"><span>E + S</span><span class="mm-reaction-arrow"><small>k₁</small><span>⇌</span><small>k₋₁</small></span><span>C</span><span class="mm-reaction-arrow"><small>k₂</small><span>→</span><small aria-hidden="true">&nbsp;</small></span><span>E + P</span></div>
+    <p>Mass action gives</p>
+    <div class="mm-equation "><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="S prime equals minus k one E S plus k minus one C; C prime equals k one E S minus the sum of k minus one and k two times C"><mtable columnalign="right left" columnspacing="0.35em" rowspacing="0.5em"><mtr><mtd><msup><mtext>[S]</mtext><mo>′</mo></msup></mtd><mtd><mo>=</mo><mo>−</mo><msub><mi>k</mi><mtext>1</mtext></msub><mtext>[E]</mtext><mtext>[S]</mtext><mo>+</mo><msub><mi>k</mi><mtext>−1</mtext></msub><mtext>[C]</mtext></mtd></mtr><mtr><mtd><msup><mtext>[C]</mtext><mo>′</mo></msup></mtd><mtd><mo>=</mo><msub><mi>k</mi><mtext>1</mtext></msub><mtext>[E]</mtext><mtext>[S]</mtext><mo>−</mo><mo>(</mo><msub><mi>k</mi><mtext>−1</mtext></msub><mo>+</mo><msub><mi>k</mi><mtext>2</mtext></msub><mo>)</mo><mtext>[C]</mtext></mtd></mtr></mtable></math></div>
+    <p>with free enzyme <math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="E equals total enzyme minus C"><mtext>[E]</mtext><mo>=</mo><msub><mi>E</mi><mtext>0</mtext></msub><mo>−</mo><mtext>[C]</mtext></math>.</p>
+    <p>If the complex settles quickly (quasi-steady state), <math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="C prime is approximately zero"><msup><mtext>[C]</mtext><mo>′</mo></msup><mo>≈</mo><mn>0</mn></math>, so</p>
+    <div class="mm-equation "><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="C is approximately total enzyme times S divided by K M plus S"><mtext>[C]</mtext><mo>≈</mo><mfrac><mrow><msub><mi>E</mi><mtext>0</mtext></msub><mtext>[S]</mtext></mrow><mrow><msub><mi>K</mi><mtext>M</mtext></msub><mo>+</mo><mtext>[S]</mtext></mrow></mfrac></math></div>
+    <p>and <math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="S prime is approximately minus k two C"><msup><mtext>[S]</mtext><mo>′</mo></msup><mo>≈</mo><mo>−</mo><msub><mi>k</mi><mtext>2</mtext></msub><mtext>[C]</mtext></math>: the reduced equation above.</p>
   </section>
 
   <section>
     <h2>What the terms mean</h2>
     <ul>
       <li><span class="mm-m">[S]′</span>: the rate of change of substrate (negative), so −[S]′ is the rate it is consumed. At t = 0 that rate is V₀ in plots 2 and 3.</li>
-      <li><span class="mm-m">V<sub>max</sub> = k₂E₀</span>: top speed, with every enzyme busy. k₂ (k<sub>cat</sub>, the turnover number) is the substrate converted per enzyme per unit time at saturation.</li>
-      <li><span class="mm-m">K<sub>M</sub> = (k₋₁ + k₂)/k₁</span>: the [S] giving half of V<sub>max</sub>. Lower means the enzyme works well at lower substrate. It equals the dissociation constant k₋₁/k₁ only when k₂ ≪ k₋₁, so it is not strictly a measure of binding affinity.</li>
-      <li><span class="mm-m">[S]/(K<sub>M</sub> + [S])</span>: fraction of enzyme occupied. About <span class="mm-m">[S]/K<sub>M</sub></span> when [S] ≪ K<sub>M</sub> (exponential decay), about 1 when [S] ≫ K<sub>M</sub> (linear decay).</li>
+      <li><math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="V max equals k two times total enzyme"><msub><mi>V</mi><mtext>max</mtext></msub><mo>=</mo><msub><mi>k</mi><mtext>2</mtext></msub><msub><mi>E</mi><mtext>0</mtext></msub></math>: top speed, with every enzyme busy. k₂ (k<sub>cat</sub>, the turnover number) is the substrate converted per enzyme per unit time at saturation.</li>
+      <li><math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="K M equals k minus one plus k two divided by k one"><msub><mi>K</mi><mtext>M</mtext></msub><mo>=</mo><mfrac><mrow><msub><mi>k</mi><mtext>−1</mtext></msub><mo>+</mo><msub><mi>k</mi><mtext>2</mtext></msub></mrow><mrow><msub><mi>k</mi><mtext>1</mtext></msub></mrow></mfrac></math>: the [S] giving half of V<sub>max</sub>. Lower means the enzyme works well at lower substrate. It equals the dissociation constant k₋₁/k₁ only when k₂ ≪ k₋₁, so it is not strictly a measure of binding affinity.</li>
+      <li><math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="S divided by K M plus S"><mfrac><mrow><mtext>[S]</mtext></mrow><mrow><msub><mi>K</mi><mtext>M</mtext></msub><mo>+</mo><mtext>[S]</mtext></mrow></mfrac></math>: fraction of enzyme occupied. About <math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="S divided by K M"><mfrac><mrow><mtext>[S]</mtext></mrow><mrow><msub><mi>K</mi><mtext>M</mtext></msub></mrow></mfrac></math> when [S] ≪ K<sub>M</sub> (exponential decay), about 1 when [S] ≫ K<sub>M</sub> (linear decay).</li>
     </ul>
   </section>
 
@@ -72,9 +78,9 @@
         <div><dt>V₀</dt><dd id="mm-r-v0"></dd></div>
         <div><dt>1/V₀</dt><dd id="mm-r-iv0"></dd></div>
         <div><dt>1/[S]</dt><dd id="mm-r-is"></dd></div>
-        <div hidden data-full><dt>k₂ = V<sub>max</sub>/E₀</dt><dd id="mm-r-k2"></dd></div>
-        <div hidden data-full><dt>k₋₁ = K<sub>M</sub> − k₂</dt><dd id="mm-r-kr"></dd></div>
-        <div hidden data-full><dt>ε = E₀/([S]₀ + K<sub>M</sub>)</dt><dd id="mm-r-eps"></dd></div>
+        <div hidden data-full><dt><math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="k two equals V max divided by total enzyme"><msub><mi>k</mi><mtext>2</mtext></msub><mo>=</mo><mfrac><mrow><msub><mi>V</mi><mtext>max</mtext></msub></mrow><mrow><msub><mi>E</mi><mtext>0</mtext></msub></mrow></mfrac></math></dt><dd id="mm-r-k2"></dd></div>
+        <div hidden data-full><dt><math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="k minus one equals K M minus k two"><msub><mi>k</mi><mtext>−1</mtext></msub><mo>=</mo><msub><mi>K</mi><mtext>M</mtext></msub><mo>−</mo><msub><mi>k</mi><mtext>2</mtext></msub></math></dt><dd id="mm-r-kr"></dd></div>
+        <div hidden data-full><dt><math xmlns="http://www.w3.org/1998/Math/MathML" aria-label="epsilon equals total enzyme divided by initial S plus K M"><mi>ε</mi><mo>=</mo><mfrac><mrow><msub><mi>E</mi><mtext>0</mtext></msub></mrow><mrow><msub><mtext>[S]</mtext><mn>0</mn></msub><mo>+</mo><msub><mi>K</mi><mtext>M</mtext></msub></mrow></mfrac></math></dt><dd id="mm-r-eps"></dd></div>
         <div hidden data-full><dt>max |ΔS| / [S]₀, t ≤ 10</dt><dd id="mm-r-err"></dd></div>
       </dl>
     </div>
@@ -103,6 +109,24 @@
 </details>
 
 <style>
+  /* Native MathML keeps fractions and indices crisp without a network dependency. */
+  .mm-equation {overflow-x:auto;max-width:100%;padding:14px 12px;margin:12px 0 16px;border-radius:8px;background:var(--site-soft);font-size:19px;}
+  .mm-equation math {width:max-content;min-width:100%;margin:0;}
+  .mm-equation-primary {font-size:28px;padding:20px 16px;border-left:3px solid var(--site-purple);}
+  .mm-explainer math, .mm-readouts math {font-size:1.08em;}
+  .mm-explainer li:has(math) {line-height:1.9;}
+  .mm-reaction {display:flex;align-items:center;justify-content:center;gap:14px;margin:14px 0 18px;font:20px Georgia,serif;}
+  .mm-reaction-arrow {display:flex;flex-direction:column;align-items:center;line-height:1.15;}
+  .mm-reaction-arrow > span {font-size:28px;}
+  .mm-reaction-arrow small {font-size:12px;color:var(--site-muted);}
+  #mm-explorer .mm-readouts div {align-items:center;min-height:27px;}
+  #mm-explorer .mm-readouts dd {flex-shrink:0;}
+  @media (max-width:520px) {
+    .mm-equation {font-size:17px;padding:12px 8px;}
+    .mm-equation-primary {font-size:24px;}
+    .mm-reaction {gap:10px;font-size:18px;}
+  }
+
   #mm-explorer, .mm-explainer {
     --mm-solution: light-dark(#c62828, #ff7b72);
     --mm-point: light-dark(#b45f06, #f0a23b);
