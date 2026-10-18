@@ -30,6 +30,10 @@ def example_path(chapter, example):
     return f"chapters/{chapter['slug']}/{example['slug']}/index.html"
 
 
+def student_path(lab):
+    return f"student-labs/{lab['slug']}/index.html"
+
+
 def replace(template, **values):
     for key, value in values.items():
         template = template.replace("{{" + key + "}}", value)
@@ -67,13 +71,14 @@ def main():
     parser.add_argument("--publish-dir", type=Path, help="Copy only public output to this directory.")
     args = parser.parse_args()
     catalog = json.loads((SOURCE / "catalog.json").read_text())
+    student_labs = json.loads((SOURCE / "student-labs.json").read_text())
     template = (SOURCE / "page.html").read_text()
     outputs = {"assets/lab.css": (SOURCE / "site.css").read_text()}
     for vendor_file in (SOURCE / "vendor").iterdir():
         if vendor_file.is_file():
             outputs[f"assets/vendor/{vendor_file.name}"] = vendor_file.read_text()
 
-    def page(path, title, description, body, chapter=None, example=None, index=0):
+    def page(path, title, description, body, chapter=None, example=None, index=0, student=None):
         home = href(path, "index.html")
         current = ' aria-current="page"' if path == "index.html" else ""
         nav = f'<a href="{home}"{current}>Chapters</a><a href="https://shzhang3.github.io/#teaching">Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">GitHub ↗</a>'
@@ -86,6 +91,8 @@ def main():
             else:
                 crumbs += f'<span aria-current="page">{chapter_label}</span>'
             crumbs += "</nav>"
+        if student:
+            crumbs = f'<nav class="site-breadcrumbs" aria-label="Breadcrumb"><a href="{home}">All chapters</a><span aria-hidden="true">/</span><a href="{home}#student-labs">Student-submitted labs</a><span aria-hidden="true">/</span><span aria-current="page">{escape(student["title"])}</span></nav>'
         example_nav = ""
         if example:
             ready = [e for e in chapter["examples"] if "source" in e]
@@ -95,6 +102,13 @@ def main():
             previous_link = f'<a href="{href(path,example_path(chapter,previous))}"><small>Previous example</small>← {escape(previous["title"])}</a>' if previous else '<span></span>'
             next_link = f'<a href="{href(path,example_path(chapter,following))}"><small>Next example</small>{escape(following["title"])} →</a>' if following else '<span></span>'
             example_nav = f'<nav class="site-example-nav" aria-label="Example navigation">{previous_link}<a class="site-all-examples" href="{href(path,chapter_path(chapter))}">All chapter examples</a>{next_link}</nav>'
+        if student:
+            position = student_labs.index(student)
+            previous = student_labs[position-1] if position else None
+            following = student_labs[position+1] if position+1 < len(student_labs) else None
+            previous_link = f'<a href="{href(path,student_path(previous))}"><small>Previous student lab</small>← {escape(previous["title"])}</a>' if previous else '<span></span>'
+            next_link = f'<a href="{href(path,student_path(following))}"><small>Next student lab</small>{escape(following["title"])} →</a>' if following else '<span></span>'
+            example_nav = f'<nav class="site-example-nav" aria-label="Student lab navigation">{previous_link}<a class="site-all-examples" href="{home}#student-labs">All student labs</a>{next_link}</nav>'
         legacy = ""
         if path == "index.html":
             legacy = '<script>const legacy={"#amath351-slope-lab":"chapters/first-order/direction-fields/","#amath351-intro":"chapters/first-order/fluids/","#ai-flow":"chapters/first-order/fluids/#ai-flow","#ai-blowup":"chapters/first-order/fluids/#ai-blowup"};if(legacy[location.hash])location.replace(legacy[location.hash]);</script>'
@@ -103,7 +117,7 @@ def main():
             CANONICAL=BASE_URL+path.removesuffix("index.html"),
             STYLESHEET=href(path,"assets/lab.css"), HOME_URL=home, HEADER_LINKS=nav,
             BREADCRUMBS=crumbs, CONTENT=body, EXAMPLE_NAV=example_nav, LEGACY_SCRIPT=legacy,
-            NOSCRIPT='<noscript>Enable JavaScript to use the interactive plots. Explanations and navigation remain available.</noscript>' if example else ""
+            NOSCRIPT='<noscript>Enable JavaScript to use the interactive plots. Explanations and navigation remain available.</noscript>' if example or student else ""
         )
 
     cards = []
@@ -111,7 +125,9 @@ def main():
         count = sum("source" in e for e in chapter["examples"])
         status = f"{count} interactive examples ready" if count else "Examples coming as the course progresses"
         cards.append(f'<a class="site-chapter" href="{href("index.html",chapter_path(chapter))}">{illustration(i)}<div class="site-chapter-copy"><div class="site-kicker">Chapter {i:02d}</div><h2>{escape(chapter["title"])}</h2><p>{escape(chapter["description"])}</p><div class="site-chapter-status">{status}</div><div class="site-chapter-action">Explore chapter <span aria-hidden="true">→</span></div></div></a>')
-    home_body = '<section class="site-hero"><div class="site-kicker">AMATH 351 · Differential equations</div><h1>One course.<br>A growing collection of experiments.</h1><p>Make a prediction, change a parameter, and see what follows. Choose a chapter to explore its examples.</p><p class="site-course">Autumn 2026 · University of Washington</p></section><section class="site-chapters" aria-label="Course chapters">'+''.join(cards)+'</section><section class="site-about"><h2>Built as we learn.</h2><p>This open-source lab grows alongside the course. Each example connects a mathematical idea to something you can observe and change. Later chapters will open as we reach their topics.</p></section>'
+    student_cards = ''.join(f'<a class="site-example" href="{href("index.html",student_path(lab))}"><small>{escape(lab["section"])} · By {escape(lab["author"])}</small><h3>{escape(lab["title"])}</h3><div class="site-example-equation">{escape(lab["label"])}</div><p>{escape(lab["description"])}</p><span class="site-example-link">Open experiment →</span></a>' for lab in student_labs)
+    student_section = f'<section id="student-labs" class="site-student-labs" aria-labelledby="student-labs-heading"><div class="site-section-title"><h2 id="student-labs-heading">Student-submitted labs</h2><span>{len(student_labs)} from students in the course</span></div><p class="site-note">Experiments built by students taking AMATH 351. Have an idea for one? See <a href="https://github.com/shzhang3/amath351-lab#student-submitted-labs" target="_blank" rel="noopener">how to contribute</a>.</p><section class="site-examples" aria-label="Student-submitted labs">{student_cards}</section></section>' if student_labs else ''
+    home_body = '<section class="site-hero"><div class="site-kicker">AMATH 351 · Differential equations</div><h1>One course.<br>A growing collection of experiments.</h1><p>Make a prediction, change a parameter, and see what follows. Choose a chapter to explore its examples.</p><p class="site-course">Autumn 2026 · University of Washington</p></section><section class="site-chapters" aria-label="Course chapters">'+''.join(cards)+'</section>'+student_section+'<section class="site-about"><h2>Built as we learn.</h2><p>This open-source lab grows alongside the course. Each example connects a mathematical idea to something you can observe and change. Later chapters will open as we reach their topics.</p></section>'
     page("index.html", "Explore the chapters", "Interactive differential equations examples in three chapters: first-order equations, higher-order linear equations, and linear systems.", home_body)
 
     for i, chapter in enumerate(catalog, 1):
@@ -155,6 +171,12 @@ def main():
                 replacements = {"AI_GROWTH_MODEL":(SOURCE / "ai-growth-model.cjs").read_text(), "D3_URL":href(path,"assets/vendor/d3.v7.9.0.min.js")}
             fragment = replace(fragment, **replacements)
             page(path, example["title"], example["description"], fragment, chapter=chapter, example=example, index=i)
+
+    for lab in student_labs:
+        path = student_path(lab)
+        replacements = {"MODEL": (SOURCE / lab["model"]).read_text()} if "model" in lab else {}
+        fragment = replace((SOURCE / lab["source"]).read_text(), **replacements)
+        page(path, lab["title"], lab["description"], fragment, student=lab)
 
     for relative, content in outputs.items():
         output = ROOT / relative

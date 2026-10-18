@@ -1,0 +1,3 @@
+[
+  {"slug": "michaelis-menten", "title": "Michaelis–Menten enzyme kinetics", "description": "Follow an enzyme using up its substrate. Link the slope field, the saturation curve, and the double-reciprocal line, then see when the one-equation model breaks down.", "section": "Section 1.4 · Separable equations", "label": "[S]′ = −Vmax[S]/(KM + [S])", "author": "Roan", "source": "michaelis-menten.html", "model": "michaelis-menten-model.cjs"}
+]

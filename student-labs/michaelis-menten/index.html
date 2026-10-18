@@ -1,0 +1,496 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Follow an enzyme using up its substrate. Link the slope field, the saturation curve, and the double-reciprocal line, then see when the one-equation model breaks down.">
+  <meta name="theme-color" content="#624298">
+  <title>Michaelis–Menten enzyme kinetics · AMATH 351 Lab</title>
+  <link rel="canonical" href="https://shzhang3.github.io/amath351-lab/student-labs/michaelis-menten/">
+  <link rel="stylesheet" href="../../assets/lab.css">
+</head>
+<body>
+  <a class="site-skip" href="#main-content">Skip to content</a>
+  <div class="site-wrap">
+    <header class="site-header">
+      <a class="site-brand" href="../../"><span class="site-brand-mark" aria-hidden="true">y′</span>AMATH 351 / Lab</a>
+      <nav aria-label="Main navigation"><a href="../../">Chapters</a><a href="https://shzhang3.github.io/#teaching">Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">GitHub ↗</a></nav>
+    </header>
+<nav class="site-breadcrumbs" aria-label="Breadcrumb"><a href="../../">All chapters</a><span aria-hidden="true">/</span><a href="../../#student-labs">Student-submitted labs</a><span aria-hidden="true">/</span><span aria-current="page">Michaelis–Menten enzyme kinetics</span></nav>
+    <main id="main-content" tabindex="-1"><noscript>Enable JavaScript to use the interactive plots. Explanations and navigation remain available.</noscript><section class="lab-intro">
+  <div class="site-kicker">Student lab · Enzyme kinetics · Separable equations</div>
+  <h1>Michaelis–Menten</h1>
+  <p class="lab-math" role="math" aria-label="S prime equals minus V max S over K M plus S">[S]′ = −V<sub>max</sub>[S] / (K<sub>M</sub> + [S])</p>
+  <p>How fast does an enzyme use up its substrate? The equation is separable, so its solutions satisfy K<sub>M</sub> ln([S]/[S]₀) + [S] − [S]₀ = −V<sub>max</sub>t exactly. Change the parameters to see the slope field, the saturation curve, and the double-reciprocal line respond together, then compare with the full two-equation model it comes from.</p>
+  <p class="lab-small">Submitted by <a href="https://github.com/roam-git" target="_blank" rel="noopener">Roan</a>.</p>
+</section>
+
+<div class="mm-explainer">
+  <section>
+    <h2>Where it comes from</h2>
+    <p>An enzyme E binds substrate S into a complex C, which releases product P:</p>
+    <p class="mm-steps">E + S ⇌ C → E + P &nbsp;<span class="mm-rates">(rates k₁, k₋₁, k₂)</span></p>
+    <p>Mass action gives <span class="mm-m">[S]′ = −k₁[E][S] + k₋₁[C]</span> and <span class="mm-m">[C]′ = k₁[E][S] − (k₋₁ + k₂)[C]</span>, with free enzyme <span class="mm-m">[E] = E₀ − [C]</span>.</p>
+    <p>If the complex settles quickly (quasi-steady state), <span class="mm-m">[C]′ ≈ 0</span>, so <span class="mm-m">[C] ≈ E₀[S]/(K<sub>M</sub> + [S])</span> and <span class="mm-m">[S]′ = −k₂[C]</span>: the equation above.</p>
+  </section>
+
+  <section>
+    <h2>What the terms mean</h2>
+    <ul>
+      <li><span class="mm-m">[S]′</span>: the rate of change of substrate (negative), so −[S]′ is the rate it is consumed. At t = 0 that rate is V₀ in plots 2 and 3.</li>
+      <li><span class="mm-m">V<sub>max</sub> = k₂E₀</span>: top speed, with every enzyme busy. k₂ (k<sub>cat</sub>, the turnover number) is the substrate converted per enzyme per unit time at saturation.</li>
+      <li><span class="mm-m">K<sub>M</sub> = (k₋₁ + k₂)/k₁</span>: the [S] giving half of V<sub>max</sub>. Lower means the enzyme works well at lower substrate. It equals the dissociation constant k₋₁/k₁ only when k₂ ≪ k₋₁, so it is not strictly a measure of binding affinity.</li>
+      <li><span class="mm-m">[S]/(K<sub>M</sub> + [S])</span>: fraction of enzyme occupied. About <span class="mm-m">[S]/K<sub>M</sub></span> when [S] ≪ K<sub>M</sub> (exponential decay), about 1 when [S] ≫ K<sub>M</sub> (linear decay).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>When the reduced model applies</h2>
+    <ul>
+      <li><strong>Quasi-steady state:</strong> after a brief initial burst, [C] adjusts fast enough to track its steady value as [S] slowly falls.</li>
+      <li><strong>Little enzyme:</strong> E₀ ≪ [S]₀ + K<sub>M</sub>. Tick “Full model” to see it fail.</li>
+      <li><strong>Simple chemistry:</strong> one substrate, no inhibitors or cooperativity, product formation effectively irreversible (early in the reaction).</li>
+      <li><strong>Well mixed,</strong> at fixed temperature and pH.</li>
+    </ul>
+    <p class="mm-aside">The full-model overlay sets k₁ = 1.</p>
+  </section>
+
+  <section>
+    <h2>How biochemists use it</h2>
+    <ul>
+      <li><strong>Characterizing enzymes:</strong> fit V₀ against [S] (plot 2) for V<sub>max</sub> and K<sub>M</sub>, then compare k<sub>cat</sub> = V<sub>max</sub>/E₀ and k<sub>cat</sub>/K<sub>M</sub> across enzymes and mutants. Plot 3 is the Lineweaver–Burk linearization; direct curve fitting is now preferred.</li>
+      <li><strong>Drug discovery:</strong> inhibitors shift the apparent K<sub>M</sub> and/or V<sub>max</sub> (competitive ones raise K<sub>M</sub> and leave V<sub>max</sub> unchanged), showing how a drug acts. Statins, competitive inhibitors of HMG-CoA reductase, are one example.</li>
+      <li><strong>Drug metabolism:</strong> liver enzymes saturate, so doses can raise blood levels disproportionately (phenytoin, ethanol).</li>
+      <li><strong>Assays and industry:</strong> enzyme-activity tests, and choosing enzymes for brewing, detergents, and biofuels.</li>
+    </ul>
+  </section>
+</div>
+
+<section id="mm-explorer" class="lab-interactive" aria-labelledby="mm-heading">
+  <h2 id="mm-heading">One equation, three views</h2>
+  <div class="mm-workspace">
+    <div class="mm-controls" role="group" aria-label="Parameters">
+      <label for="mm-in-s">[S] <output id="mm-out-s" for="mm-in-s"></output></label>
+      <input id="mm-in-s" type="range" min="0.1" max="10" step="0.1" value="5">
+      <p class="mm-hint">Starting value at t = 0</p>
+
+      <label for="mm-in-v">V<sub>max</sub> <output id="mm-out-v" for="mm-in-v"></output></label>
+      <input id="mm-in-v" type="range" min="0.1" max="4" step="0.05" value="1">
+
+      <label for="mm-in-k">K<sub>M</sub> <output id="mm-out-k" for="mm-in-k"></output></label>
+      <input id="mm-in-k" type="range" min="0.1" max="5" step="0.05" value="1">
+
+      <label class="mm-check" for="mm-in-full"><input id="mm-in-full" type="checkbox"> Full model (two ODEs)</label>
+      <div class="mm-full-group mm-off" id="mm-full-group">
+        <label for="mm-in-e" class="mm-first">E₀ <output id="mm-out-e" for="mm-in-e"></output></label>
+        <input id="mm-in-e" type="range" min="0" max="1000" step="1" value="500" disabled>
+        <p class="mm-hint">E₀ ≥ V<sub>max</sub>/K<sub>M</sub> keeps k₋₁ ≥ 0</p>
+      </div>
+
+      <dl class="mm-readouts" aria-live="polite">
+        <div><dt>V₀</dt><dd id="mm-r-v0"></dd></div>
+        <div><dt>1/V₀</dt><dd id="mm-r-iv0"></dd></div>
+        <div><dt>1/[S]</dt><dd id="mm-r-is"></dd></div>
+        <div hidden data-full><dt>k₂ = V<sub>max</sub>/E₀</dt><dd id="mm-r-k2"></dd></div>
+        <div hidden data-full><dt>k₋₁ = K<sub>M</sub> − k₂</dt><dd id="mm-r-kr"></dd></div>
+        <div hidden data-full><dt>ε = E₀/([S]₀ + K<sub>M</sub>)</dt><dd id="mm-r-eps"></dd></div>
+        <div hidden data-full><dt>max |ΔS| / [S]₀, t ≤ 10</dt><dd id="mm-r-err"></dd></div>
+      </dl>
+    </div>
+
+    <div class="mm-plots">
+      <section>
+        <h3>1 · Slope field for [S]′</h3>
+        <svg id="mm-p1" viewBox="0 0 720 330" role="img"></svg>
+      </section>
+      <section>
+        <h3>2 · V₀ on [S]</h3>
+        <svg id="mm-p2" viewBox="0 0 720 260" role="img"></svg>
+      </section>
+      <section>
+        <h3>3 · 1/V₀ on 1/[S]</h3>
+        <svg id="mm-p3" viewBox="0 0 720 290" role="img"></svg>
+      </section>
+    </div>
+  </div>
+</section>
+
+<details class="lab-explanation">
+  <summary>How are the curves computed?</summary>
+  <p>The red curves in plot 1 come from the exact implicit solution above, solved for [S] at each time with Newton's method (no numerical ODE solver). The blue full-model curves have no closed form, so they use a fixed-step fourth-order Runge–Kutta method with a step small enough for the fast binding rates.</p>
+  <p>The blue dots in plots 2 and 3 are what an experiment would measure from the full model: the peak product-formation rate k₂[C](t), reached right after the initial binding burst. They lie on the reduced curve when E₀ is small and fall below it as E₀ grows.</p>
+</details>
+
+<style>
+  #mm-explorer, .mm-explainer {
+    --mm-solution: light-dark(#c62828, #ff7b72);
+    --mm-point: light-dark(#b45f06, #f0a23b);
+    --mm-grid: light-dark(#ebe8f2, #2c2a36);
+    --mm-full: light-dark(#1565c0, #6cb6ff);
+  }
+  .mm-explainer {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 24px;}
+  .mm-explainer section {background:var(--site-paper);border:1px solid var(--site-line);border-radius:10px;padding:14px 16px;min-width:0;}
+  .mm-explainer h2 {font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--site-purple);margin:0 0 8px;font-weight:600;}
+  .mm-explainer p, .mm-explainer li {font-size:13.5px;line-height:1.55;margin:0 0 7px;}
+  .mm-explainer p:last-child, .mm-explainer li:last-child {margin-bottom:0;}
+  .mm-explainer ul {margin:0;padding-left:18px;}
+  .mm-explainer .mm-m {font:15px Georgia,serif;white-space:nowrap;}
+  .mm-explainer .mm-steps {font:15px/1.7 Georgia,serif;margin:4px 0 8px;}
+  .mm-explainer .mm-rates {font-size:12px;}
+  .mm-explainer .mm-aside {margin-top:7px;font-size:12px;}
+  #mm-explorer .mm-workspace {display:grid;grid-template-columns:240px minmax(0,1fr);gap:32px;align-items:start;}
+  #mm-explorer .mm-controls {position:sticky;top:16px;background:var(--site-soft);border:1px solid var(--site-line);border-radius:10px;padding:18px 18px 14px;}
+  #mm-explorer .mm-controls label {display:block;font-size:14px;font-weight:600;margin-top:14px;}
+  #mm-explorer .mm-controls label:first-child, #mm-explorer .mm-controls label.mm-first {margin-top:0;}
+  #mm-explorer .mm-controls output {float:right;font-weight:400;font-variant-numeric:tabular-nums;color:var(--site-muted);}
+  #mm-explorer .mm-controls input[type=range] {width:100%;margin:8px 0 0;accent-color:var(--site-purple);}
+  #mm-explorer .mm-hint {font-size:12px;color:var(--site-muted);margin:2px 0 0;}
+  #mm-explorer .mm-controls label.mm-check {display:flex;align-items:center;gap:8px;margin-top:20px;padding-top:14px;border-top:1px solid var(--site-line);cursor:pointer;}
+  #mm-explorer .mm-check input {accent-color:var(--site-purple);margin:0;width:16px;height:16px;}
+  #mm-explorer .mm-full-group {transition:opacity .15s;}
+  #mm-explorer .mm-full-group.mm-off {opacity:.45;}
+  #mm-explorer .mm-readouts {margin:18px 0 0;padding-top:12px;border-top:1px solid var(--site-line);font-size:13px;font-variant-numeric:tabular-nums;}
+  #mm-explorer .mm-readouts div {display:flex;justify-content:space-between;gap:8px;margin:3px 0;}
+  #mm-explorer .mm-readouts dt {color:var(--site-muted);}
+  #mm-explorer .mm-readouts dd {margin:0;}
+  #mm-explorer .mm-plots {min-width:0;}
+  #mm-explorer .mm-plots section {margin-bottom:22px;}
+  #mm-explorer .mm-plots section:last-child {margin-bottom:0;}
+  #mm-explorer h3 {font-size:14px;font-weight:600;margin:0 0 4px;}
+  #mm-explorer svg {display:block;width:100%;height:auto;overflow:visible;}
+  #mm-explorer svg text {fill:var(--site-ink);font-family:inherit;}
+  #mm-explorer svg .tick {font-size:11px;fill:var(--site-muted);}
+  #mm-explorer svg .axl {font-size:13px;}
+  #mm-explorer svg .note {font-size:11.5px;paint-order:stroke;stroke:var(--site-paper);stroke-width:4px;stroke-linejoin:round;}
+  #mm-explorer svg .grid {stroke:var(--mm-grid);stroke-width:1;}
+  #mm-explorer svg .frame {stroke:var(--site-line);stroke-width:1;fill:none;}
+  #mm-explorer svg .zero {stroke:var(--site-muted);stroke-width:1;}
+  #mm-explorer svg .guide {stroke:var(--site-muted);stroke-width:1;stroke-dasharray:4 3;fill:none;}
+  #mm-explorer svg .curve {stroke:var(--site-purple);stroke-width:2.5;fill:none;}
+  #mm-explorer svg .curve-ext {stroke:var(--site-purple);stroke-width:2;fill:none;stroke-dasharray:6 4;}
+  #mm-explorer svg .sol {stroke:var(--mm-solution);stroke-width:1.2;fill:none;opacity:.35;}
+  #mm-explorer svg .sol-main {stroke:var(--mm-solution);stroke-width:2.8;fill:none;}
+  #mm-explorer svg .pt {fill:var(--mm-point);stroke:var(--site-paper);stroke-width:1.5;}
+  #mm-explorer svg .mark {fill:var(--site-paper);stroke:var(--site-purple);stroke-width:2;}
+  #mm-explorer svg .full-s {stroke:var(--mm-full);stroke-width:2.4;fill:none;stroke-dasharray:7 4;}
+  #mm-explorer svg .full-c {stroke:var(--mm-full);stroke-width:1.4;fill:none;opacity:.85;}
+  #mm-explorer svg .dot {fill:var(--mm-full);stroke:var(--site-paper);stroke-width:1.2;}
+  @media (max-width:760px){
+    .mm-explainer {grid-template-columns:minmax(0,1fr);}
+    #mm-explorer .mm-workspace {grid-template-columns:minmax(0,1fr);gap:20px;}
+    #mm-explorer .mm-controls {position:static;}
+  }
+  @media (pointer:coarse){ #mm-explorer .mm-controls input[type=range] {min-height:44px;} }
+</style>
+<script>// Student lab: Michaelis–Menten kinetics, [S]' = -Vmax [S] / (K_M + [S]).
+// The reduced model is solved exactly; the full mass-action model (k1 = 1)
+// has no closed form and is integrated with fixed-step RK4.
+(function(root){
+  const rate=(s,vmax,km)=>vmax*s/(km+s);
+
+  // Solve u + ln u = L for u > 0 (u = W(e^L)) by Newton's method on e^v + v = L.
+  // f(v) = e^v + v - L is increasing and convex, so Newton converges from any start.
+  function solveU(L){
+    let v=L>1?Math.log(L):L;
+    for(let i=0;i<60;i++){
+      const e=Math.exp(v),next=v-(e+v-L)/(e+1);
+      if(Math.abs(next-v)<=1e-15*Math.max(1,Math.abs(v)))return Math.exp(next);
+      v=next;
+    }
+    return Math.exp(v);
+  }
+  // Exact solution of K_M ln(s/s0) + (s - s0) = -Vmax t.
+  const solution=(s0,t,vmax,km)=>km*solveU(Math.log(s0/km)+s0/km-vmax*t/km);
+
+  // Full model E + S <-> C -> E + P with k1 = 1. State (s, c); free enzyme is e0 - c.
+  // Vmax = kc e0 and K_M = kr + kc fix kc = Vmax/e0 and kr = K_M - kc, so e0 >= Vmax/K_M.
+  const minEnzyme=(vmax,km)=>vmax/km;
+  const fullRates=(vmax,km,e0)=>{const kc=vmax/e0;return {kc,kr:Math.max(0,km-kc)};};
+  const fullRhs=(e0,kr,kc,s,c)=>[-(e0-c)*s+kr*c,(e0-c)*s-(kr+kc)*c];
+  function rk4(e0,kr,kc,s,c,h){
+    const a=fullRhs(e0,kr,kc,s,c),
+          b=fullRhs(e0,kr,kc,s+h/2*a[0],c+h/2*a[1]),
+          d=fullRhs(e0,kr,kc,s+h/2*b[0],c+h/2*b[1]),
+          f=fullRhs(e0,kr,kc,s+h*d[0],c+h*d[1]);
+    return [s+h/6*(a[0]+2*b[0]+2*d[0]+f[0]),c+h/6*(a[1]+2*b[1]+2*d[1]+f[1])];
+  }
+  // The fastest rate is about e0 + s0 + kr + kc; h times it stays well inside RK4 stability.
+  const stepFor=(e0,kr,kc,s0)=>Math.min(.02,.25/(e0+s0+kr+kc));
+  function simulateFull(e0,kr,kc,s0,tMax,nOut){
+    const per=Math.max(1,Math.ceil(tMax/nOut/stepFor(e0,kr,kc,s0))),h=tMax/nOut/per;
+    const S=[s0],C=[0];let s=s0,c=0;
+    for(let i=0;i<nOut;i++){
+      for(let j=0;j<per;j++)[s,c]=rk4(e0,kr,kc,s,c,h);
+      S.push(s);C.push(c);
+    }
+    return {S,C};
+  }
+  // "Measured" initial velocity of the full model: the peak product-formation rate
+  // P' = kc [C](t), reached once the fast binding burst is over.
+  function peakRate(e0,kr,kc,s0){
+    const h=stepFor(e0,kr,kc,s0),n=Math.ceil(30/h);let s=s0,c=0,best=0;
+    for(let i=0;i<n;i++){
+      [s,c]=rk4(e0,kr,kc,s,c,h);
+      if(c>best)best=c;else if(c<.9*best)break; // clearly past the peak
+    }
+    return kc*best;
+  }
+  // Largest gap between the full and reduced [S](t), relative to s0, on the output grid.
+  function maxRelativeGap(sim,s0,vmax,km,tMax){
+    const n=sim.S.length-1;let gap=0;
+    for(let k=0;k<=n;k++)gap=Math.max(gap,Math.abs(sim.S[k]-solution(s0,tMax*k/n,vmax,km))/s0);
+    return gap;
+  }
+  const api=Object.freeze({rate,solveU,solution,minEnzyme,fullRates,fullRhs,simulateFull,peakRate,maxRelativeGap});
+  if(typeof module==='object'&&module.exports)module.exports=api;else root.Amath351MichaelisMenten=api;
+})(globalThis);
+</script>
+<script>
+(()=>{
+  const M = Amath351MichaelisMenten;
+  const $ = id => document.getElementById('mm-' + id);
+  const st = {S:5, V:1, K:1, E:1};
+  const T_MAX = 10, S_MAX = 10, SLOPE_MAX = 4;
+
+  // ---- formatting -------------------------------------------------------
+  const minus = s => s.replace(/-/g, '−');
+  const num = (x, d = 2) => minus(String(+x.toFixed(d)));
+  const sub = (a, b) => `${a}<tspan dy="3" font-size="9">${b}</tspan>`; // keep at end of a label
+
+  // ---- full-model overlay ---------------------------------------------------
+  const DOT_S = [0.25, 0.5, 0.75, 1, 1.5, 2, 2.5, 3, 4, 5, 6, 7, 8, 9, 10];
+  let dotCache = {key: '', dots: []};
+  function buildFull(S, V, K, E){
+    const {kc, kr} = M.fullRates(V, K, E);
+    const sim = M.simulateFull(E, kr, kc, S, T_MAX, 200);
+    // The fixed dots depend only on the kinetics, so reuse them while only [S] moves.
+    const key = `${E}|${kr}|${kc}`;
+    if(dotCache.key !== key) dotCache = {key, dots: DOT_S.map(S0 => ({S: S0, v: M.peakRate(E, kr, kc, S0)}))};
+    const dots = DOT_S.includes(S) ? dotCache.dots : [...dotCache.dots, {S, v: M.peakRate(E, kr, kc, S)}];
+    return {E, kr, kc, sim, dots, err: M.maxRelativeGap(sim, S, V, K, T_MAX), eps: E / (S + K)};
+  }
+  // E0 slider is logarithmic: position 0..1000 -> 0.01..100.
+  const posToE = pos => 0.01 * Math.pow(10, 4 * pos / 1000);
+  const eToPos = e => 1000 * Math.log10(e / 0.01) / 4;
+  let fm = null; // current full-model results, or null when the overlay is off
+  const legend = (x, y, items) => items.map((it, i) => {
+    const yy = y + i * 16;
+    const mark = it.dot ? `<circle class="dot" cx="${x + 9}" cy="${yy - 4}" r="3.8"/>`
+                        : `<line class="${it.cls}" x1="${x}" x2="${x + 18}" y1="${yy - 4}" y2="${yy - 4}"/>`;
+    return mark + `<text class="note" x="${x + 26}" y="${yy}">${it.label}</text>`;
+  }).join('');
+
+  // ---- colour ramp for slopes (shallow teal -> steep purple) -----------------
+  const STOPS = [[42,157,143],[63,95,168],[106,27,154]];
+  function ramp(u){
+    u = Math.max(0, Math.min(1, u));
+    const x = u * (STOPS.length - 1), i = Math.min(STOPS.length - 2, Math.floor(x)), w = x - i;
+    const c = STOPS[i].map((a, j) => Math.round(a + w * (STOPS[i + 1][j] - a)));
+    return `rgb(${c[0]},${c[1]},${c[2]})`;
+  }
+
+  // ---- plot helpers -------------------------------------------------------
+  function niceTicks(lo, hi, n = 5){
+    const raw = (hi - lo) / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / mag;
+    const step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * mag, out = [];
+    for(let v = Math.ceil(lo / step - 1e-9) * step; v <= hi + 1e-9; v += step)
+      out.push(Math.abs(v) < 1e-12 ? 0 : +v.toFixed(10));
+    return out;
+  }
+  function makeP(w, h, m, xd, yd){
+    const iw = w - m.l - m.r, ih = h - m.t - m.b;
+    return {w, h, m, iw, ih, xd, yd,
+      x: v => m.l + (v - xd[0]) / (xd[1] - xd[0]) * iw,
+      y: v => m.t + ih - (v - yd[0]) / (yd[1] - yd[0]) * ih};
+  }
+  function axes(p, xt, yt, xl, yl){
+    const {m, iw, ih} = p; let s = '';
+    for(const v of xt)
+      s += `<line class="grid" x1="${p.x(v)}" x2="${p.x(v)}" y1="${m.t}" y2="${m.t + ih}"/>` +
+           `<text class="tick" x="${p.x(v)}" y="${m.t + ih + 16}" text-anchor="middle">${num(v, 3)}</text>`;
+    for(const v of yt)
+      s += `<line class="grid" x1="${m.l}" x2="${m.l + iw}" y1="${p.y(v)}" y2="${p.y(v)}"/>` +
+           `<text class="tick" x="${m.l - 8}" y="${p.y(v) + 4}" text-anchor="end">${num(v, 3)}</text>`;
+    s += `<rect class="frame" x="${m.l}" y="${m.t}" width="${iw}" height="${ih}"/>`;
+    s += `<text class="axl" x="${m.l + iw / 2}" y="${p.h - 4}" text-anchor="middle">${xl}</text>`;
+    s += `<text class="axl" transform="translate(14 ${m.t + ih / 2}) rotate(-90)" text-anchor="middle">${yl}</text>`;
+    return s;
+  }
+  const clip = (id, p) => `<clipPath id="${id}"><rect x="${p.m.l}" y="${p.m.t}" width="${p.iw}" height="${p.ih}"/></clipPath>`;
+  const poly = pts => 'M' + pts.map(q => q[0].toFixed(2) + ' ' + q[1].toFixed(2)).join('L');
+  const labelSide = (p, px) => px > p.m.l + p.iw * 0.7 ? {a: 'end', d: -10} : {a: 'start', d: 10};
+
+  // ---- plot 1: slope field + solution curves -----------------------------
+  function draw1(){
+    const {S, V, K} = st, V0 = M.rate(S, V, K);
+    const p = makeP(720, 330, {l:58, r:16, t:30, b:42}, [0, T_MAX], [0, S_MAX]);
+    let s = `<defs>${clip('mm-c1', p)}<linearGradient id="mm-g1">` +
+            [0, .5, 1].map(u => `<stop offset="${u * 100}%" stop-color="${ramp(u)}"/>`).join('') +
+            `</linearGradient></defs>`;
+    s += axes(p, niceTicks(0, T_MAX), niceTicks(0, S_MAX), 't', '[S]');
+
+    // slope field: equal-length segments drawn with their true on-screen angle
+    const BINS = 14, bins = Array.from({length: BINS}, () => []);
+    const pxT = p.x(1) - p.x(0), pxS = p.y(0) - p.y(1), half = 8.5;
+    for(let i = 0; i < 25; i++) for(let j = 0; j < 20; j++){
+      const t = 0.2 + 0.4 * i, y = 0.25 + 0.5 * j, m = -M.rate(y, V, K);
+      const dx = pxT, dy = -m * pxS, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len;
+      const cx = p.x(t), cy = p.y(y);
+      const b = Math.min(BINS - 1, Math.floor(Math.min(1, -m / SLOPE_MAX) * BINS));
+      bins[b].push(`M${(cx - ux * half).toFixed(1)} ${(cy - uy * half).toFixed(1)}L${(cx + ux * half).toFixed(1)} ${(cy + uy * half).toFixed(1)}`);
+    }
+    s += '<g clip-path="url(#mm-c1)" stroke-width="1.8" stroke-linecap="round">';
+    bins.forEach((segs, b) => { if(segs.length) s += `<path d="${segs.join('')}" stroke="${ramp((b + .5) / BINS)}"/>`; });
+
+    // solution curves: a few faint ones, then the one through the chosen [S]
+    const curve = S0 => {
+      const pts = []; for(let k = 0; k <= 200; k++){ const t = T_MAX * k / 200; pts.push([p.x(t), p.y(M.solution(S0, t, V, K))]); }
+      return poly(pts);
+    };
+    for(const S0 of [2, 4, 6, 8, 10]) s += `<path class="sol" d="${curve(S0)}"/>`;
+    s += `<path class="sol-main" d="${curve(S)}"/>`;
+    if(fm){ // full two-ODE model on the same axes: [S](t) dashed, [C](t) thin
+      const sp = [], cp = [];
+      for(let k = 0; k <= 200; k++){ const x = p.x(T_MAX * k / 200); sp.push([x, p.y(fm.sim.S[k])]); cp.push([x, p.y(fm.sim.C[k])]); }
+      s += `<path class="full-c" d="${poly(cp)}"/><path class="full-s" d="${poly(sp)}"/>`;
+    }
+    s += '</g>';
+    s += `<circle class="pt" cx="${p.x(0)}" cy="${p.y(S)}" r="5.5"/>`;
+    const below = S > 8.6;
+    s += `<text class="note" x="${p.x(0) + 11}" y="${p.y(S) + (below ? 17 : -9)}">V₀ = ${num(V0)}</text>`;
+
+    // colour key
+    const right = p.m.l + p.iw, bw = 90, bx = right - 22 - bw;
+    s += `<text class="note" x="${bx - 20}" y="17" text-anchor="end">d[S]/dt</text>` +
+         `<text class="note" x="${bx - 5}" y="17" text-anchor="end">0</text>` +
+         `<rect x="${bx}" y="9" width="${bw}" height="9" rx="2" fill="url(#mm-g1)"/>` +
+         `<text class="note" x="${bx + bw + 5}" y="17">−${SLOPE_MAX}</text>`;
+    if(fm){ // horizontal legend in the top margin, left of the colour key
+      const items = [['sol-main', 'reduced [S]'], ['full-s', 'full [S]'], ['full-c', 'full [C]']];
+      let x = p.m.l;
+      for(const [cls, label] of items){
+        s += `<line class="${cls}" x1="${x}" x2="${x + 18}" y1="13" y2="13"/><text class="note" x="${x + 24}" y="17">${label}</text>`;
+        x += 24 + label.length * 6.4 + 14;
+      }
+    }
+    $('p1').setAttribute('aria-label', `Slope field of S prime for V max ${num(V)} and K M ${num(K)}, with the solution starting at S equals ${num(S)}`);
+    $('p1').innerHTML = s;
+  }
+
+  // ---- plot 2: V0 on [S] ---------------------------------------------------
+  function draw2(){
+    const {S, V, K} = st, V0 = M.rate(S, V, K);
+    const vTop = V * 1.2;
+    const p = makeP(720, 260, {l:58, r:16, t:16, b:42}, [0, S_MAX], [0, vTop]);
+    let s = `<defs>${clip('mm-c2', p)}</defs>`;
+    s += axes(p, niceTicks(0, S_MAX), niceTicks(0, vTop, 4), '[S]', 'V₀');
+    s += `<g clip-path="url(#mm-c2)">`;
+    s += `<line class="guide" x1="${p.m.l}" x2="${p.m.l + p.iw}" y1="${p.y(V)}" y2="${p.y(V)}"/>`;
+    const pts = []; for(let k = 0; k <= 240; k++){ const x = S_MAX * k / 240; pts.push([p.x(x), p.y(M.rate(x, V, K))]); }
+    s += `<path class="curve" d="${poly(pts)}"/></g>`;
+    if(fm) for(const d of fm.dots) s += `<circle class="dot" cx="${p.x(d.S)}" cy="${p.y(d.v)}" r="3.8"/>`;
+    s += `<text class="note" x="${p.m.l + p.iw - 4}" y="${p.y(V) - 6}" text-anchor="end">${sub('V', 'max')}</text>`;
+
+    // half-saturation marker
+    s += `<line class="guide" x1="${p.x(K)}" x2="${p.x(K)}" y1="${p.y(V / 2)}" y2="${p.y(0)}"/>` +
+         `<line class="guide" x1="${p.m.l}" x2="${p.x(K)}" y1="${p.y(V / 2)}" y2="${p.y(V / 2)}"/>` +
+         `<circle class="mark" cx="${p.x(K)}" cy="${p.y(V / 2)}" r="4.5"/>` +
+         `<text class="note" x="${p.x(K) + 6}" y="${p.y(0) - 6}">${sub('K', 'M')}</text>` +
+         `<text class="note" x="${p.m.l + 6}" y="${p.y(V / 2) - 6}">${sub('½V', 'max')}</text>`;
+
+    // chosen point
+    s += `<line class="guide" x1="${p.x(S)}" x2="${p.x(S)}" y1="${p.y(V0)}" y2="${p.y(0)}"/>` +
+         `<line class="guide" x1="${p.m.l}" x2="${p.x(S)}" y1="${p.y(V0)}" y2="${p.y(V0)}"/>` +
+         `<circle class="pt" cx="${p.x(S)}" cy="${p.y(V0)}" r="5.5"/>`;
+    const L = labelSide(p, p.x(S));
+    s += `<text class="note" x="${p.x(S) + L.d}" y="${p.y(V0) + 18}" text-anchor="${L.a}">V₀ = ${num(V0)}</text>`;
+    if(fm) s += legend(p.m.l + p.iw - 215, p.m.t + p.ih - 30,
+      [{cls: 'curve', label: 'reduced: V<tspan dy="3" font-size="9">max</tspan><tspan dy="-3">[S]/(K</tspan><tspan dy="3" font-size="9">M</tspan><tspan dy="-3"> + [S])</tspan>'},
+       {dot: true, label: 'full model: peak k₂[C]'}]);
+    $('p2').setAttribute('aria-label', `Initial rate V zero against S: saturating curve with V max ${num(V)} and K M ${num(K)}; at S equals ${num(S)}, V zero is ${num(V0)}`);
+    $('p2').innerHTML = s;
+  }
+
+  // ---- plot 3: 1/V0 on 1/[S] (Lineweaver–Burk) ------------------------------
+  function draw3(){
+    const {S, V, K} = st, V0 = M.rate(S, V, K);
+    const line = x => (K * x + 1) / V;
+    const xmin = -1.3 / K, xmax = Math.max(1.4 / S, 1.3 / K);
+    const ymin = line(xmin), ymax = line(xmax) * 1.06;
+    const p = makeP(720, 290, {l:58, r:16, t:16, b:42}, [xmin, xmax], [ymin, ymax]);
+    let s = `<defs>${clip('mm-c3', p)}</defs>`;
+    s += axes(p, niceTicks(xmin, xmax), niceTicks(ymin, ymax, 5), '1/[S]', '1/V₀');
+    s += `<g clip-path="url(#mm-c3)">`;
+    if(p.y(0) >= p.m.t && p.y(0) <= p.m.t + p.ih)
+      s += `<line class="zero" x1="${p.m.l}" x2="${p.m.l + p.iw}" y1="${p.y(0)}" y2="${p.y(0)}"/>`;
+    s += `<line class="zero" x1="${p.x(0)}" x2="${p.x(0)}" y1="${p.m.t}" y2="${p.m.t + p.ih}"/>`;
+    s += `<path class="curve-ext" d="${poly([[p.x(xmin), p.y(line(xmin))], [p.x(0), p.y(line(0))]])}"/>`;
+    s += `<path class="curve" d="${poly([[p.x(0), p.y(line(0))], [p.x(xmax), p.y(line(xmax))]])}"/>`;
+    if(fm) for(const d of fm.dots) if(d.v > 0) s += `<circle class="dot" cx="${p.x(1 / d.S)}" cy="${p.y(1 / d.v)}" r="3.8"/>`;
+    s += `</g>`;
+
+    // intercepts: y = 1/Vmax, x = -1/K_M
+    s += `<circle class="mark" cx="${p.x(0)}" cy="${p.y(1 / V)}" r="4.5"/>` +
+         `<text class="note" x="${p.x(0) + 9}" y="${p.y(1 / V) + 18}">${sub('1/V', 'max')}</text>` +
+         `<circle class="mark" cx="${p.x(-1 / K)}" cy="${p.y(0)}" r="4.5"/>` +
+         `<text class="note" x="${p.x(-1 / K)}" y="${p.y(0) - 10}" text-anchor="middle">${sub('−1/K', 'M')}</text>`;
+
+    // chosen point
+    const X = 1 / S, Y = 1 / V0;
+    s += `<line class="guide" x1="${p.x(X)}" x2="${p.x(X)}" y1="${p.y(Y)}" y2="${p.y(ymin)}"/>` +
+         `<line class="guide" x1="${p.m.l}" x2="${p.x(X)}" y1="${p.y(Y)}" y2="${p.y(Y)}"/>` +
+         `<circle class="pt" cx="${p.x(X)}" cy="${p.y(Y)}" r="5.5"/>`;
+    // label sits above-left of the point (clear of the rising line) unless it is too close to the left edge
+    const roomLeft = p.x(X) - p.m.l >= 90;
+    s += `<text class="note" x="${p.x(X) + (roomLeft ? -10 : 10)}" y="${p.y(Y) - 10}" text-anchor="${roomLeft ? 'end' : 'start'}">1/V₀ = ${num(Y)}</text>`;
+    if(fm) s += legend(p.m.l + 12, p.m.t + 18,
+      [{cls: 'curve', label: 'reduced model'}, {dot: true, label: 'full model: peak k₂[C]'}]);
+    $('p3').setAttribute('aria-label', `Double-reciprocal line with slope K M over V max, y-intercept ${num(1 / V)} and x-intercept ${num(-1 / K)}; the point for S equals ${num(S)} is marked`);
+    $('p3').innerHTML = s;
+  }
+
+  // ---- wiring ---------------------------------------------------------------
+  function update(){
+    st.S = +$('in-s').value; st.V = +$('in-v').value; st.K = +$('in-k').value;
+    $('out-s').textContent = num(st.S); $('out-v').textContent = num(st.V); $('out-k').textContent = num(st.K);
+    const V0 = M.rate(st.S, st.V, st.K);
+    $('r-v0').textContent = num(V0, 3); $('r-iv0').textContent = num(1 / V0, 3); $('r-is').textContent = num(1 / st.S, 3);
+
+    // full model: E0 cannot go below Vmax/K_M (that would make k-1 negative)
+    const on = $('in-full').checked, ein = $('in-e');
+    const minPos = Math.min(1000, Math.ceil(eToPos(M.minEnzyme(st.V, st.K)) - 1e-9));
+    ein.min = minPos;
+    const pos = Math.max(minPos, Math.round(eToPos(st.E)));
+    ein.value = pos;
+    const E = posToE(pos);
+    $('out-e').textContent = String(+E.toPrecision(3));
+    ein.disabled = !on;
+    $('full-group').classList.toggle('mm-off', !on);
+    fm = on ? buildFull(st.S, st.V, st.K, E) : null;
+    for(const row of document.querySelectorAll('#mm-explorer [data-full]')) row.hidden = !on;
+    if(fm){
+      $('r-k2').textContent = num(fm.kc, 3); $('r-kr').textContent = num(fm.kr, 3);
+      $('r-eps').textContent = num(fm.eps, 3); $('r-err').textContent = num(100 * fm.err, 1) + '%';
+    }
+    draw1(); draw2(); draw3();
+  }
+  // Redraw at most once per frame while a slider is being dragged.
+  let queued = false;
+  const schedule = () => {
+    if(queued) return;
+    queued = true;
+    requestAnimationFrame(() => { queued = false; update(); });
+  };
+  for(const id of ['in-s', 'in-v', 'in-k']) $(id).addEventListener('input', schedule);
+  $('in-full').addEventListener('change', schedule);
+  $('in-e').addEventListener('input', () => { st.E = posToE(+$('in-e').value); schedule(); });
+  update();
+})();
+</script>
+</main>
+<nav class="site-example-nav" aria-label="Student lab navigation"><span></span><a class="site-all-examples" href="../../#student-labs">All student labs</a><span></span></nav>
+    <footer class="site-footer"><span>University of Washington · Autumn 2026</span><div><a href="https://shzhang3.github.io/#teaching">Shiheng Zhang · Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">Contribute on GitHub ↗</a></div></footer>
+  </div>
+
+</body>
+</html>

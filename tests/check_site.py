@@ -30,7 +30,7 @@ class Page(HTMLParser):
             self.references.extend(attrs.get(key, "").split())
 
 
-files = [ROOT / "index.html", *sorted((ROOT / "chapters").rglob("*.html"))]
+files = [ROOT / "index.html", *sorted((ROOT / "chapters").rglob("*.html")), *sorted((ROOT / "student-labs").rglob("*.html"))]
 pages = {}
 for file in files:
     source = file.read_text()
@@ -69,5 +69,6 @@ assert visited == set(files), "Some example or chapter pages are unreachable fro
 catalog = json.loads((ROOT / "src/catalog.json").read_text())
 assert len(catalog) == 3
 ready = sum("source" in e for c in catalog for e in c["examples"])
-assert len(files) == 1 + len(catalog) + ready, "Published pages do not match the catalog"
-print(f"Verified {len(files)} reachable pages, three chapter entries, all local links, anchors, stylesheets, and accessible labels.")
+student_labs = json.loads((ROOT / "src/student-labs.json").read_text())
+assert len(files) == 1 + len(catalog) + ready + len(student_labs), "Published pages do not match the catalogs"
+print(f"Verified {len(files)} reachable pages, three chapter entries, {len(student_labs)} student lab{"" if len(student_labs) == 1 else "s"}, all local links, anchors, stylesheets, and accessible labels.")
