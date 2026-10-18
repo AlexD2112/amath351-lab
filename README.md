@@ -246,9 +246,9 @@ growth alone does not imply finite-time blow-up, and diminishing returns alone
 do not imply saturation. Source and helpers: **src/ai-self-improvement.html** and
 **src/ai-growth-model.cjs**.
 
-## Student-submitted labs
+## Student Showcase
 
-The home page has a **Student-submitted labs** section for experiments built by
+The home page has a **Student Showcase** section for experiments built by
 students in the course. Each lab gets its own page under **student-labs/**, with
 breadcrumbs back to the section and previous/next links between student labs.
 
@@ -269,7 +269,7 @@ The fragment should contain exactly one `h1` and use the shared `site-` and
 
 ## Edit and build
 
-**src/catalog.json** defines the three chapters and their example lists. **src/student-labs.json** lists the student-submitted labs. An
+**src/catalog.json** defines the three chapters and their example lists. **src/student-labs.json** lists the student projects. An
 example with a `source` is published; an example without one is shown as planned.
 Add an example's source fragment and its catalog entry to extend the lab.
 

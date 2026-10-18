@@ -92,7 +92,7 @@ def main():
                 crumbs += f'<span aria-current="page">{chapter_label}</span>'
             crumbs += "</nav>"
         if student:
-            crumbs = f'<nav class="site-breadcrumbs" aria-label="Breadcrumb"><a href="{home}">All chapters</a><span aria-hidden="true">/</span><a href="{home}#student-labs">Student-submitted labs</a><span aria-hidden="true">/</span><span aria-current="page">{escape(student["title"])}</span></nav>'
+            crumbs = f'<nav class="site-breadcrumbs" aria-label="Breadcrumb"><a href="{home}">All chapters</a><span aria-hidden="true">/</span><a href="{home}#student-labs">Student Showcase</a><span aria-hidden="true">/</span><span aria-current="page">{escape(student["title"])}</span></nav>'
         example_nav = ""
         if example:
             ready = [e for e in chapter["examples"] if "source" in e]
@@ -106,9 +106,9 @@ def main():
             position = student_labs.index(student)
             previous = student_labs[position-1] if position else None
             following = student_labs[position+1] if position+1 < len(student_labs) else None
-            previous_link = f'<a href="{href(path,student_path(previous))}"><small>Previous student lab</small>← {escape(previous["title"])}</a>' if previous else '<span></span>'
-            next_link = f'<a href="{href(path,student_path(following))}"><small>Next student lab</small>{escape(following["title"])} →</a>' if following else '<span></span>'
-            example_nav = f'<nav class="site-example-nav" aria-label="Student lab navigation">{previous_link}<a class="site-all-examples" href="{home}#student-labs">All student labs</a>{next_link}</nav>'
+            previous_link = f'<a href="{href(path,student_path(previous))}"><small>Previous student project</small>← {escape(previous["title"])}</a>' if previous else '<span></span>'
+            next_link = f'<a href="{href(path,student_path(following))}"><small>Next student project</small>{escape(following["title"])} →</a>' if following else '<span></span>'
+            example_nav = f'<nav class="site-example-nav" aria-label="Student project navigation">{previous_link}<a class="site-all-examples" href="{home}#student-labs">All student projects</a>{next_link}</nav>'
         legacy = ""
         if path == "index.html":
             legacy = '<script>const legacy={"#amath351-slope-lab":"chapters/first-order/direction-fields/","#amath351-intro":"chapters/first-order/fluids/","#ai-flow":"chapters/first-order/fluids/#ai-flow","#ai-blowup":"chapters/first-order/fluids/#ai-blowup"};if(legacy[location.hash])location.replace(legacy[location.hash]);</script>'
@@ -126,7 +126,7 @@ def main():
         status = f"{count} interactive examples ready" if count else "Examples coming as the course progresses"
         cards.append(f'<a class="site-chapter" href="{href("index.html",chapter_path(chapter))}">{illustration(i)}<div class="site-chapter-copy"><div class="site-kicker">Chapter {i:02d}</div><h2>{escape(chapter["title"])}</h2><p>{escape(chapter["description"])}</p><div class="site-chapter-status">{status}</div><div class="site-chapter-action">Explore chapter <span aria-hidden="true">→</span></div></div></a>')
     student_cards = ''.join(f'<a class="site-example" href="{href("index.html",student_path(lab))}"><small>{escape(lab["section"])} · By {escape(lab["author"])}</small><h3>{escape(lab["title"])}</h3><div class="site-example-equation">{escape(lab["label"])}</div><p>{escape(lab["description"])}</p><span class="site-example-link">Open experiment →</span></a>' for lab in student_labs)
-    student_section = f'<section id="student-labs" class="site-student-labs" aria-labelledby="student-labs-heading"><div class="site-section-title"><h2 id="student-labs-heading">Student-submitted labs</h2><span>{len(student_labs)} from students in the course</span></div><p class="site-note">Experiments built by students taking AMATH 351. Have an idea for one? See <a href="https://github.com/shzhang3/amath351-lab#student-submitted-labs" target="_blank" rel="noopener">how to contribute</a>.</p><section class="site-examples" aria-label="Student-submitted labs">{student_cards}</section></section>' if student_labs else ''
+    student_section = f'<section id="student-labs" class="site-student-labs" aria-labelledby="student-labs-heading"><div class="site-section-title"><h2 id="student-labs-heading">Student Showcase</h2><span>{len(student_labs)} from students in the course</span></div><p class="site-note">Exploring differential equations through student-created projects. Have an idea to share? See <a href="https://github.com/shzhang3/amath351-lab#student-showcase" target="_blank" rel="noopener">how to contribute</a>.</p><section class="site-examples" aria-label="Student Showcase">{student_cards}</section></section>' if student_labs else ''
     home_body = '<section class="site-hero"><div class="site-kicker">AMATH 351 · Differential equations</div><h1>One course.<br>A growing collection of experiments.</h1><p>Make a prediction, change a parameter, and see what follows. Choose a chapter to explore its examples.</p><p class="site-course">Autumn 2026 · University of Washington</p></section><section class="site-chapters" aria-label="Course chapters">'+''.join(cards)+'</section>'+student_section+'<section class="site-about"><h2>Built as we learn.</h2><p>This open-source lab grows alongside the course. Each example connects a mathematical idea to something you can observe and change. Later chapters will open as we reach their topics.</p></section>'
     page("index.html", "Explore the chapters", "Interactive differential equations examples in three chapters: first-order equations, higher-order linear equations, and linear systems.", home_body)
 
