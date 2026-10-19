@@ -17,7 +17,8 @@ The site follows **chapter index → chapter's examples → individual experimen
 
 Chapter 1 currently includes the fluid-motion opening, direction fields,
 position/velocity/acceleration, Planet Gzyx, the tangent-to-slope-field exploration,
-separable and exact equations, and the AI self-improvement growth models.
+separable and exact equations, the AI self-improvement growth models, phase lines,
+and Euler’s method.
 The other examples are explicitly labeled as planned and
 have no inactive or broken experiment links. Chapter groupings follow the
 Autumn 2026 syllabus, rather than the textbook's chapter numbering.
@@ -320,3 +321,31 @@ small interaction fix. Keep mathematical behavior and learning goals explicit.
 
 Original project code: MIT. See LICENSE.
 D3 7.9.0: ISC, copyright Mike Bostock. See [the D3 license](src/vendor/d3.LICENSE.txt).
+
+## Phase lines and Euler’s method (Sections 2.2 and 2.4)
+
+- [Phase line + solution curves](https://shzhang3.github.io/amath351-lab/chapters/first-order/equilibria/)
+  uses the lecture example `x′ = x²(x² − 4)`. A separate vertical phase line
+  and a time–state graph share the same state scale and moving point. Initial-state
+  presets show attraction to −2, repulsion from 2, and one-sided attraction to 0.
+  The signs are +, −, −, + across the four intervals. Optional family curves and
+  a slope field support predictions before playback. Inverting the separated
+  integral within each invariant interval avoids numerical crossings of equilibria.
+  For x0 > 2 the finite-time endpoint is computed analytically; plot exit is
+  distinguished from blowup. Animation stops at the maximal forward time.
+- [Euler’s method](https://shzhang3.github.io/amath351-lab/chapters/first-order/euler/)
+  uses `y′ = x + 0.2y`, `y(0) = −3`, up to x = 5. Take one step, play the
+  sequence, or scrub completed steps. The next segment, step triangle, local slope,
+  and update formula use the current approximate point. An optional h/2 polygon
+  and exact curve compare values and absolute errors at the same x. A second
+  preset uses HW 2’s `y′ = x − y`, `y(0) = 1`, up to x = 0.4.
+  For the lecture example, Euler with h = 1 gives 4.74304; the exact value is
+  22e − 50 ≈ 9.80220. With h = 0.1 Euler gives ≈ 9.21494.
+
+Both pages start paused, provide keyboard controls, stop playback on edits or
+page hiding, and replace automatic playback with discrete advances when reduced
+motion is requested. Plots resize for narrow screens. Values are rounded for display.
+`tests/phase-euler.test.cjs` verifies interval invariance, differential-equation
+residuals, blowup termination, hand-calculated Euler steps, exact references,
+and convergence at a common endpoint. No lecture source or student material is
+included in the public site.

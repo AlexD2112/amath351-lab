@@ -1,0 +1,111 @@
+<style>
+.phase-layout{display:grid;grid-template-columns:minmax(0,2.25fr) minmax(240px,1fr);gap:20px;margin-top:24px}.phase-panel{min-width:0}.phase-panel h2{font-size:17px;font-weight:500;line-height:1.3;margin:0 0 5px}.phase-panel svg{display:block;width:100%;overflow:visible}.phase-key{display:flex;flex-wrap:wrap;gap:10px 24px;margin:12px 0;font-size:12px;color:var(--site-muted)}.phase-key span:before{content:'';display:inline-block;width:22px;border-top:3px solid var(--site-purple);margin-right:7px;vertical-align:middle}.phase-key .phase-family:before{border-color:var(--site-teal);opacity:.6}.phase-key .phase-equilibrium:before{border-color:var(--site-muted);border-top-style:dashed;border-top-width:1px}.phase-result{border-left:3px solid var(--site-purple);padding:12px 18px;background:var(--site-soft);margin-top:18px;min-height:90px}.phase-result p{margin:3px 0}.phase-table{width:100%;border-collapse:collapse;margin:12px 0}.phase-table th,.phase-table td{text-align:left;padding:9px;border-bottom:1px solid var(--site-line)}.phase-prompt{color:var(--site-muted);margin-top:0}.phase-eq{font:24px Georgia,serif;color:var(--site-purple)}
+@media(max-width:700px){.phase-layout{grid-template-columns:1fr}.phase-panel:last-child{border-top:1px solid var(--site-line);padding-top:20px}.phase-table{font-size:12px}}
+</style>
+<section class="lab-intro">
+  <div class="site-kicker">Section 2.2 · Equilibrium solutions & stability</div>
+  <h1>What happens near equilibrium?</h1>
+  <p class="lab-math">dx/dt = x²(x² − 4), &nbsp; x(0) = x₀</p>
+  <p>A phase line keeps only the state x. A solution graph adds time. Follow the same point in both views, and use the arrows to predict where it will go.</p>
+</section>
+<section class="lab-interactive" aria-label="Phase line experiment">
+  <p class="phase-prompt"><strong>Predict first:</strong> What changes when you start just above 0 instead of just below it?</p>
+  <div class="lab-controls">
+    <label class="lab-label" for="ph-initial">Initial state x₀ = <output id="ph-initial-out">0.60</output><input class="lab-slider" id="ph-initial" type="range" min="-3" max="3" step="0.05" value="0.6"></label>
+    <label for="ph-window">Time window<select class="lab-select" id="ph-window"><option value="2">0 ≤ t ≤ 2</option><option value="6">0 ≤ t ≤ 6</option><option value="12">0 ≤ t ≤ 12</option></select></label>
+  </div>
+  <div class="lab-row" aria-label="Initial state presets">
+    <span class="lab-small">Try:</span><button class="lab-button" data-ph-start="-0.3">Just below 0</button><button class="lab-button" data-ph-start="0.3">Just above 0</button><button class="lab-button" data-ph-start="-2">x₀ = −2</button><button class="lab-button" data-ph-start="0">x₀ = 0</button><button class="lab-button" data-ph-start="2">x₀ = 2</button><button class="lab-button" data-ph-start="2.1">Above 2</button>
+  </div>
+  <div class="lab-controls">
+    <label class="lab-check"><input type="checkbox" id="ph-family" checked>Show nearby solution curves</label>
+    <label class="lab-check"><input type="checkbox" id="ph-field">Show slope field</label>
+  </div>
+  <div class="phase-layout">
+    <div class="phase-panel"><h2>1. Solution curves in the t–x plane</h2><p class="lab-small">Horizontal: time t · Vertical: state x(t)</p><svg id="ph-curves" role="img" aria-label="Solution curves and selected trajectory"></svg></div>
+    <div class="phase-panel"><h2>2. The phase line</h2><p class="lab-small">Vertical: state x · Arrows: direction as t increases</p><svg id="ph-line" role="img" aria-label="Separate phase line with three equilibria and flow arrows"></svg></div>
+  </div>
+  <div class="phase-key"><span>Selected solution</span><span class="phase-family">Other initial states</span><span class="phase-equilibrium">Dashed horizontal lines: equilibria</span></div>
+  <div class="lab-controls"><button id="ph-play" class="lab-button lab-primary">Follow the point</button><button id="ph-reset" class="lab-button">Back to t = 0</button><label class="lab-label" for="ph-time">Time t = <output id="ph-time-out">0.000</output><input class="lab-slider" id="ph-time" type="range" min="0" max="2" step="0.001" value="0"></label></div>
+  <div class="phase-result" role="status" aria-live="polite"><p id="ph-state" class="lab-numbers"></p><p id="ph-behavior"></p><p id="ph-exit" class="lab-small"></p></div>
+</section>
+<section class="lab-explanation">
+  <h2>Read the signs before drawing curves</h2>
+  <p>A positive value of f(x) means x increases, so the phase arrow points up. A negative value means x decreases, so it points down. The arrows show direction, not speed.</p>
+  <table class="phase-table"><caption class="lab-small">For x ≠ 0, the factor x² is positive. The sign comes from x² − 4.</caption><thead><tr><th scope="col">State interval</th><th scope="col">Sign of x′</th><th scope="col">Motion</th></tr></thead><tbody><tr><td>x &lt; −2</td><td>+</td><td>↑ toward −2</td></tr><tr><td>−2 &lt; x &lt; 0</td><td>−</td><td>↓ toward −2</td></tr><tr><td>0 &lt; x &lt; 2</td><td>−</td><td>↓ toward 0</td></tr><tr><td>x &gt; 2</td><td>+</td><td>↑ away from 2</td></tr></tbody></table>
+  <p><strong>−2 attracts from both sides.</strong> It is asymptotically stable. <strong>2 repels from both sides.</strong> It is unstable. <strong>0 attracts from above and repels from below.</strong> We call it semistable; it is not stable with respect to perturbations on both sides.</p>
+  <p>Equilibria themselves stay fixed. Because f is a polynomial, local uniqueness prevents a solution from crossing an equilibrium solution.</p>
+  <details><summary>How are the curves calculated?</summary><p>The curves come from inverting the separated integral on each interval between equilibria:</p><p class="lab-math">H(x(t)) = H(x₀) + t,<br>H(x) = 1/(4x) + (1/16) ln |(x − 2)/(x + 2)|.</p><p>For x₀ &gt; 2, H(x) → 0 as x → ∞, so the maximal forward time is T = −H(x₀). The curve ends at blowup. Equilibrium solutions are handled separately.</p></details>
+</section>
+<script src="{{D3_URL}}"></script>
+<script>
+{{PHASE_LINE_MODEL}}
+(() => {
+  'use strict';
+  const M=Amath351Phase, $=id=>document.getElementById(id), ink='var(--site-ink)', muted='var(--site-muted)', purple='var(--site-purple)', teal='var(--site-teal)', line='var(--site-line)';
+  const state={x0:.6,t:0,end:2}; let playing=false, raf=0, previous=0, xs,ys,curves,lineSvg,plotWidth,plotHeight,cursor,phaseDot,guide;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const format=x=>Number.isFinite(x)?(Math.abs(x)<1e-10?'0':Number(x.toPrecision(5)).toString()):'∞';
+  function stop(){playing=false;cancelAnimationFrame(raf);$('ph-play').textContent=reduced.matches?'Advance time':'Follow the point';}
+  function text(g,x,y,value,color=muted,size=12,anchor='start'){return g.append('text').attr('x',x).attr('y',y).attr('fill',color).attr('font-size',size).attr('text-anchor',anchor).text(value);}
+  function path(g,points,color,width=2,dash=null){return g.append('path').attr('d',d3.line()(points)).attr('fill','none').attr('stroke',color).attr('stroke-width',width).attr('stroke-dasharray',dash);}
+  function draw(){
+    curves=d3.select('#ph-curves'); lineSvg=d3.select('#ph-line'); curves.selectAll('*').remove();lineSvg.selectAll('*').remove();
+    const w=$('ph-curves').clientWidth, pw=$('ph-line').clientWidth;plotWidth=w;plotHeight=350;
+    xs=d3.scaleLinear().domain([0,state.end]).range([43,w-20]);ys=d3.scaleLinear().domain([-3.2,3.2]).range([plotHeight-36,20]);
+    curves.attr('viewBox',`0 0 ${w} ${plotHeight}`);lineSvg.attr('viewBox',`0 0 ${pw} ${plotHeight}`);
+    curves.append('defs').append('clipPath').attr('id','ph-clip').append('rect').attr('x',43).attr('y',20).attr('width',w-63).attr('height',plotHeight-56);
+    const clipped=curves.append('g').attr('clip-path','url(#ph-clip)');
+    for(const x of [-3,-2,-1,0,1,2,3]){path(clipped,[[43,ys(x)],[w-20,ys(x)]],line,1);text(curves,34,ys(x)+4,x,muted,11,'end');}
+    curves.append('g').attr('transform',`translate(0,${plotHeight-36})`).call(d3.axisBottom(xs).ticks(w<400?4:6).tickSizeOuter(0)).attr('color',muted);
+    text(curves,w-20,plotHeight-3,'time t',ink,12,'end');text(curves,43,12,'x(t)',ink);
+    if($('ph-field').checked){for(let i=0;i<=18;i++)for(let j=0;j<=18;j++){
+      const t=state.end*i/18,x=-3.2+6.4*j/18,dx=(w-63)/state.end,dy=-(plotHeight-56)/6.4*M.slope(x),norm=Math.hypot(dx,dy);
+      path(clipped,[[xs(t)-5*dx/norm,ys(x)-5*dy/norm],[xs(t)+5*dx/norm,ys(x)+5*dy/norm]],muted,1).attr('opacity',.25);
+    }}
+    for(const x of M.equilibria)path(clipped,[[43,ys(x)],[w-20,ys(x)]],muted,1,'5 5');
+    const drawCurve=(initial,color,width,opacity)=>clipped.append('path').datum(M.trajectory(initial,state.end)).attr('d',d3.line().defined(d=>d.x!==null).x(d=>xs(d.t)).y(d=>ys(d.x))).attr('fill','none').attr('stroke',color).attr('stroke-width',width).attr('opacity',opacity);
+    if($('ph-family').checked)for(const x of [-3,-2.5,-1.7,-.7,-.3,.3,.9,1.6,1.95,2.1,2.5])drawCurve(x,teal,1.6,.5);
+    drawCurve(state.x0,purple,3,1);
+    if(state.x0>2){const exit=M.primitive(3.2)-M.primitive(state.x0);if(exit<state.end)text(curves,xs(exit),ys(3.2)+4,'↑',purple,22,'middle');}
+    guide=clipped.append('path').attr('fill','none').attr('stroke',purple).attr('stroke-dasharray','3 4').attr('opacity',.5);
+    cursor=curves.append('circle').attr('r',5.5).attr('fill',purple).attr('stroke','var(--site-paper)').attr('stroke-width',2);
+    const px=51;
+    path(lineSvg,[[px,ys(-3.2)],[px,ys(3.2)]],muted,1.5);
+    for(const [a,b,label] of [[-3.05,-2.25,'+'],[-.35,-1.65,'−'],[1.65,.35,'−'],[2.25,3.05,'+']]){
+      path(lineSvg,[[px,ys(a)],[px,ys(b)]],teal,2.5);
+      const y=ys(b),sgn=b>a?1:-1;path(lineSvg,[[px-5,y+sgn*8],[px,y],[px+5,y+sgn*8]],teal,2.5);
+      text(lineSvg,px-17,(ys(a)+ys(b))/2+4,label,teal,14,'end');
+    }
+    for(const [x,title,kind] of [[-2,'−2 · stable','attracts both sides'],[0,'0 · semistable','attracts only from above'],[2,'2 · unstable','repels both sides']]){
+      lineSvg.append('circle').attr('cx',px).attr('cy',ys(x)).attr('r',5).attr('fill','var(--site-paper)').attr('stroke',muted).attr('stroke-width',2);
+      text(lineSvg,px+19,ys(x)-3,title,ink,12);text(lineSvg,px+19,ys(x)+14,kind,muted,10);
+    }
+    text(lineSvg,px,12,'x',ink,12,'middle');
+    phaseDot=lineSvg.append('circle').attr('cx',px).attr('r',6).attr('fill',purple).attr('stroke','var(--site-paper)').attr('stroke-width',2);
+    update();
+  }
+  function update(){
+    const x=M.solution(state.x0,state.t),finite=x!==null,visible=finite&&x<=3.2,T=M.blowupTime(state.x0);
+    $('ph-time').value=state.t;$('ph-time-out').textContent=state.t.toFixed(3);$('ph-initial-out').textContent=state.x0.toFixed(2);
+    cursor.attr('display',visible?null:'none').attr('cx',xs(state.t)).attr('cy',visible?ys(x):20);
+    phaseDot.attr('display',visible?null:'none').attr('cy',visible?ys(x):20);
+    guide.attr('d',visible?`M${xs(state.t)},${ys(-3.2)}V${ys(x)}H${xs(state.end)}`:null);
+    $('ph-state').textContent=finite?`x(${state.t.toFixed(3)}) ≈ ${format(x)}   ·   x′ ≈ ${format(M.slope(x))}${visible?'':'   ·   Above the displayed range'}`:`The forward solution ends at T ≈ ${format(T)}. There is no finite solution at or beyond T.`;
+    $('ph-behavior').textContent=M.behavior(state.x0);
+    $('ph-exit').textContent=Number.isFinite(T)?`For this initial value, x(t) → ∞ as t → T⁻, with T ≈ ${format(T)}. The upward arrow marks where the curve leaves the plot.`:'';
+  }
+  function initial(x){stop();state.x0=x;state.t=0;$('ph-initial').value=x;draw();}
+  $('ph-initial').addEventListener('input',e=>initial(+e.target.value));
+  document.querySelectorAll('[data-ph-start]').forEach(b=>b.addEventListener('click',()=>initial(+b.dataset.phStart)));
+  $('ph-window').addEventListener('change',e=>{stop();state.end=+e.target.value;state.t=Math.min(state.t,state.end);$('ph-time').max=state.end;draw();});
+  ['ph-family','ph-field'].forEach(id=>$(id).addEventListener('change',()=>{stop();draw();}));
+  $('ph-time').addEventListener('input',e=>{stop();state.t=+e.target.value;update();});
+  $('ph-reset').addEventListener('click',()=>{stop();state.t=0;update();});
+  function frame(now){if(!playing)return;const limit=Math.min(state.end,M.blowupTime(state.x0)),dt=previous?Math.min(now-previous,80):0;previous=now;state.t=Math.min(limit,state.t+dt*limit/10000);update();if(state.t>=limit)stop();else raf=requestAnimationFrame(frame);}
+  $('ph-play').addEventListener('click',()=>{if(playing){stop();return;}const limit=Math.min(state.end,M.blowupTime(state.x0));if(state.t>=limit)state.t=0;if(reduced.matches){state.t=Math.min(limit,state.t+limit/20);update();return;}playing=true;previous=0;$('ph-play').textContent='Pause';raf=requestAnimationFrame(frame);});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});reduced.addEventListener('change',stop);
+  let resize;new ResizeObserver(()=>{cancelAnimationFrame(resize);resize=requestAnimationFrame(draw);}).observe($('ph-curves').parentElement);
+  stop();draw();
+})();
+</script>

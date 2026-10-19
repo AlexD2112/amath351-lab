@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Build an approximation one tangent step at a time, compare h with h/2, and reveal the exact solution.">
+  <meta name="theme-color" content="#624298">
+  <title>Take one small step · AMATH 351 Lab</title>
+  <link rel="canonical" href="https://shzhang3.github.io/amath351-lab/chapters/first-order/euler/">
+  <link rel="stylesheet" href="../../../assets/lab.css">
+</head>
+<body>
+  <a class="site-skip" href="#main-content">Skip to content</a>
+  <div class="site-wrap">
+    <header class="site-header">
+      <a class="site-brand" href="../../../"><span class="site-brand-mark" aria-hidden="true">y′</span>AMATH 351 / Lab</a>
+      <nav aria-label="Main navigation"><a href="../../../">Chapters</a><a href="https://shzhang3.github.io/#teaching">Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">GitHub ↗</a></nav>
+    </header>
+<nav class="site-breadcrumbs" aria-label="Breadcrumb"><a href="../../../">All chapters</a><span aria-hidden="true">/</span><a href="../">Chapter 01: First-order equations</a><span aria-hidden="true">/</span><span aria-current="page">Take one small step</span></nav>
+    <main id="main-content" tabindex="-1"><noscript>Enable JavaScript to use the interactive plots. Explanations and navigation remain available.</noscript><style>
+.eu-plot{display:block;width:100%;margin:18px 0 6px}.eu-key{display:flex;flex-wrap:wrap;gap:10px 22px;font-size:12px;color:var(--site-muted)}.eu-key span:before{content:'';display:inline-block;width:23px;border-top:3px solid var(--site-purple);margin-right:7px;vertical-align:middle}.eu-key .eu-exact:before{border-color:var(--site-teal)}.eu-key .eu-fine:before{border-color:var(--site-orange);border-top-style:dashed}.eu-key .eu-next:before{border-top-style:dashed}.eu-step{background:var(--site-soft);border-left:3px solid var(--site-purple);padding:14px 18px;margin-top:20px;min-height:118px}.eu-step p{margin:4px 0}.eu-step .lab-math{font-size:18px}.eu-lower{display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-top:22px}.eu-table-wrap{max-height:250px;overflow:auto;border:1px solid var(--site-line);border-radius:7px}.eu-table{width:100%;border-collapse:collapse;font-size:12px;font-variant-numeric:tabular-nums}.eu-table th,.eu-table td{padding:7px 10px;text-align:right;white-space:nowrap;border-bottom:1px solid var(--site-line)}.eu-table th{position:sticky;top:0;background:var(--site-paper)}.eu-table tr[aria-current="true"]{background:var(--site-soft);font-weight:600}.eu-lower h2{font-size:20px}.eu-error{font-size:14px;line-height:1.8}.eu-steps-label{flex:1 1 200px}.eu-instruction{color:var(--site-muted)}
+@media(max-width:680px){.eu-lower{grid-template-columns:1fr}.eu-step{padding:12px}.eu-step .lab-math{font-size:16px}}
+</style>
+<section class="lab-intro"><div class="site-kicker">Section 2.4 · Euler’s method</div><h1>Take one small step</h1><p class="lab-math">xₙ₊₁ = xₙ + h, &nbsp; yₙ₊₁ = yₙ + h f(xₙ, yₙ)</p><p>Read the slope at your current point. Follow that direction for one step. At the new point, read the slope again.</p></section>
+<section class="lab-interactive" aria-label="Euler method experiment">
+  <div class="lab-controls"><label class="lab-label" for="eu-problem">Initial value problem<select class="lab-select" id="eu-problem"><option value="lecture">Lecture: y′ = x + 0.2y, y(0) = −3</option><option value="homework">HW 2: y′ = x − y, y(0) = 1</option></select></label><label for="eu-h">Step size h<select class="lab-select" id="eu-h"></select></label></div>
+  <p class="eu-instruction"><strong>Predict first:</strong> Will the next step go up or down? Does the slope at the new point stay the same?</p>
+  <div class="lab-controls"><button class="lab-button lab-primary" id="eu-next">Take one step →</button><button class="lab-button" id="eu-play">Play steps</button><button class="lab-button" id="eu-reset">Start over</button><button class="lab-button" id="eu-end">Go to endpoint</button></div>
+  <div class="lab-controls"><label class="lab-check"><input type="checkbox" id="eu-exact">Reveal exact solution</label><label class="lab-check"><input type="checkbox" id="eu-fine">Compare with h/2</label><label class="lab-check"><input type="checkbox" id="eu-field" checked>Show slope field</label></div>
+  <svg class="eu-plot" id="eu-plot" role="img" aria-label="Euler approximation, next tangent step, and optional exact solution"></svg>
+  <div class="eu-key"><span>Euler, step h</span><span class="eu-next">Next step (preview)</span><span class="eu-exact" id="eu-exact-key" hidden>Exact solution</span><span class="eu-fine" id="eu-fine-key" hidden>Euler, step h/2</span></div>
+  <label class="lab-label eu-steps-label" for="eu-step">Completed steps: <output id="eu-step-out">0</output><input class="lab-slider" id="eu-step" type="range" min="0" max="5" step="1" value="0"></label>
+  <div class="eu-step" role="status" aria-live="polite"><p id="eu-position" class="lab-numbers"></p><p id="eu-slope" class="lab-numbers"></p><p id="eu-update" class="lab-math"></p></div>
+  <div class="eu-lower"><div><h2>Record each step</h2><div class="eu-table-wrap" tabindex="0" aria-label="Scrollable Euler calculation table"><table class="eu-table"><thead><tr><th scope="col">n</th><th scope="col">xₙ</th><th scope="col">yₙ</th><th scope="col">f(xₙ, yₙ)</th></tr></thead><tbody id="eu-table-body"></tbody></table></div></div><div><h2>Compare at the same x</h2><div id="eu-error" class="eu-error lab-numbers"></div><p class="lab-small">Reducing h adds more steps over the same interval. Changing the field’s visual density would not change the calculation.</p></div></div>
+</section>
+<section class="lab-explanation"><h2>A curve becomes a sequence of local decisions</h2><p>The dashed segment previews one Euler step. Its slope is f(xₙ, yₙ), evaluated at the current <em>approximate</em> point. The horizontal change is h and the vertical change is h f(xₙ, yₙ). After taking that step, we update the slope.</p><p>The polygon is an approximation. Its segments need not be tangent to the exact solution through the original initial point: later Euler points usually lie off that curve.</p><details><summary>Try this in class</summary><ol><li>Keep h = 1. Predict the first two slopes and take two steps.</li><li>Go to the endpoint, then reveal the exact solution. How large is the error?</li><li>Turn on h/2, then try h = 0.1. Compare all approximations at the same endpoint.</li><li>Switch to the HW 2 equation and repeat with h = 0.2 and h = 0.1.</li></ol><p>For these smooth examples, reducing h reduces the endpoint error. Euler’s global error is O(h) on a fixed interval under the usual regularity assumptions; this is not a guarantee for every equation or every step size.</p></details></section>
+<script src="../../../assets/vendor/d3.v7.9.0.min.js"></script>
+<script>
+(function (root) {
+  'use strict';
+  const problems = Object.freeze({
+    lecture: Object.freeze({label: 'Lecture: y′ = x + 0.2y, y(0) = −3', equation: 'y′ = x + 0.2y', initial: -3, end: 5, steps: [1, .5, .2, .1, .05], domain: [-5, 11], slope: (x,y) => x + .2*y, exact: x => 22*Math.exp(x/5)-5*x-25, formula: 'y(x) = 22eˣ⁄⁵ − 5x − 25'}),
+    homework: Object.freeze({label: 'HW 2: y′ = x − y, y(0) = 1', equation: 'y′ = x − y', initial: 1, end: .4, steps: [.2, .1, .05, .025], domain: [.4, 1.1], slope: (x,y) => x-y, exact: x => x-1+2*Math.exp(-x), formula: 'y(x) = x − 1 + 2e⁻ˣ'})
+  });
+  function solve(problem, h) {
+    if (!(h > 0) || !Number.isFinite(h)) throw new RangeError('Step size must be positive and finite.');
+    const count = Math.round(problem.end / h);
+    if (count < 1 || count > 10000 || Math.abs(count*h-problem.end) > 1e-9) throw new RangeError('Step size must divide the interval.');
+    let y = problem.initial;
+    return Array.from({length: count+1}, (_, n) => {
+      const x = n*h, slope = problem.slope(x,y);
+      const point = {n, x, y, slope, error: Math.abs(y-problem.exact(x))};
+      y += h*slope;
+      return point;
+    });
+  }
+  const api = Object.freeze({problems, solve});
+  if (typeof module === 'object' && module.exports) module.exports = api;
+  else root.Amath351Euler = api;
+})(globalThis);
+
+(() => {
+  'use strict';
+  const M=Amath351Euler,$=id=>document.getElementById(id),purple='var(--site-purple)',teal='var(--site-teal)',orange='var(--site-orange)',muted='var(--site-muted)',ink='var(--site-ink)',line='var(--site-line)';
+  let problem=M.problems.lecture,h=1,n=0,points,fine,playing=false,timer=0;
+  const reduced=matchMedia('(prefers-reduced-motion: reduce)');
+  const fmt=x=>Math.abs(x)<1e-10?'0':Number(x.toFixed(5)).toString();
+  function stop(){playing=false;clearTimeout(timer);$('eu-play').textContent=reduced.matches?'Advance one step':'Play steps';}
+  function recalculate(){points=M.solve(problem,h);fine=M.solve(problem,h/2);$('eu-step').max=points.length-1;render();}
+  function chooseProblem(){stop();problem=M.problems[$('eu-problem').value];h=problem.steps[0];n=0;$('eu-h').replaceChildren(...problem.steps.map(value=>{const o=document.createElement('option');o.value=value;o.textContent=value;return o;}));recalculate();}
+  function render(){
+    const svg=d3.select('#eu-plot');svg.selectAll('*').remove();const w=$('eu-plot').clientWidth,H=w<500?330:390,left=43,right=w-18,top=22,bottom=H-42;
+    const sx=d3.scaleLinear().domain([0,problem.end]).range([left,right]),sy=d3.scaleLinear().domain(problem.domain).range([bottom,top]);
+    svg.attr('viewBox',`0 0 ${w} ${H}`);
+    svg.append('defs').append('clipPath').attr('id','eu-clip').append('rect').attr('x',left).attr('y',top).attr('width',right-left).attr('height',bottom-top);
+    const g=svg.append('g').attr('clip-path','url(#eu-clip)');
+    function path(parent,data,color,width=2,dash=null){return parent.append('path').attr('d',d3.line()(data)).attr('fill','none').attr('stroke',color).attr('stroke-width',width).attr('stroke-dasharray',dash);}
+    function label(x,y,value,color=muted,anchor='start'){return svg.append('text').attr('x',x).attr('y',y).attr('fill',color).attr('font-size',12).attr('text-anchor',anchor).text(value);}
+    for(const y of sy.ticks(5))path(g,[[left,sy(y)],[right,sy(y)]],line,1);
+    svg.append('g').attr('transform',`translate(0,${bottom})`).call(d3.axisBottom(sx).ticks(w<450?4:10).tickSizeOuter(0)).attr('color',muted);
+    svg.append('g').attr('transform',`translate(${left},0)`).call(d3.axisLeft(sy).ticks(5).tickSizeOuter(0)).attr('color',muted);
+    label(right,H-5,'x',ink,'end');label(left,12,'y',ink);
+    if($('eu-field').checked)for(let i=0;i<=24;i++)for(let j=0;j<=14;j++){
+      const x=problem.end*i/24,y=problem.domain[0]+(problem.domain[1]-problem.domain[0])*j/14;
+      const dx=(right-left)/problem.end,dy=-(bottom-top)/(problem.domain[1]-problem.domain[0])*problem.slope(x,y),norm=Math.hypot(dx,dy);
+      path(g,[[sx(x)-5*dx/norm,sy(y)-5*dy/norm],[sx(x)+5*dx/norm,sy(y)+5*dy/norm]],muted,1).attr('opacity',.27);
+    }
+    const exact=$('eu-exact').checked,compare=$('eu-fine').checked;
+    $('eu-exact-key').hidden=!exact;$('eu-fine-key').hidden=!compare;
+    if(exact)path(g,Array.from({length:301},(_,i)=>{const x=problem.end*i/300;return[sx(x),sy(problem.exact(x))];}),teal,2.5);
+    if(compare)path(g,fine.slice(0,2*n+1).map(p=>[sx(p.x),sy(p.y)]),orange,2.5,'6 4');
+    path(g,points.slice(0,n+1).map(p=>[sx(p.x),sy(p.y)]),purple,3);
+    g.selectAll('.eu-node').data(points.slice(0,n+1)).enter().append('circle').attr('class','eu-node').attr('cx',p=>sx(p.x)).attr('cy',p=>sy(p.y)).attr('r',points.length<30?3:2).attr('fill',purple);
+    const p=points[n],q=points[n+1];
+    if(q){
+      path(g,[[sx(p.x),sy(p.y)],[sx(q.x),sy(p.y)],[sx(q.x),sy(q.y)]],muted,1.3,'3 4');
+      path(g,[[sx(p.x),sy(p.y)],[sx(q.x),sy(q.y)]],purple,2.5,'7 4');
+      g.append('circle').attr('cx',sx(q.x)).attr('cy',sy(q.y)).attr('r',5).attr('fill','var(--site-paper)').attr('stroke',purple).attr('stroke-width',2);
+      // Small steps are labelled in the numeric panel, without overlapping the plot.
+      if(sx(q.x)-sx(p.x)>48){label((sx(p.x)+sx(q.x))/2,sy(p.y)+(p.slope<0?-12:18),'h',muted,'middle');}
+    }
+    svg.append('circle').attr('cx',sx(p.x)).attr('cy',sy(p.y)).attr('r',5.5).attr('fill',purple).attr('stroke','var(--site-paper)').attr('stroke-width',2);
+    $('eu-step').value=n;$('eu-step-out').textContent=`${n} / ${points.length-1}`;$('eu-next').disabled=!q;$('eu-play').disabled=!q;$('eu-end').disabled=!q;
+    $('eu-position').textContent=`Current point: (x${n}, y${n}) = (${fmt(p.x)}, ${fmt(p.y)})`;
+    $('eu-slope').textContent=`Local slope f(x${n}, y${n}) = ${fmt(p.slope)}${q?`   ·   Δx = ${fmt(h)}   ·   Δy = h f = ${fmt(h*p.slope)}`:''}`;
+    $('eu-update').textContent=q?`Next: y${n+1} = ${fmt(p.y)} + (${fmt(h)})(${fmt(p.slope)}) = ${fmt(q.y)}`:`Endpoint reached: y(${fmt(problem.end)}) ≈ ${fmt(p.y)} with h = ${fmt(h)}.`;
+    const tbody=$('eu-table-body');tbody.replaceChildren(...points.slice(0,n+1).map(p=>{const row=document.createElement('tr');row.setAttribute('aria-current',p.n===n?'true':'false');[p.n,fmt(p.x),fmt(p.y),fmt(p.slope)].forEach(value=>{const td=document.createElement('td');td.textContent=value;row.append(td);});return row;}));
+    tbody.parentElement.parentElement.scrollTop=tbody.parentElement.parentElement.scrollHeight;
+    const lines=[`At x = ${fmt(p.x)}:`,`Euler (h = ${fmt(h)}): ${fmt(p.y)}`];
+    if(compare)lines.push(`Euler (h/2 = ${fmt(h/2)}): ${fmt(fine[2*n].y)}`);
+    if(exact){lines.push(`Exact: ${fmt(problem.exact(p.x))}`,`Absolute error (h): ${fmt(p.error)}`);if(compare)lines.push(`Absolute error (h/2): ${fmt(fine[2*n].error)}`);lines.push(problem.formula);}
+    else lines.push('Reveal the exact solution to measure the error.');
+    $('eu-error').replaceChildren(...lines.map(value=>{const el=document.createElement('p');el.style.margin='3px 0';el.textContent=value;return el;}));
+  }
+  function advance(){n=Math.min(n+1,points.length-1);if(n===points.length-1)stop();render();}
+  $('eu-next').addEventListener('click',()=>{stop();advance();});
+  $('eu-reset').addEventListener('click',()=>{stop();n=0;render();});
+  $('eu-end').addEventListener('click',()=>{stop();n=points.length-1;render();});
+  $('eu-step').addEventListener('input',e=>{stop();n=+e.target.value;render();});
+  $('eu-problem').addEventListener('change',chooseProblem);
+  $('eu-h').addEventListener('change',e=>{stop();const currentX=points[n].x;h=+e.target.value;n=Math.min(Math.round(currentX/h),Math.round(problem.end/h));recalculate();});
+  ['eu-exact','eu-fine','eu-field'].forEach(id=>$(id).addEventListener('change',()=>{stop();render();}));
+  function tick(){if(!playing)return;advance();if(playing)timer=setTimeout(tick,650);}
+  $('eu-play').addEventListener('click',()=>{if(playing){stop();return;}if(reduced.matches){advance();return;}playing=true;$('eu-play').textContent='Pause';tick();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();});reduced.addEventListener('change',stop);
+  let resize;new ResizeObserver(()=>{cancelAnimationFrame(resize);resize=requestAnimationFrame(render);}).observe($('eu-plot').parentElement);
+  stop();chooseProblem();
+})();
+</script>
+</main>
+<nav class="site-example-nav" aria-label="Example navigation"><a href="../equilibria/"><small>Previous example</small>← What happens near equilibrium?</a><a class="site-all-examples" href="../">All chapter examples</a><span></span></nav>
+    <footer class="site-footer"><span>University of Washington · Autumn 2026</span><div><a href="https://shzhang3.github.io/#teaching">Shiheng Zhang · Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">Contribute on GitHub ↗</a></div></footer>
+  </div>
+
+</body>
+</html>
