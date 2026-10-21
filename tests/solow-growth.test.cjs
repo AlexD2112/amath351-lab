@@ -67,6 +67,29 @@ test('a saving shock is continuous, keeps the old path before, and converges to 
   close(m.output(m.steady(s2,a,lam),a)/m.output(m.steady(s1,a,lam),a),Math.pow(1.5,.5),1e-12);
 });
 
+test('consumption drops when saving rises, recovers, and ends higher below the golden rule',()=>{
+  const [s1,s2,a,lam,T]=[.2,.3,1/3,.06,20],k0=m.steady(s1,a,lam);
+  const c=t=>m.consumptionPath(k0,t,s1,s2,T,a,lam);
+  // Before the shock it is (1 - s) k^a along the old path, constant at the steady state.
+  for(const t of [0,10,T])close(c(t),m.steadyConsumption(s1,a,lam),1e-12);
+  // At the shock k is unchanged, so c jumps by exactly (1 - s2)/(1 - s1).
+  close(c(T+1e-9)/c(T),(1-s2)/(1-s1),1e-7);
+  // It then rises monotonically and settles at the new steady state, which is higher since s2 < a.
+  for(const t of [T+1,T+10,T+40])assert(c(t+1)>c(t));
+  close(c(1000),m.steadyConsumption(s2,a,lam),1e-9);
+  assert(c(1000)>c(T));
+  // Without a shock (s2 = s1) it is just consumption along the plain solution.
+  for(const t of [5,50])close(m.consumptionPath(2,t,s1,s1,T,a,lam),m.consumption(m.solution(2,t,s1,a,lam),s1,a),1e-12);
+});
+
+test('cutting an over-saving rate raises consumption at once and keeps it higher',()=>{
+  const [a,lam,T]=[1/3,.06,20];
+  for(const k0 of [2,20]){
+    const keep=t=>m.consumptionPath(k0,t,.6,.6,T,a,lam),cut=t=>m.consumptionPath(k0,t,.6,a,T,a,lam);
+    for(const t of [T+1e-9,T+5,T+30,T+100])assert(cut(t)>keep(t));
+  }
+});
+
 test('Euler steps match hand calculations and converge with order one',()=>{
   const [s,a,lam,k0]=[.2,1/3,.06,2];
   const pts=m.euler(k0,10,20,s,a,lam);

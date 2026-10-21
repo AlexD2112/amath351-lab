@@ -4,7 +4,7 @@
   <div class="so-equation so-equation-primary"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="k prime equals s k to the alpha, minus n plus delta times k"><msup><mi>k</mi><mo>′</mo></msup><mo>=</mo><mi>s</mi><msup><mi>k</mi><mi>α</mi></msup><mo>−</mo><mo>(</mo><mi>n</mi><mo>+</mo><mi>δ</mi><mo>)</mo><mi>k</mi></math></div>
   <p>Why can't a country grow rich just by saving more? Capital per worker k grows when investment exceeds what is needed to replace worn-out machines and equip new workers. With λ = n + δ, the substitution v = k<sup>1−α</sup> turns this Bernoulli equation into a linear one, so</p>
   <div class="so-equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="k of t equals, s over lambda plus k zero to the 1 minus alpha minus s over lambda times e to the minus 1 minus alpha lambda t, all to the power 1 over 1 minus alpha"><mi>k</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msup><mrow><mo>[</mo><mfrac><mi>s</mi><mi>λ</mi></mfrac><mo>+</mo><mrow><mo>(</mo><msubsup><mi>k</mi><mn>0</mn><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow></msubsup><mo>−</mo><mfrac><mi>s</mi><mi>λ</mi></mfrac><mo>)</mo></mrow><msup><mi>e</mi><mrow><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo>)</mo><mi>λ</mi><mi>t</mi></mrow></msup><mo>]</mo></mrow><mrow><mn>1</mn><mo>/</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo>)</mo></mrow></msup></math></div>
-  <p>Change the saving rate, population growth, and depreciation, and see the Solow diagram, the path to the steady state, and the golden rule respond together. Then compare the exact path with Euler's method.</p>
+  <p>Change the saving rate, population growth, and depreciation, and see the Solow diagram, the path to the steady state, the golden rule, and consumption over time respond together. Then compare the exact path with Euler's method.</p>
   <p class="lab-small">Submitted by <a href="https://github.com/AlexD2112" target="_blank" rel="noopener">Alex</a>.</p>
 </section>
 
@@ -49,7 +49,7 @@
 </div>
 
 <section id="so-explorer" class="lab-interactive" aria-labelledby="so-heading">
-  <h2 id="so-heading">One economy, three views</h2>
+  <h2 id="so-heading">One economy, four views</h2>
   <div class="so-presets" role="group" aria-label="Presets">
     <span class="lab-small">Presets</span>
     <button type="button" class="lab-button" data-preset="baseline">Baseline</button>
@@ -101,6 +101,7 @@
         <div><dt>Golden-rule s</dt><dd id="so-r-gr"></dd></div>
         <div><dt>Half-life of the gap</dt><dd id="so-r-hl"></dd></div>
         <div><dt>k(t)</dt><dd id="so-r-k"></dd></div>
+        <div><dt>c(t), consumption</dt><dd id="so-r-c"></dd></div>
         <div><dt>Growth of y at t</dt><dd id="so-r-g"></dd></div>
         <div hidden data-euler><dt>Euler factor 1 − h(1 − α)λ</dt><dd id="so-r-ef"></dd></div>
         <div hidden data-euler><dt>|Euler − exact| at t</dt><dd id="so-r-ee"></dd></div>
@@ -120,6 +121,10 @@
         <h3>3 · Golden rule: steady-state consumption against s</h3>
         <svg id="so-p3" viewBox="0 0 720 250" role="img"></svg>
       </section>
+      <section>
+        <h3>4 · Consumption over time</h3>
+        <svg id="so-p4" viewBox="0 0 720 270" role="img"></svg>
+      </section>
     </div>
   </div>
 </section>
@@ -131,12 +136,16 @@
     <p>No. Growth jumps after year 20, then dies away as k approaches its new, higher k*. The long-run effect is on the level: y* rises by a factor (0.3/0.2)<sup>α/(1−α)</sup> ≈ 1.22 for α = 1/3, a one-time gain of about 22%. Use the "Saving rises in year 20" preset and watch "Growth of y at t".</p>
   </details>
   <details>
+    <summary>Same experiment: what happens to consumption in year 20, and is the higher saving rate worth it?</summary>
+    <p>Consumption falls at once. Capital has not changed yet, so output is the same, but people now keep 70% of it instead of 80%: c drops by the factor 0.7/0.8, from about 1.45 to 1.27. It then climbs as capital builds up, passes its old level about 24 years after the change, and settles at c* ≈ 1.55, about 7% higher. Plot 4 shows the dip and the recovery. Whether the trade is worth it depends on how much the economy values the future, because the people alive in year 20 pay for consumption that arrives decades later.</p>
+  </details>
+  <details>
     <summary>Two countries share the same s, α, n, and δ, but one starts with k₀ = 1 and the other with k₀ = 15. Which grows faster?</summary>
     <p>The poorer one. Output growth is y′/y = α(s k<sup>α−1</sup> − λ), which falls as k rises, so a country far below k* grows quickly and a country above k* shrinks toward it. Economists call this <em>conditional convergence</em>: countries converge only if they share the same steady state.</p>
   </details>
   <details>
     <summary>Is saving more always better for consumption in the long run?</summary>
-    <p>No. Plot 3 is a hump that peaks at s = α. Beyond that, the extra output from more capital is smaller than the extra investment needed to maintain it, so consumption falls. The "Over-saving" preset (s = 0.6) has lower c* than s = α ≈ 0.33. Such an economy is <em>dynamically inefficient</em>: saving less would raise consumption now and later.</p>
+    <p>No. Plot 3 is a hump that peaks at s = α. Beyond that, the extra output from more capital is smaller than the extra investment needed to maintain it, so consumption falls. The "Over-saving" preset (s = 0.6) has lower c* than s = α ≈ 0.33. Such an economy is <em>dynamically inefficient</em>: saving less would raise consumption now and later. To see it, choose "Over-saving", turn on "Saving changes in year 20", and set the new rate to 0.33: in plot 4 consumption jumps up in year 20 and stays above the dashed path it would have followed.</p>
   </details>
   <details>
     <summary>Turn on Euler's method with h = 40 years. What happens near k*, and why does h = 55 fail?</summary>
@@ -146,7 +155,7 @@
 
 <details class="lab-explanation">
   <summary>How are the curves computed?</summary>
-  <p>Every solid curve uses the exact Bernoulli solution above. No numerical ODE solver is used. When the saving rate changes in year 20, the formula restarts from k(20) with the new s. The orange polygon is Euler's method, k<sub>n+1</sub> = k<sub>n</sub> + h(s k<sub>n</sub><sup>α</sup> − λk<sub>n</sub>). It stops if a step would make k nonpositive, since k<sup>α</sup> is undefined there.</p>
+  <p>Every solid curve uses the exact Bernoulli solution above. No numerical ODE solver is used. When the saving rate changes in year 20, the formula restarts from k(20) with the new s. Consumption is c(t) = (1 − s(t)) k(t)<sup>α</sup>, so it jumps in year 20 even though k does not. The orange polygon is Euler's method, k<sub>n+1</sub> = k<sub>n</sub> + h(s k<sub>n</sub><sup>α</sup> − λk<sub>n</sub>). It stops if a step would make k nonpositive, since k<sup>α</sup> is undefined there.</p>
   <p>The slope field draws equal-length segments at their true on-screen angle. Because the equation is autonomous, every row of segments is parallel, and the row at k* is flat. The model and its checks are in <code>src/solow-growth-model.cjs</code> and <code>tests/solow-growth.test.cjs</code>.</p>
 </details>
 
@@ -209,6 +218,7 @@
   #so-explorer svg .now {stroke:var(--so-point);stroke-width:1.5;stroke-dasharray:3 3;}
   #so-explorer svg .output {stroke:var(--site-muted);stroke-width:1.6;fill:none;}
   #so-explorer svg .curve {stroke:var(--site-purple);stroke-width:2.6;fill:none;}
+  #so-explorer svg .cons-line {stroke:var(--so-solution);stroke-width:2.8;fill:none;}
   #so-explorer svg .curve-old {stroke:var(--site-purple);stroke-width:1.8;fill:none;stroke-dasharray:6 4;opacity:.6;}
   #so-explorer svg .break {stroke:var(--so-break);stroke-width:2.4;fill:none;}
   #so-explorer svg .cons {fill:var(--site-purple);opacity:.12;}
@@ -446,6 +456,60 @@
     $('p3').innerHTML = g;
   }
 
+  // ---- plot 4: consumption over time ----------------------------------------
+  function draw4(){
+    const {a, t, k0} = st, L = lam();
+    const cAt = tt => M.consumptionPath(k0, tt, st.s, st.shock ? st.s2 : st.s, T_SHOCK, a, L);
+    const keep = tt => M.consumption(M.solution(k0, tt, st.s, a, L), st.s, a);  // path if s never changed
+    const gold = M.steadyConsumption(M.goldenRule(a), a, L);
+    const eu = eulerPath(), cEu = eu ? eu.map(q => [q[0], M.consumption(q[1], sAt(q[0]), a)]) : [];
+    const N = 400, xs = Array.from({length: N + 1}, (_, i) => T_MAX * i / N);
+    let top = Math.max(gold, ...xs.map(cAt), ...(st.shock ? xs.map(keep) : []));
+    if(eu) top = Math.max(top, Math.min(2 * top, Math.max(...cEu.map(q => q[1]))));
+    top *= 1.15;
+    const p = makeP(720, 270, {l:58, r:16, t:30, b:42}, [0, T_MAX], [0, top]);
+    let g = `<defs>${clip('so-c4', p)}</defs>`;
+    g += axes(p, niceTicks(0, T_MAX), niceTicks(0, top, 4), 't (years)', 'c, consumption per worker');
+    g += `<g clip-path="url(#so-c4)">`;
+    // golden-rule ceiling: no steady state with these n, δ, α gives more
+    g += `<line class="guide" x1="${p.x(0)}" x2="${p.x(T_MAX)}" y1="${p.y(gold)}" y2="${p.y(gold)}"/>`;
+    const c1 = M.steadyConsumption(st.s, a, L);
+    g += `<line class="guide" x1="${p.x(0)}" x2="${p.x(st.shock ? T_SHOCK : T_MAX)}" y1="${p.y(c1)}" y2="${p.y(c1)}"/>`;
+    if(st.shock){
+      const c2 = M.steadyConsumption(st.s2, a, L);
+      g += `<line class="guide" x1="${p.x(T_SHOCK)}" x2="${p.x(T_MAX)}" y1="${p.y(c2)}" y2="${p.y(c2)}"/>`;
+      g += `<line class="guide" x1="${p.x(T_SHOCK)}" x2="${p.x(T_SHOCK)}" y1="${p.m.t}" y2="${p.m.t + p.ih}"/>`;
+      // what consumption would have done had the saving rate stayed put
+      g += `<path class="curve-old" d="${poly(xs.filter(x => x >= T_SHOCK).map(x => [p.x(x), p.y(keep(x))]))}"/>`;
+    }
+    // draw the jump in year 20 as a vertical step rather than a slanted segment
+    const pre = xs.filter(x => !st.shock || x <= T_SHOCK).map(x => [p.x(x), p.y(cAt(x))]);
+    let d = poly(pre);
+    if(st.shock) d += 'L' + poly(xs.filter(x => x >= T_SHOCK).map(x => [p.x(x), p.y(cAt(Math.max(x, T_SHOCK + 1e-9)))])).slice(1);
+    g += `<path class="cons-line" d="${d}"/>`;
+    if(eu){
+      g += `<path class="euler" d="${poly(cEu.map(q => [p.x(q[0]), p.y(q[1])]))}"/>`;
+      for(const q of cEu) g += `<circle class="euler-pt" cx="${p.x(q[0])}" cy="${p.y(q[1])}" r="3.4"/>`;
+    }
+    g += `<line class="now" x1="${p.x(t)}" x2="${p.x(t)}" y1="${p.m.t}" y2="${p.m.t + p.ih}"/>`;
+    g += `</g>`;
+    if(yIn(p, p.y(gold))) g += `<text class="note" x="${p.x(T_MAX) - 4}" y="${p.y(gold) - 6}" text-anchor="end">golden-rule c = ${num(gold, 3)}</text>`;
+    // c* never exceeds the golden-rule level, so its label goes below its line, clear of the one above
+    if(yIn(p, p.y(c1))) g += `<text class="note" x="${p.x(2)}" y="${p.y(c1) + 15}">c* = ${num(c1, 3)}</text>`;
+    if(st.shock){ const c2 = M.steadyConsumption(st.s2, a, L); if(yIn(p, p.y(c2)) && Math.abs(p.y(c2) - p.y(gold)) > 1) g += `<text class="note" x="${p.x(T_MAX) - 4}" y="${p.y(c2) + 15}" text-anchor="end">new c* = ${num(c2, 3)}</text>`; }
+    const c = cAt(t);
+    g += `<circle class="pt" cx="${p.x(t)}" cy="${p.y(c)}" r="5.5"/>`;
+    const Ls = labelSide(p, p.x(t));
+    g += `<text class="note" x="${p.x(t) + Ls.d}" y="${p.y(c) + 18}" text-anchor="${Ls.a}">c = ${num(c, 3)}</text>`;
+    const items = [['cons-line', 'c(t) = (1 − s)k(t)<tspan dy="-4" font-size="9">α</tspan>']];
+    if(st.shock) items.push(['curve-old', `if s stayed ${num(st.s)}`]);
+    if(eu) items.push(['euler', `Euler, h = ${st.h}`]);
+    let lx = p.m.l;
+    for(const [cls, label] of items){ g += `<line class="${cls}" x1="${lx}" x2="${lx + 18}" y1="13" y2="13"/><text class="note" x="${lx + 24}" y="17">${label}</text>`; lx += 150; }
+    $('p4').setAttribute('aria-label', `Consumption per worker over 100 years, starting at ${num(cAt(0), 3)} and approaching ${num(M.steadyConsumption(st.shock ? st.s2 : st.s, a, L), 3)}${st.shock ? `. It drops when the saving rate changes in year ${T_SHOCK}, then recovers` : ''}. The golden-rule maximum is ${num(gold, 3)}.`);
+    $('p4').innerHTML = g;
+  }
+
   // ---- wiring ---------------------------------------------------------------
   function update(){
     st.s = +$('in-s').value; st.a = +$('in-a').value; st.n = +$('in-n').value; st.d = +$('in-d').value;
@@ -462,14 +526,14 @@
     $('r-ks').textContent = num(ks); $('r-ys').textContent = num(M.output(ks, st.a));
     $('r-cs').textContent = num(M.steadyConsumption(s, st.a, L), 3); $('r-gr').textContent = num(M.goldenRule(st.a));
     $('r-hl').textContent = num(M.halfLife(st.a, L), 1) + ' yr';
-    $('r-k').textContent = num(k); $('r-g').textContent = pct(M.outputGrowth(k, s, st.a, L), 2) + ' / yr';
+    $('r-k').textContent = num(k); $('r-c').textContent = num(M.consumption(k, s, st.a), 3); $('r-g').textContent = pct(M.outputGrowth(k, s, st.a, L), 2) + ' / yr';
     for(const row of document.querySelectorAll('#so-explorer [data-euler]')) row.hidden = !st.euler;
     if(st.euler){
       $('r-ef').textContent = num(M.eulerFactor(st.h, st.a, L), 2);
       const ke = eulerAt(eulerPath(), st.t);
       $('r-ee').textContent = Number.isFinite(ke) ? num(Math.abs(ke - k), 3) : 'stopped';
     }
-    draw1(); draw2(); draw3();
+    draw1(); draw2(); draw3(); draw4();
   }
   let queued = false;
   const schedule = () => { if(queued) return; queued = true; requestAnimationFrame(() => { queued = false; update(); }); };

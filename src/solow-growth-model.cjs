@@ -30,6 +30,13 @@
     return solution(solution(k0,tShock,s1,a,lam),t-tShock,s2,a,lam);
   }
 
+  // Consumption per worker along the same path, c(t) = (1 - s(t)) k(t)^a. k is continuous at
+  // tShock but the saving rate is not, so c jumps by the factor (1 - s2)/(1 - s1) there.
+  function consumptionPath(k0,t,s1,s2,tShock,a,lam){
+    const s=t>tShock?s2:s1;
+    return consumption(shockPath(k0,t,s1,s2,tShock,a,lam),s,a);
+  }
+
   // Growth rate of output per worker: y'/y = a k'/k.
   const outputGrowth=(k,s,a,lam)=>a*rate(k,s,a,lam)/k;
 
@@ -48,6 +55,6 @@
   // factor is negative and diverges once it is below -1.
   const eulerFactor=(h,a,lam)=>1-h*convergenceRate(a,lam);
 
-  const api=Object.freeze({output,investment,breakEven,rate,consumption,steady,convergenceRate,halfLife,steadyConsumption,goldenRule,solution,shockPath,outputGrowth,euler,eulerFactor});
+  const api=Object.freeze({output,investment,breakEven,rate,consumption,steady,convergenceRate,halfLife,steadyConsumption,goldenRule,solution,shockPath,consumptionPath,outputGrowth,euler,eulerFactor});
   if(typeof module==='object'&&module.exports)module.exports=api;else root.Amath351Solow=api;
 })(globalThis);
