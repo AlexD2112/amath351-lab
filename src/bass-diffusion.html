@@ -1,0 +1,439 @@
+<section class="lab-intro">
+  <div class="site-kicker">Student lab · Economics &amp; marketing · Separable equations</div>
+  <h1>Bass diffusion</h1>
+  <div class="bd-equation bd-equation-primary"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="F prime equals p plus q F, times 1 minus F"><msup><mi>F</mi><mo>′</mo></msup><mo>=</mo><mo>(</mo><mi>p</mi><mo>+</mo><mi>q</mi><mi>F</mi><mo>)</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>F</mi><mo>)</mo></math></div>
+  <p>How does a new product spread through a market? Some people buy because of advertising, and others because someone they know already owns one. The equation is separable, and its solution through F(0) = F₀ is</p>
+  <div class="bd-equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="F of t equals 1 minus p plus q divided by R zero e to the p plus q t, plus q, where R zero equals p plus q F zero over 1 minus F zero"><mi>F</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><mn>1</mn><mo>−</mo><mfrac><mrow><mi>p</mi><mo>+</mo><mi>q</mi></mrow><mrow><msub><mi>R</mi><mn>0</mn></msub><msup><mi>e</mi><mrow><mo>(</mo><mi>p</mi><mo>+</mo><mi>q</mi><mo>)</mo><mi>t</mi></mrow></msup><mo>+</mo><mi>q</mi></mrow></mfrac><mo>,</mo><mspace width="1em"/><msub><mi>R</mi><mn>0</mn></msub><mo>=</mo><mfrac><mrow><mi>p</mi><mo>+</mo><mi>q</mi><msub><mi>F</mi><mn>0</mn></msub></mrow><mrow><mn>1</mn><mo>−</mo><msub><mi>F</mi><mn>0</mn></msub></mrow></mfrac></math></div>
+  <p>Change how strongly advertising and word of mouth act, and see the adoption curve, the yearly sales, and the phase line respond together.</p>
+  <p class="lab-small">Submitted by <a href="https://github.com/AlexD2112" target="_blank" rel="noopener">Alex</a>.</p>
+</section>
+
+<div class="bd-explainer">
+  <section>
+    <h2>Where it comes from</h2>
+    <p>Let F(t) be the fraction of a market's eventual buyers who have bought by year t. The remaining 1 − F have not bought yet. Each year a fraction of them buy:</p>
+    <ul>
+      <li><strong>p</strong> of them on their own, from advertising and media, whatever anyone else does;</li>
+      <li><strong>qF</strong> of them through word of mouth, which grows with the share of people who already own one.</li>
+    </ul>
+    <p>Multiplying the rate (p + qF) by the pool 1 − F gives the equation above. Frank Bass proposed it in 1969 to forecast sales of new consumer durables.</p>
+  </section>
+
+  <section>
+    <h2>What the terms mean</h2>
+    <ul>
+      <li><strong>p, coefficient of innovation:</strong> the rate at which people adopt independently. It sets how fast sales start.</li>
+      <li><strong>q, coefficient of imitation:</strong> how strongly adopters persuade the people who have not bought. It sets how sharp the S-curve is.</li>
+      <li><strong>F′:</strong> sales per year as a share of the market. Multiply by the market size m to get units.</li>
+      <li>A meta-analysis of published estimates (Sultan, Farley &amp; Lehmann, 1990) found average values near <strong>p ≈ 0.03</strong> and <strong>q ≈ 0.38</strong> per year: imitation usually matters far more than innovation.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Solving it (Section 1.4)</h2>
+    <p>Separate the variables and split the left side with partial fractions:</p>
+    <div class="bd-equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="1 over p plus q F times 1 minus F equals 1 over p plus q, times q over p plus q F plus 1 over 1 minus F"><mfrac><mn>1</mn><mrow><mo>(</mo><mi>p</mi><mo>+</mo><mi>q</mi><mi>F</mi><mo>)</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>F</mi><mo>)</mo></mrow></mfrac><mo>=</mo><mfrac><mn>1</mn><mrow><mi>p</mi><mo>+</mo><mi>q</mi></mrow></mfrac><mrow><mo>(</mo><mfrac><mi>q</mi><mrow><mi>p</mi><mo>+</mo><mi>q</mi><mi>F</mi></mrow></mfrac><mo>+</mo><mfrac><mn>1</mn><mrow><mn>1</mn><mo>−</mo><mi>F</mi></mrow></mfrac><mo>)</mo></mrow></math></div>
+    <p>Integrating both sides gives</p>
+    <div class="bd-equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="1 over p plus q, times log of p plus q F over 1 minus F, equals t plus C"><mfrac><mn>1</mn><mrow><mi>p</mi><mo>+</mo><mi>q</mi></mrow></mfrac><mi mathvariant="normal">ln</mi><mfrac><mrow><mi>p</mi><mo>+</mo><mi>q</mi><mi>F</mi></mrow><mrow><mn>1</mn><mo>−</mo><mi>F</mi></mrow></mfrac><mo>=</mo><mi>t</mi><mo>+</mo><mi>C</mi></math></div>
+    <p>So R = (p + qF)/(1 − F) grows exactly exponentially, like e<sup>(p+q)t</sup>. Solving for F gives the formula above. The constant solution F = 1, lost when dividing, is the saturated market.</p>
+  </section>
+
+  <section>
+    <h2>Reading the phase line (Section 2.2)</h2>
+    <ul>
+      <li><strong>Equilibria:</strong> F = 1 (everyone has bought, stable) and F = −p/q (unstable, and outside the market whenever p &gt; 0).</li>
+      <li><strong>Peak sales:</strong> F′ is a downward parabola in F, highest at <strong>F* = (q − p)/(2q)</strong>. Since F″ = (dF′/dF)·F′, the sales peak is also the inflection point of the S-curve. From F₀ = 0 it happens at t* = ln(q/p)/(p + q).</li>
+      <li><strong>Special cases:</strong> q = 0 is the linear equation F′ = p(1 − F) of Section 1.5, with no S-shape. p = 0 is the logistic equation of Section 2.1. Then F = 0 is also an equilibrium, so word of mouth alone cannot start a market.</li>
+      <li><strong>Left out:</strong> price, competing products, repeat purchases, and a market size that changes over time.</li>
+    </ul>
+  </section>
+</div>
+
+<section id="bd-explorer" class="lab-interactive" aria-labelledby="bd-heading">
+  <h2 id="bd-heading">One market, three views</h2>
+  <div class="bd-presets" role="group" aria-label="Presets">
+    <span class="lab-small">Presets</span>
+    <button type="button" class="lab-button" data-preset="0.03,0.38,0">Typical durable</button>
+    <button type="button" class="lab-button" data-preset="0.01,0.9,0">Viral product</button>
+    <button type="button" class="lab-button" data-preset="0.1,0,0">Advertising only</button>
+    <button type="button" class="lab-button" data-preset="0,0.5,0.01">Word of mouth only</button>
+  </div>
+  <div class="bd-workspace">
+    <div class="bd-controls" role="group" aria-label="Parameters">
+      <label for="bd-in-p">p, innovation <output id="bd-out-p" for="bd-in-p"></output></label>
+      <input id="bd-in-p" type="range" min="0" max="0.2" step="0.005" value="0.03">
+
+      <label for="bd-in-q">q, imitation <output id="bd-out-q" for="bd-in-q"></output></label>
+      <input id="bd-in-q" type="range" min="0" max="1" step="0.01" value="0.38">
+
+      <label for="bd-in-f">F₀, share at launch <output id="bd-out-f" for="bd-in-f"></output></label>
+      <input id="bd-in-f" type="range" min="0" max="0.5" step="0.01" value="0">
+
+      <label for="bd-in-t" class="bd-time">Year t <output id="bd-out-t" for="bd-in-t"></output></label>
+      <input id="bd-in-t" type="range" min="0" max="30" step="0.1" value="0">
+      <button type="button" id="bd-play" class="lab-button lab-primary bd-play" aria-pressed="false">Play</button>
+
+      <dl class="bd-readouts" aria-live="polite">
+        <div><dt>F(t), share adopted</dt><dd id="bd-r-f"></dd></div>
+        <div><dt>F′(t), sales per year</dt><dd id="bd-r-df"></dd></div>
+        <div><dt>Peak sales year t*</dt><dd id="bd-r-tp"></dd></div>
+        <div><dt>Peak sales F′</dt><dd id="bd-r-rp"></dd></div>
+        <div><dt>Share adopted at peak F*</dt><dd id="bd-r-fp"></dd></div>
+        <div><dt>Half the market by</dt><dd id="bd-r-half"></dd></div>
+        <div><dt>Buyers who were innovators</dt><dd id="bd-r-inn"></dd></div>
+      </dl>
+    </div>
+
+    <div class="bd-plots">
+      <section>
+        <h3>1 · Slope field for F′ and the adoption curve</h3>
+        <svg id="bd-p1" viewBox="0 0 720 320" role="img"></svg>
+      </section>
+      <section>
+        <h3>2 · Sales per year: who is buying?</h3>
+        <svg id="bd-p2" viewBox="0 0 720 260" role="img"></svg>
+      </section>
+      <section>
+        <h3>3 · Phase line: F′ against F</h3>
+        <svg id="bd-p3" viewBox="0 0 720 270" role="img"></svg>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="bd-predict" aria-labelledby="bd-predict-heading">
+  <h2 id="bd-predict-heading">Predict, then check</h2>
+  <details>
+    <summary>Start from the typical durable and double q to 0.76. Does peak sales come earlier or later? Higher or lower?</summary>
+    <p>Earlier and higher. The peak moves from t* = ln(0.38/0.03)/0.41 ≈ 6.2 years to ln(0.76/0.03)/0.79 ≈ 4.1 years. The peak rate (p + q)²/(4q) rises from about 11% to about 21% of the market per year. A faster spread means a shorter, sharper sales cycle.</p>
+  </details>
+  <details>
+    <summary>Set p = 0 and F₀ = 0. What happens, and why does the phase line explain it?</summary>
+    <p>Nothing happens. With p = 0, F′ = qF(1 − F) is the logistic equation, and F = 0 becomes an equilibrium. Word of mouth needs someone to talk. Raise F₀ a little and the S-curve comes back, but it starts more slowly the smaller F₀ is. This is one reason firms give out free samples and launch to early users.</p>
+  </details>
+  <details>
+    <summary>Make p larger than q. Where does the sales curve peak now?</summary>
+    <p>At launch. F* = (q − p)/(2q) is negative, so on 0 ≤ F ≤ 1 the parabola only decreases, and sales start high and fall from the beginning. The adoption curve is concave, with no S-shape and no inflection point. Heavily advertised products with little word of mouth look like this.</p>
+  </details>
+  <details>
+    <summary>In the typical durable, innovation happens at only 3% a year. Roughly what share of all buyers are innovators?</summary>
+    <p>About 21%. Adding up p(1 − F) over the whole diffusion gives (p/q) ln((p + q)/p) ≈ (0.03/0.38) ln(13.7). Early on, before many people own the product, almost every sale comes from innovation. This is the teal area in plot 2.</p>
+  </details>
+</section>
+
+<details class="lab-explanation">
+  <summary>How are the curves computed?</summary>
+  <p>Every curve uses the exact solution above. It is written as F = 1 − (p + q)/(R + q) so it stays finite when R = R₀e<sup>(p+q)t</sup> becomes very large. No numerical ODE solver is used. The peak year, the time to reach half the market, and the innovators' share are also exact. The share is (p/q) ln((p + q)/(p + qF₀))/(1 − F₀), from integrating p/(p + qF) over F.</p>
+  <p>The slope field draws equal-length segments at their true on-screen angle, shaded from shallow to steep. In plot 2 the two shaded areas add up to F′(t), and their total area is the share of the market that adopts. The model and its checks are in <code>src/bass-diffusion-model.cjs</code> and <code>tests/bass-diffusion.test.cjs</code>.</p>
+</details>
+
+<style>
+  .bd-equation {overflow-x:auto;max-width:100%;padding:14px 12px;margin:12px 0 16px;border-radius:8px;background:var(--site-soft);font-size:19px;}
+  .bd-equation math {width:max-content;min-width:100%;margin:0;}
+  .bd-equation-primary {font-size:28px;padding:20px 16px;border-left:3px solid var(--site-purple);}
+  .bd-explainer .bd-equation {font-size:16px;padding:10px 8px;margin:8px 0 10px;}
+  @media (max-width:520px) {
+    .bd-equation {font-size:16px;padding:12px 8px;}
+    .bd-equation-primary {font-size:24px;}
+  }
+
+  #bd-explorer, .bd-explainer, .bd-predict {
+    --bd-solution: light-dark(#c62828, #ff7b72);
+    --bd-point: light-dark(#b45f06, #f0a23b);
+    --bd-grid: light-dark(#ebe8f2, #2c2a36);
+    --bd-innov: var(--site-teal);
+    --bd-imit: var(--site-orange);
+  }
+  .bd-explainer {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 24px;}
+  .bd-explainer section {background:var(--site-paper);border:1px solid var(--site-line);border-radius:10px;padding:14px 16px;min-width:0;}
+  .bd-explainer h2, .bd-predict h2 {font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--site-purple);margin:0 0 8px;font-weight:600;}
+  .bd-explainer p, .bd-explainer li {font-size:13.5px;line-height:1.55;margin:0 0 7px;}
+  .bd-explainer p:last-child, .bd-explainer li:last-child {margin-bottom:0;}
+  .bd-explainer ul {margin:0;padding-left:18px;}
+
+  #bd-explorer .bd-presets {display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 18px;}
+  #bd-explorer .bd-presets .lab-button {padding:6px 12px;font-size:13px;}
+  #bd-explorer .bd-workspace {display:grid;grid-template-columns:250px minmax(0,1fr);gap:32px;align-items:start;}
+  #bd-explorer .bd-controls {position:sticky;top:16px;background:var(--site-soft);border:1px solid var(--site-line);border-radius:10px;padding:18px 18px 14px;}
+  #bd-explorer .bd-controls label {display:block;font-size:14px;font-weight:600;margin-top:14px;}
+  #bd-explorer .bd-controls label:first-child {margin-top:0;}
+  #bd-explorer .bd-controls label.bd-time {margin-top:20px;padding-top:14px;border-top:1px solid var(--site-line);}
+  #bd-explorer .bd-controls output {float:right;font-weight:400;font-variant-numeric:tabular-nums;color:var(--site-muted);}
+  #bd-explorer .bd-controls input[type=range] {width:100%;margin:8px 0 0;accent-color:var(--site-purple);}
+  #bd-explorer .bd-play {margin-top:10px;width:100%;}
+  #bd-explorer .bd-readouts {margin:18px 0 0;padding-top:12px;border-top:1px solid var(--site-line);font-size:13px;font-variant-numeric:tabular-nums;}
+  #bd-explorer .bd-readouts div {display:flex;justify-content:space-between;gap:8px;margin:3px 0;}
+  #bd-explorer .bd-readouts dt {color:var(--site-muted);}
+  #bd-explorer .bd-readouts dd {margin:0;flex-shrink:0;}
+  #bd-explorer .bd-plots {min-width:0;}
+  #bd-explorer .bd-plots section {margin-bottom:22px;}
+  #bd-explorer .bd-plots section:last-child {margin-bottom:0;}
+  #bd-explorer h3 {font-size:14px;font-weight:600;margin:0 0 4px;}
+  #bd-explorer svg {display:block;width:100%;height:auto;overflow:visible;}
+  #bd-explorer svg text {fill:var(--site-ink);font-family:inherit;}
+  #bd-explorer svg .tick {font-size:11px;fill:var(--site-muted);}
+  #bd-explorer svg .axl {font-size:13px;}
+  #bd-explorer svg .note {font-size:11.5px;paint-order:stroke;stroke:var(--site-paper);stroke-width:4px;stroke-linejoin:round;}
+  #bd-explorer svg .grid {stroke:var(--bd-grid);stroke-width:1;}
+  #bd-explorer svg .frame {stroke:var(--site-line);stroke-width:1;fill:none;}
+  #bd-explorer svg .zero {stroke:var(--site-muted);stroke-width:1;}
+  #bd-explorer svg .guide {stroke:var(--site-muted);stroke-width:1;stroke-dasharray:4 3;fill:none;}
+  #bd-explorer svg .now {stroke:var(--bd-point);stroke-width:1.5;stroke-dasharray:3 3;}
+  #bd-explorer svg .curve {stroke:var(--site-purple);stroke-width:2.6;fill:none;}
+  #bd-explorer svg .sol {stroke:var(--bd-solution);stroke-width:1.2;fill:none;opacity:.35;}
+  #bd-explorer svg .sol-main {stroke:var(--bd-solution);stroke-width:2.8;fill:none;}
+  #bd-explorer svg .innov-area {fill:var(--bd-innov);opacity:.55;}
+  #bd-explorer svg .imit-area {fill:var(--bd-imit);opacity:.5;}
+  #bd-explorer svg .innov {stroke:var(--bd-innov);stroke-width:2;fill:none;}
+  #bd-explorer svg .imit {stroke:var(--bd-imit);stroke-width:2;fill:none;}
+  #bd-explorer svg .pt {fill:var(--bd-point);stroke:var(--site-paper);stroke-width:1.5;}
+  #bd-explorer svg .mark {fill:var(--site-paper);stroke:var(--site-purple);stroke-width:2;}
+  #bd-explorer svg .eq-stable {fill:var(--site-ink);}
+  #bd-explorer svg .eq-unstable {fill:var(--site-paper);stroke:var(--site-ink);stroke-width:1.8;}
+  #bd-explorer svg .arrow {fill:var(--site-ink);}
+  #bd-explorer svg .swatch-innov {fill:var(--bd-innov);opacity:.7;}
+  #bd-explorer svg .swatch-imit {fill:var(--bd-imit);opacity:.65;}
+
+  .bd-predict {margin:24px 0 0;padding:18px 20px;background:var(--site-paper);border:1px solid var(--site-line);border-radius:10px;}
+  .bd-predict details {border-top:1px solid var(--site-line);padding:4px 0;}
+  .bd-predict details:first-of-type {border-top:0;}
+  .bd-predict summary {cursor:pointer;padding:8px 0;font-size:14.5px;line-height:1.45;}
+  .bd-predict details p {margin:2px 0 10px;font-size:13.5px;line-height:1.55;color:var(--site-ink);}
+  @media (max-width:760px){
+    .bd-explainer {grid-template-columns:minmax(0,1fr);}
+    #bd-explorer .bd-workspace {grid-template-columns:minmax(0,1fr);gap:20px;}
+    #bd-explorer .bd-controls {position:static;}
+  }
+  @media (pointer:coarse){ #bd-explorer .bd-controls input[type=range] {min-height:44px;} }
+</style>
+<script>{{MODEL}}</script>
+<script>
+(()=>{
+  const M = Amath351BassDiffusion;
+  const $ = id => document.getElementById('bd-' + id);
+  const st = {p: .03, q: .38, F0: 0, t: 0};
+  const T_MAX = 30;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+
+  // ---- formatting -------------------------------------------------------
+  const minus = s => s.replace(/-/g, '−');
+  const num = (x, d = 2) => minus(String(+x.toFixed(d)));
+  const pct = (x, d = 1) => num(100 * x, d) + '%';
+  const years = t => Number.isFinite(t) ? num(t, 1) + ' yr' : 'never';
+
+  // ---- colour ramp for slopes (shallow teal -> steep purple) -----------------
+  const STOPS = [[42,157,143],[63,95,168],[106,27,154]];
+  function ramp(u){
+    u = Math.max(0, Math.min(1, u));
+    const x = u * (STOPS.length - 1), i = Math.min(STOPS.length - 2, Math.floor(x)), w = x - i;
+    const c = STOPS[i].map((a, j) => Math.round(a + w * (STOPS[i + 1][j] - a)));
+    return `rgb(${c[0]},${c[1]},${c[2]})`;
+  }
+
+  // ---- plot helpers -------------------------------------------------------
+  function niceTicks(lo, hi, n = 5){
+    const raw = (hi - lo) / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / mag;
+    const step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * mag, out = [];
+    for(let v = Math.ceil(lo / step - 1e-9) * step; v <= hi + 1e-9; v += step)
+      out.push(Math.abs(v) < 1e-12 ? 0 : +v.toFixed(10));
+    return out;
+  }
+  function makeP(w, h, m, xd, yd){
+    const iw = w - m.l - m.r, ih = h - m.t - m.b;
+    return {w, h, m, iw, ih, xd, yd,
+      x: v => m.l + (v - xd[0]) / (xd[1] - xd[0]) * iw,
+      y: v => m.t + ih - (v - yd[0]) / (yd[1] - yd[0]) * ih};
+  }
+  function axes(p, xt, yt, xl, yl, yfmt = v => num(v, 3)){
+    const {m, iw, ih} = p; let s = '';
+    for(const v of xt)
+      s += `<line class="grid" x1="${p.x(v)}" x2="${p.x(v)}" y1="${m.t}" y2="${m.t + ih}"/>` +
+           `<text class="tick" x="${p.x(v)}" y="${m.t + ih + 16}" text-anchor="middle">${num(v, 3)}</text>`;
+    for(const v of yt)
+      s += `<line class="grid" x1="${m.l}" x2="${m.l + iw}" y1="${p.y(v)}" y2="${p.y(v)}"/>` +
+           `<text class="tick" x="${m.l - 8}" y="${p.y(v) + 4}" text-anchor="end">${yfmt(v)}</text>`;
+    s += `<rect class="frame" x="${m.l}" y="${m.t}" width="${iw}" height="${ih}"/>`;
+    s += `<text class="axl" x="${m.l + iw / 2}" y="${p.h - 4}" text-anchor="middle">${xl}</text>`;
+    s += `<text class="axl" transform="translate(14 ${m.t + ih / 2}) rotate(-90)" text-anchor="middle">${yl}</text>`;
+    return s;
+  }
+  const clip = (id, p) => `<clipPath id="${id}"><rect x="${p.m.l}" y="${p.m.t}" width="${p.iw}" height="${p.ih}"/></clipPath>`;
+  const poly = pts => 'M' + pts.map(q => q[0].toFixed(2) + ' ' + q[1].toFixed(2)).join('L');
+  const inside = (p, t) => t >= p.xd[0] && t <= p.xd[1];
+  const labelSide = (p, px) => px > p.m.l + p.iw * 0.7 ? {a: 'end', d: -10} : {a: 'start', d: 10};
+  const pctTick = v => num(100 * v, 1) + '%';
+  const stalled = () => st.p + st.q <= 0 || (st.p === 0 && st.F0 === 0);
+
+  // ---- plot 1: slope field + adoption curves -----------------------------
+  function draw1(pk){
+    const {p: P, q: Q, F0, t} = st;
+    const p = makeP(720, 320, {l:58, r:16, t:30, b:42}, [0, T_MAX], [0, 1]);
+    const slopeMax = Math.max(1e-9, M.peak(0, P, Q).rate);
+    let s = `<defs>${clip('bd-c1', p)}<linearGradient id="bd-g1">` +
+            [0, .5, 1].map(u => `<stop offset="${u * 100}%" stop-color="${ramp(u)}"/>`).join('') +
+            `</linearGradient></defs>`;
+    s += axes(p, niceTicks(0, T_MAX), niceTicks(0, 1), 't (years)', 'F, share adopted', pctTick);
+
+    // slope field: the rate depends only on F, so each row of segments is parallel
+    const BINS = 14, bins = Array.from({length: BINS}, () => []);
+    const pxT = p.x(1) - p.x(0), pxF = p.y(0) - p.y(1), half = 8.5;
+    for(let i = 0; i < 25; i++) for(let j = 0; j < 20; j++){
+      const tt = 0.6 + 1.2 * i, F = 0.025 + 0.05 * j, m = M.rate(F, P, Q);
+      const dx = pxT, dy = -m * pxF, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len;
+      const cx = p.x(tt), cy = p.y(F);
+      const b = Math.min(BINS - 1, Math.floor(Math.min(1, m / slopeMax) * BINS));
+      bins[b].push(`M${(cx - ux * half).toFixed(1)} ${(cy - uy * half).toFixed(1)}L${(cx + ux * half).toFixed(1)} ${(cy + uy * half).toFixed(1)}`);
+    }
+    s += '<g clip-path="url(#bd-c1)" stroke-width="1.8" stroke-linecap="round">';
+    bins.forEach((segs, b) => { if(segs.length) s += `<path d="${segs.join('')}" stroke="${ramp((b + .5) / BINS)}"/>`; });
+    const curve = F0c => {
+      const pts = []; for(let k = 0; k <= 240; k++){ const tt = T_MAX * k / 240; pts.push([p.x(tt), p.y(M.solution(F0c, tt, P, Q))]); }
+      return poly(pts);
+    };
+    for(const F0c of [0, .2, .4, .6, .8]) if(Math.abs(F0c - F0) > .005) s += `<path class="sol" d="${curve(F0c)}"/>`;
+    s += `<path class="sol-main" d="${curve(F0)}"/>`;
+    s += '</g>';
+
+    // the sales peak is the inflection point of the S-curve; its label and the
+    // moving point's label sit on opposite sides so they never overlap
+    const before = pk.t > 0 && inside(p, pk.t) && t < pk.t;
+    if(pk.t > 0 && inside(p, pk.t)){
+      s += `<circle class="mark" cx="${p.x(pk.t)}" cy="${p.y(pk.F)}" r="5"/>`;
+      s += `<text class="note" x="${p.x(pk.t) + (before ? 10 : -10)}" y="${p.y(pk.F) + 4}" text-anchor="${before ? 'start' : 'end'}">inflection = sales peak, t* = ${num(pk.t, 1)}</text>`;
+    }
+    const F = M.solution(F0, t, P, Q);
+    s += `<circle class="pt" cx="${p.x(t)}" cy="${p.y(F)}" r="5.5"/>`;
+    const L = before && p.x(t) - p.m.l > 80 ? {a: 'end', d: -10} : labelSide(p, p.x(t));
+    s += `<text class="note" x="${p.x(t) + L.d}" y="${p.y(F) - 10}" text-anchor="${L.a}">F = ${pct(F)}</text>`;
+
+    const right = p.m.l + p.iw, bw = 90, bx = right - 22 - bw;
+    s += `<text class="note" x="${bx - 20}" y="17" text-anchor="end">F′</text>` +
+         `<text class="note" x="${bx - 5}" y="17" text-anchor="end">0</text>` +
+         `<rect x="${bx}" y="9" width="${bw}" height="9" rx="2" fill="url(#bd-g1)"/>` +
+         `<text class="note" x="${bx + bw + 5}" y="17">${pct(slopeMax, 0)}</text>`;
+    if(stalled()) s += `<text class="note" x="${p.m.l + 12}" y="${p.m.t + 22}">No one adopts: with p = 0, word of mouth needs a first adopter. Raise p or F₀.</text>`;
+    $('p1').setAttribute('aria-label', `Slope field of F prime for p ${num(P, 3)} and q ${num(Q)}, with the adoption curve from F zero ${pct(F0)}. At year ${num(t, 1)} the share adopted is ${pct(F)}.`);
+    $('p1').innerHTML = s;
+  }
+
+  // ---- plot 2: sales over time, split into innovators and imitators --------
+  function draw2(pk){
+    const {p: P, q: Q, F0, t} = st, N = 240;
+    const rows = [];
+    for(let k = 0; k <= N; k++){ const tt = T_MAX * k / N, F = M.solution(F0, tt, P, Q); rows.push([tt, M.innovators(F, P), M.imitators(F, Q)]); }
+    const top = Math.max(.01, ...rows.map(r => r[1] + r[2])) * 1.15;
+    const p = makeP(720, 260, {l:58, r:16, t:16, b:42}, [0, T_MAX], [0, top]);
+    let s = `<defs>${clip('bd-c2', p)}</defs>`;
+    s += axes(p, niceTicks(0, T_MAX), niceTicks(0, top, 4), 't (years)', 'F′, per year', v => pctTick(v));
+    const base = rows.map(r => [p.x(r[0]), p.y(r[1])]);
+    const total = rows.map(r => [p.x(r[0]), p.y(r[1] + r[2])]);
+    s += `<g clip-path="url(#bd-c2)">`;
+    s += `<path class="innov-area" d="${poly([[p.x(0), p.y(0)], ...base, [p.x(T_MAX), p.y(0)]])}Z"/>`;
+    s += `<path class="imit-area" d="${poly([...base, ...total.slice().reverse()])}Z"/>`;
+    s += `<path class="curve" d="${poly(total)}"/>`;
+    s += `<line class="now" x1="${p.x(t)}" x2="${p.x(t)}" y1="${p.m.t}" y2="${p.m.t + p.ih}"/>`;
+    s += `</g>`;
+    if(!stalled() && inside(p, pk.t)){
+      s += `<line class="guide" x1="${p.x(pk.t)}" x2="${p.x(pk.t)}" y1="${p.y(pk.rate)}" y2="${p.y(0)}"/>` +
+           `<circle class="mark" cx="${p.x(pk.t)}" cy="${p.y(pk.rate)}" r="4.5"/>`;
+      const L = labelSide(p, p.x(pk.t));
+      s += `<text class="note" x="${p.x(pk.t) + L.d}" y="${p.y(pk.rate) - 6}" text-anchor="${L.a}">peak ${pct(pk.rate)} per year</text>`;
+    }
+    const F = M.solution(F0, t, P, Q), r = M.rate(F, P, Q);
+    s += `<circle class="pt" cx="${p.x(t)}" cy="${p.y(r)}" r="5.5"/>`;
+    const lx = p.m.l + p.iw - 150, ly = p.m.t + 16;
+    s += `<rect class="swatch-imit" x="${lx}" y="${ly - 9}" width="14" height="10" rx="2"/><text class="note" x="${lx + 20}" y="${ly}">imitators, qF(1 − F)</text>` +
+         `<rect class="swatch-innov" x="${lx}" y="${ly + 7}" width="14" height="10" rx="2"/><text class="note" x="${lx + 20}" y="${ly + 16}">innovators, p(1 − F)</text>`;
+    $('p2').setAttribute('aria-label', `Sales per year over 30 years, stacked into innovators and imitators. ${stalled() ? 'Sales are zero.' : `Sales peak at ${pct(pk.rate)} of the market per year in year ${num(pk.t, 1)}.`}`);
+    $('p2').innerHTML = s;
+  }
+
+  // ---- plot 3: F' as a function of F, with the phase line on the axis --------
+  function draw3(pk){
+    const {p: P, q: Q, F0, t} = st;
+    const top = Math.max(.02, P, M.peak(0, P, Q).rate) * 1.2;
+    const p = makeP(720, 270, {l:58, r:16, t:16, b:48}, [0, 1], [0, top]);
+    let s = `<defs>${clip('bd-c3', p)}</defs>`;
+    s += axes(p, niceTicks(0, 1), niceTicks(0, top, 4), 'F, share adopted', 'F′', pctTick);
+    const line = f => { const pts = []; for(let k = 0; k <= 200; k++){ const F = k / 200; pts.push([p.x(F), p.y(f(F))]); } return poly(pts); };
+    s += `<g clip-path="url(#bd-c3)">`;
+    s += `<path class="innov" d="${line(F => M.innovators(F, P))}"/>`;
+    s += `<path class="imit" d="${line(F => M.imitators(F, Q))}"/>`;
+    s += `<path class="curve" d="${line(F => M.rate(F, P, Q))}"/>`;
+    s += `</g>`;
+
+    // phase line: F increases wherever F' > 0, toward the stable equilibrium F = 1
+    const y0 = p.y(0);
+    for(const F of [.12, .37, .62, .87]){
+      if(M.rate(F, P, Q) <= 0) continue;
+      const x = p.x(F);
+      s += `<path class="arrow" d="M${x + 7} ${y0}L${x - 5} ${y0 - 6}L${x - 5} ${y0 + 6}Z"/>`;
+    }
+    s += `<circle class="eq-stable" cx="${p.x(1)}" cy="${y0}" r="6"/>`;
+    if(P === 0 && Q > 0) s += `<circle class="eq-unstable" cx="${p.x(0)}" cy="${y0}" r="6"/>`;
+    s += `<text class="note" x="${p.x(1) - 8}" y="${y0 - 12}" text-anchor="end">F = 1 stable</text>`;
+    if(P === 0 && Q > 0) s += `<text class="note" x="${p.x(0) + 10}" y="${y0 - 12}">F = 0 unstable</text>`;
+
+    const vertex = M.peakShare(P, Q);
+    if(vertex > 0){
+      const vr = M.rate(vertex, P, Q);
+      s += `<line class="guide" x1="${p.x(vertex)}" x2="${p.x(vertex)}" y1="${p.y(vr)}" y2="${y0}"/>` +
+           `<circle class="mark" cx="${p.x(vertex)}" cy="${p.y(vr)}" r="4.5"/>` +
+           `<text class="note" x="${p.x(vertex)}" y="${p.y(vr) - 10}" text-anchor="middle">F* = ${pct(vertex)}</text>`;
+    }
+    const F = M.solution(F0, t, P, Q);
+    s += `<circle class="pt" cx="${p.x(F)}" cy="${p.y(M.rate(F, P, Q))}" r="5.5"/>`;
+    const lx = p.m.l + p.iw - 170, ly = p.m.t + 16;
+    s += `<line class="curve" x1="${lx}" x2="${lx + 18}" y1="${ly - 4}" y2="${ly - 4}"/><text class="note" x="${lx + 26}" y="${ly}">total F′</text>` +
+         `<line class="imit" x1="${lx}" x2="${lx + 18}" y1="${ly + 12}" y2="${ly + 12}"/><text class="note" x="${lx + 26}" y="${ly + 16}">imitation qF(1 − F)</text>` +
+         `<line class="innov" x1="${lx}" x2="${lx + 18}" y1="${ly + 28}" y2="${ly + 28}"/><text class="note" x="${lx + 26}" y="${ly + 32}">innovation p(1 − F)</text>`;
+    $('p3').setAttribute('aria-label', `F prime against F: a downward parabola${vertex > 0 ? ` with its maximum at F star ${pct(vertex)}` : ' that decreases from F equals 0'}. The phase line points right toward the stable equilibrium F equals 1.`);
+    $('p3').innerHTML = s;
+  }
+
+  // ---- wiring ---------------------------------------------------------------
+  function update(){
+    st.p = +$('in-p').value; st.q = +$('in-q').value; st.F0 = +$('in-f').value; st.t = +$('in-t').value;
+    $('out-p').textContent = num(st.p, 3); $('out-q').textContent = num(st.q); $('out-f').textContent = pct(st.F0, 0); $('out-t').textContent = num(st.t, 1);
+    const {p: P, q: Q, F0, t} = st, pk = M.peak(F0, P, Q), F = M.solution(F0, t, P, Q);
+    $('r-f').textContent = pct(F); $('r-df').textContent = pct(M.rate(F, P, Q));
+    const none = stalled();
+    $('r-tp').textContent = none ? '—' : pk.t === 0 ? 'at launch' : years(pk.t);
+    $('r-rp').textContent = none ? '—' : pct(pk.rate);
+    $('r-fp').textContent = none ? '—' : pct(pk.F);
+    $('r-half').textContent = years(M.timeTo(F0, .5, P, Q));
+    const share = M.innovatorShare(F0, P, Q);
+    $('r-inn').textContent = none || Number.isNaN(share) ? '—' : pct(share, 0);
+    draw1(pk); draw2(pk); draw3(pk);
+  }
+  let queued = false;
+  const schedule = () => { if(queued) return; queued = true; requestAnimationFrame(() => { queued = false; update(); }); };
+
+  // ---- playback: advance t; reduced motion jumps in discrete steps instead ----
+  let playing = false, last = 0;
+  const setPlaying = on => { playing = on; $('play').setAttribute('aria-pressed', String(on)); $('play').textContent = on ? 'Pause' : 'Play'; };
+  function frame(now){
+    if(!playing) return;
+    const dt = last ? Math.min(.1, (now - last) / 1000) : 0; last = now;
+    const tin = $('in-t'), next = Math.min(T_MAX, +tin.value + 4 * dt);
+    tin.value = next; update();
+    if(next >= T_MAX) setPlaying(false); else requestAnimationFrame(frame);
+  }
+  $('play').addEventListener('click', () => {
+    const tin = $('in-t');
+    if(reduceMotion.matches){ tin.value = +tin.value >= T_MAX ? 0 : Math.min(T_MAX, +tin.value + 3); update(); return; }
+    if(playing){ setPlaying(false); return; }
+    if(+tin.value >= T_MAX) tin.value = 0;
+    setPlaying(true); last = 0; requestAnimationFrame(frame);
+  });
+  for(const id of ['in-p', 'in-q', 'in-f']) $(id).addEventListener('input', () => { setPlaying(false); schedule(); });
+  $('in-t').addEventListener('input', () => { setPlaying(false); schedule(); });
+  document.addEventListener('visibilitychange', () => { if(document.hidden) setPlaying(false); });
+  for(const b of document.querySelectorAll('#bd-explorer [data-preset]')) b.addEventListener('click', () => {
+    const [P, Q, F0] = b.dataset.preset.split(',').map(Number);
+    $('in-p').value = P; $('in-q').value = Q; $('in-f').value = F0; $('in-t').value = 0;
+    setPlaying(false); update();
+  });
+  update();
+})();
+</script>
