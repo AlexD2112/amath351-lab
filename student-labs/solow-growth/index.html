@@ -1,0 +1,585 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Save, invest, and watch capital per worker settle at a steady state. Solve a Bernoulli equation exactly, find the golden-rule saving rate, and see Euler&#x27;s method overshoot with large steps.">
+  <meta name="theme-color" content="#624298">
+  <title>Solow growth model · AMATH 351 Lab</title>
+  <link rel="canonical" href="https://shzhang3.github.io/amath351-lab/student-labs/solow-growth/">
+  <link rel="stylesheet" href="../../assets/lab.css">
+</head>
+<body>
+  <a class="site-skip" href="#main-content">Skip to content</a>
+  <div class="site-wrap">
+    <header class="site-header">
+      <a class="site-brand" href="../../"><span class="site-brand-mark" aria-hidden="true">y′</span>AMATH 351 / Lab</a>
+      <nav aria-label="Main navigation"><a href="../../">Chapters</a><a href="https://shzhang3.github.io/#teaching">Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">GitHub ↗</a></nav>
+    </header>
+<nav class="site-breadcrumbs" aria-label="Breadcrumb"><a href="../../">All chapters</a><span aria-hidden="true">/</span><a href="../../#student-labs">Student Showcase</a><span aria-hidden="true">/</span><span aria-current="page">Solow growth model</span></nav>
+    <main id="main-content" tabindex="-1"><noscript>Enable JavaScript to use the interactive plots. Explanations and navigation remain available.</noscript><section class="lab-intro">
+  <div class="site-kicker">Student lab · Macroeconomics · Bernoulli equations</div>
+  <h1>Solow growth model</h1>
+  <div class="so-equation so-equation-primary"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="k prime equals s k to the alpha, minus n plus delta times k"><msup><mi>k</mi><mo>′</mo></msup><mo>=</mo><mi>s</mi><msup><mi>k</mi><mi>α</mi></msup><mo>−</mo><mo>(</mo><mi>n</mi><mo>+</mo><mi>δ</mi><mo>)</mo><mi>k</mi></math></div>
+  <p>Why can't a country grow rich just by saving more? Capital per worker k grows when investment exceeds what is needed to replace worn-out machines and equip new workers. With λ = n + δ, the substitution v = k<sup>1−α</sup> turns this Bernoulli equation into a linear one, so</p>
+  <div class="so-equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="k of t equals, s over lambda plus k zero to the 1 minus alpha minus s over lambda times e to the minus 1 minus alpha lambda t, all to the power 1 over 1 minus alpha"><mi>k</mi><mo>(</mo><mi>t</mi><mo>)</mo><mo>=</mo><msup><mrow><mo>[</mo><mfrac><mi>s</mi><mi>λ</mi></mfrac><mo>+</mo><mrow><mo>(</mo><msubsup><mi>k</mi><mn>0</mn><mrow><mn>1</mn><mo>−</mo><mi>α</mi></mrow></msubsup><mo>−</mo><mfrac><mi>s</mi><mi>λ</mi></mfrac><mo>)</mo></mrow><msup><mi>e</mi><mrow><mo>−</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo>)</mo><mi>λ</mi><mi>t</mi></mrow></msup><mo>]</mo></mrow><mrow><mn>1</mn><mo>/</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo>)</mo></mrow></msup></math></div>
+  <p>Change the saving rate, population growth, and depreciation, and see the Solow diagram, the path to the steady state, and the golden rule respond together. Then compare the exact path with Euler's method.</p>
+  <p class="lab-small">Submitted by <a href="https://github.com/AlexD2112" target="_blank" rel="noopener">Alex</a>.</p>
+</section>
+
+<div class="so-explainer">
+  <section>
+    <h2>Where it comes from</h2>
+    <p>An economy produces Y = K<sup>α</sup>L<sup>1−α</sup> from capital K and workers L. Per worker, output is y = k<sup>α</sup> with k = K/L. Each year:</p>
+    <ul>
+      <li>a share <strong>s</strong> of output is saved and invested in new capital: K′ = sY − δK;</li>
+      <li>the workforce grows at rate <strong>n</strong>: L′ = nL.</li>
+    </ul>
+    <p>The quotient rule gives k′/k = K′/K − L′/L, and this simplifies to the equation above. Robert Solow introduced the model in 1956 and received the 1987 Nobel Prize in economics for his work on growth.</p>
+  </section>
+
+  <section>
+    <h2>What the terms mean</h2>
+    <ul>
+      <li><strong>s k<sup>α</sup>, investment:</strong> new machines per worker each year.</li>
+      <li><strong>(n + δ) k, break-even investment:</strong> what it takes just to keep k constant. δ is the share of capital that wears out each year, and n spreads the existing capital over more workers.</li>
+      <li><strong>α, capital share:</strong> close to 1/3 in national accounts. Because α &lt; 1, each extra machine adds less output than the last (diminishing returns).</li>
+      <li><strong>c = (1 − s) k<sup>α</sup>, consumption:</strong> what people actually get to use. Saving raises k, but it also costs consumption today.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Solving it (Section 1.6)</h2>
+    <p>The equation has the Bernoulli form k′ + λk = s k<sup>α</sup>. Let v = k<sup>1−α</sup>, so v′ = (1 − α)k<sup>−α</sup>k′. Multiplying the equation by (1 − α)k<sup>−α</sup> gives</p>
+    <div class="so-equation"><math xmlns="http://www.w3.org/1998/Math/MathML" display="block" aria-label="v prime plus 1 minus alpha lambda v equals 1 minus alpha s"><msup><mi>v</mi><mo>′</mo></msup><mo>+</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo>)</mo><mi>λ</mi><mi>v</mi><mo>=</mo><mo>(</mo><mn>1</mn><mo>−</mo><mi>α</mi><mo>)</mo><mi>s</mi></math></div>
+    <p>This is linear with constant coefficients. The integrating factor e<sup>(1−α)λt</sup> (Section 1.5) gives v(t) = s/λ + (v₀ − s/λ)e<sup>−(1−α)λt</sup>, and k = v<sup>1/(1−α)</sup>.</p>
+    <p>k ≡ 0 also solves the equation, and so does the formula started from k₀ = 0. Because k<sup>α</sup> has an infinite slope at 0, uniqueness fails there, just as it does for y′ = 3|y|<sup>2/3</sup>.</p>
+  </section>
+
+  <section>
+    <h2>Reading the phase line (Section 2.2)</h2>
+    <ul>
+      <li><strong>Steady state:</strong> investment equals break-even investment at <strong>k* = (s/λ)<sup>1/(1−α)</sup></strong>. Below k*, k′ &gt; 0. Above it, k′ &lt; 0. So k* is stable, and k = 0 is unstable.</li>
+      <li><strong>Speed:</strong> the slope of k′ at k* is −(1 − α)λ. The gap closes by half every ln 2/((1 − α)λ) years, about 17 years for the defaults.</li>
+      <li><strong>No long-run growth:</strong> output per worker y* = (k*)<sup>α</sup> is constant. Saving more raises the level of y* but not its long-run growth rate. Sustained growth needs technological progress, which this version leaves out.</li>
+      <li><strong>Golden rule:</strong> steady-state consumption c*(s) = (1 − s)(s/λ)<sup>α/(1−α)</sup> is largest at s = α. Saving beyond that lowers consumption in every period.</li>
+    </ul>
+  </section>
+</div>
+
+<section id="so-explorer" class="lab-interactive" aria-labelledby="so-heading">
+  <h2 id="so-heading">One economy, three views</h2>
+  <div class="so-presets" role="group" aria-label="Presets">
+    <span class="lab-small">Presets</span>
+    <button type="button" class="lab-button" data-preset="baseline">Baseline</button>
+    <button type="button" class="lab-button" data-preset="shock">Saving rises in year 20</button>
+    <button type="button" class="lab-button" data-preset="rich">Starts rich</button>
+    <button type="button" class="lab-button" data-preset="over">Over-saving</button>
+    <button type="button" class="lab-button" data-preset="euler">Euler, h = 40</button>
+  </div>
+  <div class="so-workspace">
+    <div class="so-controls" role="group" aria-label="Parameters">
+      <label for="so-in-s">s, saving rate <output id="so-out-s" for="so-in-s"></output></label>
+      <input id="so-in-s" type="range" min="0.05" max="0.8" step="0.01" value="0.2">
+
+      <label for="so-in-a">α, capital share <output id="so-out-a" for="so-in-a"></output></label>
+      <input id="so-in-a" type="range" min="0.2" max="0.6" step="0.01" value="0.33">
+
+      <label for="so-in-n">n, population growth <output id="so-out-n" for="so-in-n"></output></label>
+      <input id="so-in-n" type="range" min="0" max="0.04" step="0.001" value="0.01">
+
+      <label for="so-in-d">δ, depreciation <output id="so-out-d" for="so-in-d"></output></label>
+      <input id="so-in-d" type="range" min="0.01" max="0.1" step="0.001" value="0.05">
+
+      <label for="so-in-k">k₀, starting capital <output id="so-out-k" for="so-in-k"></output></label>
+      <input id="so-in-k" type="range" min="0.2" max="20" step="0.1" value="2">
+
+      <label class="so-check" for="so-in-shock"><input id="so-in-shock" type="checkbox"> Saving changes in year 20</label>
+      <div class="so-group so-off" id="so-shock-group">
+        <label for="so-in-s2">new saving rate <output id="so-out-s2" for="so-in-s2"></output></label>
+        <input id="so-in-s2" type="range" min="0.05" max="0.8" step="0.01" value="0.3" disabled>
+      </div>
+
+      <label class="so-check" for="so-in-euler"><input id="so-in-euler" type="checkbox"> Euler's method</label>
+      <div class="so-group so-off" id="so-euler-group">
+        <label for="so-in-h">step h (years)</label>
+        <select id="so-in-h" class="lab-select" disabled>
+          <option value="1">1</option><option value="5">5</option><option value="10" selected>10</option>
+          <option value="25">25</option><option value="40">40</option><option value="55">55</option>
+        </select>
+      </div>
+
+      <label for="so-in-t" class="so-time">Year t <output id="so-out-t" for="so-in-t"></output></label>
+      <input id="so-in-t" type="range" min="0" max="100" step="0.5" value="0">
+      <button type="button" id="so-play" class="lab-button lab-primary so-play" aria-pressed="false">Play</button>
+
+      <dl class="so-readouts" aria-live="polite">
+        <div><dt>k*, steady capital</dt><dd id="so-r-ks"></dd></div>
+        <div><dt>y*, steady output</dt><dd id="so-r-ys"></dd></div>
+        <div><dt>c*, steady consumption</dt><dd id="so-r-cs"></dd></div>
+        <div><dt>Golden-rule s</dt><dd id="so-r-gr"></dd></div>
+        <div><dt>Half-life of the gap</dt><dd id="so-r-hl"></dd></div>
+        <div><dt>k(t)</dt><dd id="so-r-k"></dd></div>
+        <div><dt>Growth of y at t</dt><dd id="so-r-g"></dd></div>
+        <div hidden data-euler><dt>Euler factor 1 − h(1 − α)λ</dt><dd id="so-r-ef"></dd></div>
+        <div hidden data-euler><dt>|Euler − exact| at t</dt><dd id="so-r-ee"></dd></div>
+      </dl>
+    </div>
+
+    <div class="so-plots">
+      <section>
+        <h3>1 · Solow diagram: investment against break-even</h3>
+        <svg id="so-p1" viewBox="0 0 720 300" role="img"></svg>
+      </section>
+      <section>
+        <h3>2 · Slope field for k′ and the path to the steady state</h3>
+        <svg id="so-p2" viewBox="0 0 720 320" role="img"></svg>
+      </section>
+      <section>
+        <h3>3 · Golden rule: steady-state consumption against s</h3>
+        <svg id="so-p3" viewBox="0 0 720 250" role="img"></svg>
+      </section>
+    </div>
+  </div>
+</section>
+
+<section class="so-predict" aria-labelledby="so-predict-heading">
+  <h2 id="so-predict-heading">Predict, then check</h2>
+  <details>
+    <summary>The economy is at its steady state when saving rises from 20% to 30% in year 20. Does output per worker grow faster forever?</summary>
+    <p>No. Growth jumps after year 20, then dies away as k approaches its new, higher k*. The long-run effect is on the level: y* rises by a factor (0.3/0.2)<sup>α/(1−α)</sup> ≈ 1.22 for α = 1/3, a one-time gain of about 22%. Use the "Saving rises in year 20" preset and watch "Growth of y at t".</p>
+  </details>
+  <details>
+    <summary>Two countries share the same s, α, n, and δ, but one starts with k₀ = 1 and the other with k₀ = 15. Which grows faster?</summary>
+    <p>The poorer one. Output growth is y′/y = α(s k<sup>α−1</sup> − λ), which falls as k rises, so a country far below k* grows quickly and a country above k* shrinks toward it. Economists call this <em>conditional convergence</em>: countries converge only if they share the same steady state.</p>
+  </details>
+  <details>
+    <summary>Is saving more always better for consumption in the long run?</summary>
+    <p>No. Plot 3 is a hump that peaks at s = α. Beyond that, the extra output from more capital is smaller than the extra investment needed to maintain it, so consumption falls. The "Over-saving" preset (s = 0.6) has lower c* than s = α ≈ 0.33. Such an economy is <em>dynamically inefficient</em>: saving less would raise consumption now and later.</p>
+  </details>
+  <details>
+    <summary>Turn on Euler's method with h = 40 years. What happens near k*, and why does h = 55 fail?</summary>
+    <p>Near k*, each Euler step multiplies the gap by 1 − h(1 − α)λ. For the defaults that is 1 − 40 · 0.04 = −0.6, so the approximation overshoots, lands on alternating sides of k*, and still converges. With h = 55 the factor is −1.2 and the oscillation grows. The exact solution can never cross k*, because uniqueness keeps it off the constant solution k ≡ k*. The oscillation comes only from the numerical method, which is stable only for h &lt; 2/((1 − α)λ).</p>
+  </details>
+</section>
+
+<details class="lab-explanation">
+  <summary>How are the curves computed?</summary>
+  <p>Every solid curve uses the exact Bernoulli solution above. No numerical ODE solver is used. When the saving rate changes in year 20, the formula restarts from k(20) with the new s. The orange polygon is Euler's method, k<sub>n+1</sub> = k<sub>n</sub> + h(s k<sub>n</sub><sup>α</sup> − λk<sub>n</sub>). It stops if a step would make k nonpositive, since k<sup>α</sup> is undefined there.</p>
+  <p>The slope field draws equal-length segments at their true on-screen angle. Because the equation is autonomous, every row of segments is parallel, and the row at k* is flat. The model and its checks are in <code>src/solow-growth-model.cjs</code> and <code>tests/solow-growth.test.cjs</code>.</p>
+</details>
+
+<style>
+  .so-equation {overflow-x:auto;max-width:100%;padding:14px 12px;margin:12px 0 16px;border-radius:8px;background:var(--site-soft);font-size:19px;}
+  .so-equation math {width:max-content;min-width:100%;margin:0;}
+  .so-equation-primary {font-size:28px;padding:20px 16px;border-left:3px solid var(--site-purple);}
+  .so-explainer .so-equation {font-size:16px;padding:10px 8px;margin:8px 0 10px;}
+  @media (max-width:520px) {
+    .so-equation {font-size:16px;padding:12px 8px;}
+    .so-equation-primary {font-size:24px;}
+  }
+
+  #so-explorer, .so-explainer, .so-predict {
+    --so-solution: light-dark(#c62828, #ff7b72);
+    --so-point: light-dark(#b45f06, #f0a23b);
+    --so-grid: light-dark(#ebe8f2, #2c2a36);
+    --so-break: var(--site-teal);
+    --so-euler: var(--site-orange);
+  }
+  .so-explainer {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 24px;}
+  .so-explainer section {background:var(--site-paper);border:1px solid var(--site-line);border-radius:10px;padding:14px 16px;min-width:0;}
+  .so-explainer h2, .so-predict h2 {font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--site-purple);margin:0 0 8px;font-weight:600;}
+  .so-explainer p, .so-explainer li {font-size:13.5px;line-height:1.55;margin:0 0 7px;}
+  .so-explainer p:last-child, .so-explainer li:last-child {margin-bottom:0;}
+  .so-explainer ul {margin:0;padding-left:18px;}
+
+  #so-explorer .so-presets {display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 18px;}
+  #so-explorer .so-presets .lab-button {padding:6px 12px;font-size:13px;}
+  #so-explorer .so-workspace {display:grid;grid-template-columns:250px minmax(0,1fr);gap:32px;align-items:start;}
+  #so-explorer .so-controls {position:sticky;top:16px;background:var(--site-soft);border:1px solid var(--site-line);border-radius:10px;padding:18px 18px 14px;}
+  #so-explorer .so-controls label {display:block;font-size:14px;font-weight:600;margin-top:14px;}
+  #so-explorer .so-controls label:first-child {margin-top:0;}
+  #so-explorer .so-controls output {float:right;font-weight:400;font-variant-numeric:tabular-nums;color:var(--site-muted);}
+  #so-explorer .so-controls input[type=range] {width:100%;margin:8px 0 0;accent-color:var(--site-purple);}
+  #so-explorer .so-controls .lab-select {margin-top:6px;padding:6px 10px;}
+  #so-explorer .so-controls label.so-check {display:flex;align-items:center;gap:8px;margin-top:18px;padding-top:14px;border-top:1px solid var(--site-line);cursor:pointer;}
+  #so-explorer .so-check input {accent-color:var(--site-purple);margin:0;width:16px;height:16px;}
+  #so-explorer .so-group {transition:opacity .15s;}
+  #so-explorer .so-group label {margin-top:10px;font-weight:500;}
+  #so-explorer .so-group.so-off {opacity:.45;}
+  #so-explorer .so-controls label.so-time {margin-top:20px;padding-top:14px;border-top:1px solid var(--site-line);}
+  #so-explorer .so-play {margin-top:10px;width:100%;}
+  #so-explorer .so-readouts {margin:18px 0 0;padding-top:12px;border-top:1px solid var(--site-line);font-size:13px;font-variant-numeric:tabular-nums;}
+  #so-explorer .so-readouts div {display:flex;justify-content:space-between;gap:8px;margin:3px 0;}
+  #so-explorer .so-readouts dt {color:var(--site-muted);}
+  #so-explorer .so-readouts dd {margin:0;flex-shrink:0;}
+  #so-explorer .so-plots {min-width:0;}
+  #so-explorer .so-plots section {margin-bottom:22px;}
+  #so-explorer .so-plots section:last-child {margin-bottom:0;}
+  #so-explorer h3 {font-size:14px;font-weight:600;margin:0 0 4px;}
+  #so-explorer svg {display:block;width:100%;height:auto;overflow:visible;}
+  #so-explorer svg text {fill:var(--site-ink);font-family:inherit;}
+  #so-explorer svg .tick {font-size:11px;fill:var(--site-muted);}
+  #so-explorer svg .axl {font-size:13px;}
+  #so-explorer svg .note {font-size:11.5px;paint-order:stroke;stroke:var(--site-paper);stroke-width:4px;stroke-linejoin:round;}
+  #so-explorer svg .grid {stroke:var(--so-grid);stroke-width:1;}
+  #so-explorer svg .frame {stroke:var(--site-line);stroke-width:1;fill:none;}
+  #so-explorer svg .guide {stroke:var(--site-muted);stroke-width:1;stroke-dasharray:4 3;fill:none;}
+  #so-explorer svg .now {stroke:var(--so-point);stroke-width:1.5;stroke-dasharray:3 3;}
+  #so-explorer svg .output {stroke:var(--site-muted);stroke-width:1.6;fill:none;}
+  #so-explorer svg .curve {stroke:var(--site-purple);stroke-width:2.6;fill:none;}
+  #so-explorer svg .curve-old {stroke:var(--site-purple);stroke-width:1.8;fill:none;stroke-dasharray:6 4;opacity:.6;}
+  #so-explorer svg .break {stroke:var(--so-break);stroke-width:2.4;fill:none;}
+  #so-explorer svg .cons {fill:var(--site-purple);opacity:.12;}
+  #so-explorer svg .sol {stroke:var(--so-solution);stroke-width:1.2;fill:none;opacity:.35;}
+  #so-explorer svg .sol-main {stroke:var(--so-solution);stroke-width:2.8;fill:none;}
+  #so-explorer svg .euler {stroke:var(--so-euler);stroke-width:2;fill:none;}
+  #so-explorer svg .euler-pt {fill:var(--so-euler);stroke:var(--site-paper);stroke-width:1.2;}
+  #so-explorer svg .pt {fill:var(--so-point);stroke:var(--site-paper);stroke-width:1.5;}
+  #so-explorer svg .mark {fill:var(--site-paper);stroke:var(--site-purple);stroke-width:2;}
+  #so-explorer svg .eq-stable {fill:var(--site-ink);}
+  #so-explorer svg .eq-unstable {fill:var(--site-paper);stroke:var(--site-ink);stroke-width:1.8;}
+  #so-explorer svg .arrow {fill:var(--site-ink);}
+
+  .so-predict {margin:24px 0 0;padding:18px 20px;background:var(--site-paper);border:1px solid var(--site-line);border-radius:10px;}
+  .so-predict details {border-top:1px solid var(--site-line);padding:4px 0;}
+  .so-predict details:first-of-type {border-top:0;}
+  .so-predict summary {cursor:pointer;padding:8px 0;font-size:14.5px;line-height:1.45;}
+  .so-predict details p {margin:2px 0 10px;font-size:13.5px;line-height:1.55;color:var(--site-ink);}
+  @media (max-width:760px){
+    .so-explainer {grid-template-columns:minmax(0,1fr);}
+    #so-explorer .so-workspace {grid-template-columns:minmax(0,1fr);gap:20px;}
+    #so-explorer .so-controls {position:static;}
+  }
+  @media (pointer:coarse){ #so-explorer .so-controls input[type=range] {min-height:44px;} }
+</style>
+<script>// Student lab: the Solow growth model, k' = s k^a - lam k, with lam = n + delta.
+// It is a Bernoulli equation: v = k^{1-a} turns it into the linear equation
+// v' = (1-a)(s - lam v), solved exactly with an integrating factor.
+(function(root){
+  const output=(k,a)=>Math.pow(k,a);                    // y = f(k) = k^a, per worker
+  const investment=(k,s,a)=>s*Math.pow(k,a);
+  const breakEven=(k,lam)=>lam*k;                       // keeps k constant as workers are added and capital wears out
+  const rate=(k,s,a,lam)=>s*Math.pow(k,a)-lam*k;
+  const consumption=(k,s,a)=>(1-s)*Math.pow(k,a);
+
+  const steady=(s,a,lam)=>Math.pow(s/lam,1/(1-a));
+  // Linearizing at k*: d/dk (s k^a - lam k) = a lam - lam = -(1 - a) lam, the same rate the
+  // Bernoulli solution decays at, so the gap to k* (in k^{1-a}) halves every ln 2/((1-a) lam).
+  const convergenceRate=(a,lam)=>(1-a)*lam;
+  const halfLife=(a,lam)=>Math.LN2/convergenceRate(a,lam);
+
+  // Steady-state consumption as a function of the saving rate; the golden rule maximizes it at s = a.
+  const steadyConsumption=(s,a,lam)=>(1-s)*Math.pow(s/lam,a/(1-a));
+  const goldenRule=a=>a;
+
+  function solution(k0,t,s,a,lam){
+    const b=1-a,v0=Math.pow(k0,b);
+    const v=lam>0?s/lam+(v0-s/lam)*Math.exp(-b*lam*t):v0+b*s*t;
+    return Math.pow(v,1/b);
+  }
+
+  // The saving rate changes from s1 to s2 at time tShock; the solution restarts from k(tShock).
+  function shockPath(k0,t,s1,s2,tShock,a,lam){
+    if(t<=tShock)return solution(k0,t,s1,a,lam);
+    return solution(solution(k0,tShock,s1,a,lam),t-tShock,s2,a,lam);
+  }
+
+  // Growth rate of output per worker: y'/y = a k'/k.
+  const outputGrowth=(k,s,a,lam)=>a*rate(k,s,a,lam)/k;
+
+  // Euler's method (Section 2.4) with step h up to time T. Stops if k would leave k > 0.
+  function euler(k0,h,T,s,a,lam){
+    const pts=[[0,k0]];let k=k0,t=0;
+    const n=Math.round(T/h);
+    for(let i=1;i<=n;i++){
+      k=k+h*rate(k,s,a,lam);t=i*h;
+      if(!(k>0))break;
+      pts.push([t,k]);
+    }
+    return pts;
+  }
+  // Near k*, Euler multiplies the gap by 1 - h(1 - a)lam each step: it oscillates once that
+  // factor is negative and diverges once it is below -1.
+  const eulerFactor=(h,a,lam)=>1-h*convergenceRate(a,lam);
+
+  const api=Object.freeze({output,investment,breakEven,rate,consumption,steady,convergenceRate,halfLife,steadyConsumption,goldenRule,solution,shockPath,outputGrowth,euler,eulerFactor});
+  if(typeof module==='object'&&module.exports)module.exports=api;else root.Amath351Solow=api;
+})(globalThis);
+</script>
+<script>
+(()=>{
+  const M = Amath351Solow;
+  const $ = id => document.getElementById('so-' + id);
+  const st = {};
+  const T_MAX = 100, T_SHOCK = 20;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)');
+  const PRESETS = {
+    baseline: {s: .2, a: .33, n: .01, d: .05, k: 2, shock: false, euler: false},
+    shock:    {s: .2, a: .33, n: .01, d: .05, k: 6, shock: true, s2: .3, euler: false},
+    rich:     {s: .2, a: .33, n: .01, d: .05, k: 15, shock: false, euler: false},
+    over:     {s: .6, a: .33, n: .01, d: .05, k: 2, shock: false, euler: false},
+    euler:    {s: .2, a: .33, n: .01, d: .05, k: 2, shock: false, euler: true, h: 40},
+  };
+
+  // ---- formatting -------------------------------------------------------
+  const minus = s => s.replace(/-/g, '−');
+  const num = (x, d = 2) => minus(String(+x.toFixed(d)));
+  const pct = (x, d = 1) => num(100 * x, d) + '%';
+
+  // ---- colour ramp for slopes (falling teal -> flat grey-blue -> rising purple) --
+  const STOPS = [[42,157,143],[63,95,168],[106,27,154]];
+  function ramp(u){
+    u = Math.max(0, Math.min(1, u));
+    const x = u * (STOPS.length - 1), i = Math.min(STOPS.length - 2, Math.floor(x)), w = x - i;
+    const c = STOPS[i].map((a, j) => Math.round(a + w * (STOPS[i + 1][j] - a)));
+    return `rgb(${c[0]},${c[1]},${c[2]})`;
+  }
+
+  // ---- plot helpers -------------------------------------------------------
+  function niceTicks(lo, hi, n = 5){
+    const raw = (hi - lo) / n, mag = Math.pow(10, Math.floor(Math.log10(raw))), f = raw / mag;
+    const step = (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * mag, out = [];
+    for(let v = Math.ceil(lo / step - 1e-9) * step; v <= hi + 1e-9; v += step)
+      out.push(Math.abs(v) < 1e-12 ? 0 : +v.toFixed(10));
+    return out;
+  }
+  function makeP(w, h, m, xd, yd){
+    const iw = w - m.l - m.r, ih = h - m.t - m.b;
+    return {w, h, m, iw, ih, xd, yd,
+      x: v => m.l + (v - xd[0]) / (xd[1] - xd[0]) * iw,
+      y: v => m.t + ih - (v - yd[0]) / (yd[1] - yd[0]) * ih};
+  }
+  function axes(p, xt, yt, xl, yl){
+    const {m, iw, ih} = p; let s = '';
+    for(const v of xt)
+      s += `<line class="grid" x1="${p.x(v)}" x2="${p.x(v)}" y1="${m.t}" y2="${m.t + ih}"/>` +
+           `<text class="tick" x="${p.x(v)}" y="${m.t + ih + 16}" text-anchor="middle">${num(v, 3)}</text>`;
+    for(const v of yt)
+      s += `<line class="grid" x1="${m.l}" x2="${m.l + iw}" y1="${p.y(v)}" y2="${p.y(v)}"/>` +
+           `<text class="tick" x="${m.l - 8}" y="${p.y(v) + 4}" text-anchor="end">${num(v, 3)}</text>`;
+    s += `<rect class="frame" x="${m.l}" y="${m.t}" width="${iw}" height="${ih}"/>`;
+    s += `<text class="axl" x="${m.l + iw / 2}" y="${p.h - 4}" text-anchor="middle">${xl}</text>`;
+    s += `<text class="axl" transform="translate(14 ${m.t + ih / 2}) rotate(-90)" text-anchor="middle">${yl}</text>`;
+    return s;
+  }
+  const clip = (id, p) => `<clipPath id="${id}"><rect x="${p.m.l}" y="${p.m.t}" width="${p.iw}" height="${p.ih}"/></clipPath>`;
+  const poly = pts => 'M' + pts.map(q => q[0].toFixed(2) + ' ' + q[1].toFixed(2)).join('L');
+  const labelSide = (p, px) => px > p.m.l + p.iw * 0.7 ? {a: 'end', d: -10} : {a: 'start', d: 10};
+  const yIn = (p, y) => y >= p.m.t && y <= p.m.t + p.ih;
+
+  // ---- the model with the current settings ---------------------------------
+  const lam = () => st.n + st.d;
+  const sAt = t => st.shock && t > T_SHOCK ? st.s2 : st.s;
+  const path = (k0, t) => st.shock ? M.shockPath(k0, t, st.s, st.s2, T_SHOCK, st.a, lam()) : M.solution(k0, t, st.s, st.a, lam());
+  const kNow = () => path(st.k0, st.t);
+  function kTop(){
+    const L = lam(), stars = [M.steady(st.s, st.a, L)];
+    if(st.shock) stars.push(M.steady(st.s2, st.a, L));
+    return Math.max(1.5 * Math.max(...stars), 1.1 * st.k0, 1);
+  }
+  function eulerPath(){
+    if(!st.euler) return null;
+    // Euler with the saving rate that applies at the start of each step
+    const pts = [[0, st.k0]]; let k = st.k0;
+    for(let i = 1; i * st.h <= T_MAX + 1e-9; i++){
+      const t0 = (i - 1) * st.h;
+      k = k + st.h * M.rate(k, sAt(t0 + 1e-9), st.a, lam());
+      if(!(k > 0)) break;
+      pts.push([i * st.h, k]);
+    }
+    return pts;
+  }
+  function eulerAt(pts, t){
+    for(let i = 1; i < pts.length; i++) if(t <= pts[i][0]){
+      const [t0, k0] = pts[i - 1], [t1, k1] = pts[i];
+      return k0 + (k1 - k0) * (t - t0) / (t1 - t0);
+    }
+    return t <= pts.at(-1)[0] ? pts.at(-1)[1] : NaN;
+  }
+
+  // ---- plot 1: Solow diagram ----------------------------------------------
+  function draw1(){
+    const {a, t} = st, L = lam(), s = sAt(t), K = kTop(), k = kNow(), ks = M.steady(s, a, L);
+    // scale to the crossing that defines k*; output, about 1/s times investment, may leave the top
+    const top = Math.min(M.output(K, a) * 1.08, 2.4 * Math.max(M.breakEven(K, L), M.investment(K, Math.max(st.s, st.shock ? st.s2 : 0), a)));
+    const p = makeP(720, 300, {l:58, r:16, t:16, b:46}, [0, K], [0, top]);
+    let g = `<defs>${clip('so-c1', p)}</defs>`;
+    g += axes(p, niceTicks(0, K), niceTicks(0, top, 4), 'k, capital per worker', 'per worker');
+    const line = f => { const pts = []; for(let i = 0; i <= 240; i++){ const x = K * i / 240; pts.push([p.x(x), p.y(f(x))]); } return poly(pts); };
+    g += `<g clip-path="url(#so-c1)">`;
+    // consumption at the current k: the gap between output and investment
+    g += `<line class="guide" x1="${p.x(k)}" x2="${p.x(k)}" y1="${p.y(M.output(k, a))}" y2="${p.y(0)}"/>`;
+    g += `<rect class="cons" x="${p.x(k) - 5}" y="${p.y(M.output(k, a))}" width="10" height="${Math.max(0, p.y(M.investment(k, s, a)) - p.y(M.output(k, a)))}"/>`;
+    g += `<path class="output" d="${line(x => M.output(x, a))}"/>`;
+    if(st.shock) g += `<path class="curve-old" d="${line(x => M.investment(x, t > T_SHOCK ? st.s : st.s2, a))}"/>`;
+    g += `<path class="curve" d="${line(x => M.investment(x, s, a))}"/>`;
+    g += `<path class="break" d="${line(x => M.breakEven(x, L))}"/>`;
+    g += `</g>`;
+
+    // phase line on the k axis: arrows toward k*, stable k*, unstable 0
+    const y0 = p.y(0);
+    for(const f of [.12, .3, .5, .7, .88]){
+      const x = K * f, r = M.rate(x, s, a, L);
+      if(Math.abs(x - ks) < K * .04) continue;
+      const px = p.x(x), dir = r > 0 ? 1 : -1;
+      g += `<path class="arrow" d="M${px + 7 * dir} ${y0}L${px - 5 * dir} ${y0 - 6}L${px - 5 * dir} ${y0 + 6}Z"/>`;
+    }
+    g += `<circle class="eq-unstable" cx="${p.x(0)}" cy="${y0}" r="5.5"/>`;
+    g += `<circle class="eq-stable" cx="${p.x(ks)}" cy="${y0}" r="6"/>`;
+    g += `<line class="guide" x1="${p.x(ks)}" x2="${p.x(ks)}" y1="${p.y(M.breakEven(ks, L))}" y2="${y0}"/>`;
+    g += `<circle class="mark" cx="${p.x(ks)}" cy="${p.y(M.breakEven(ks, L))}" r="4.5"/>`;
+    g += `<text class="note" x="${p.x(ks)}" y="${y0 - 12}" text-anchor="middle">k* = ${num(ks)}</text>`;
+    g += `<circle class="pt" cx="${p.x(k)}" cy="${p.y(M.investment(k, s, a))}" r="5.5"/>`;
+
+    const lx = p.m.l + 12, ly = p.m.t + 16;
+    const items = [['output', 'output y = k<tspan dy="-4" font-size="9">α</tspan>'], ['curve', `investment ${num(s)}·k<tspan dy="-4" font-size="9">α</tspan>`], ['break', `break-even (n + δ)k = ${num(L, 3)}k`]];
+    if(st.shock) items.push(['curve-old', `investment ${t > T_SHOCK ? 'before' : 'after'} year ${T_SHOCK}`]);
+    items.forEach(([cls, label], i) => {
+      g += `<line class="${cls}" x1="${lx}" x2="${lx + 18}" y1="${ly + 16 * i - 4}" y2="${ly + 16 * i - 4}"/><text class="note" x="${lx + 26}" y="${ly + 16 * i}">${label}</text>`;
+    });
+    $('p1').setAttribute('aria-label', `Solow diagram: investment ${num(s)} k to the alpha and break-even line ${num(L, 3)} k cross at k star ${num(ks)}. The current capital is ${num(k)}.`);
+    $('p1').innerHTML = g;
+  }
+
+  // ---- plot 2: slope field + paths in time ----------------------------------
+  function draw2(){
+    const {a, t, k0} = st, L = lam(), K = kTop();
+    const p = makeP(720, 320, {l:58, r:16, t:30, b:42}, [0, T_MAX], [0, K]);
+    let g = `<defs>${clip('so-c2', p)}<linearGradient id="so-g2">` +
+            [0, .5, 1].map(u => `<stop offset="${u * 100}%" stop-color="${ramp(u)}"/>`).join('') +
+            `</linearGradient></defs>`;
+    g += axes(p, niceTicks(0, T_MAX), niceTicks(0, K), 't (years)', 'k, capital per worker');
+
+    // slope field, coloured by sign and size of k′ relative to the largest |k′| on screen
+    const pxT = p.x(1) - p.x(0), pxK = p.y(0) - p.y(1), half = 8.5, BINS = 14, bins = Array.from({length: BINS}, () => []);
+    let big = 1e-9;
+    for(let j = 0; j < 18; j++){ const k = K * (j + .5) / 18; big = Math.max(big, Math.abs(M.rate(k, st.s, a, L)), st.shock ? Math.abs(M.rate(k, st.s2, a, L)) : 0); }
+    for(let i = 0; i < 25; i++) for(let j = 0; j < 18; j++){
+      const tt = T_MAX * (i + .5) / 25, k = K * (j + .5) / 18, m = M.rate(k, sAt(tt), a, L);
+      const dx = pxT, dy = -m * pxK, len = Math.hypot(dx, dy), ux = dx / len, uy = dy / len, cx = p.x(tt), cy = p.y(k);
+      const b = Math.min(BINS - 1, Math.floor((m / big + 1) / 2 * BINS));
+      bins[b].push(`M${(cx - ux * half).toFixed(1)} ${(cy - uy * half).toFixed(1)}L${(cx + ux * half).toFixed(1)} ${(cy + uy * half).toFixed(1)}`);
+    }
+    g += '<g clip-path="url(#so-c2)" stroke-width="1.8" stroke-linecap="round">';
+    bins.forEach((segs, b) => { if(segs.length) g += `<path d="${segs.join('')}" stroke="${ramp((b + .5) / BINS)}" opacity=".75"/>`; });
+    // steady states
+    const ks1 = M.steady(st.s, a, L);
+    g += `<line class="guide" x1="${p.x(0)}" x2="${p.x(st.shock ? T_SHOCK : T_MAX)}" y1="${p.y(ks1)}" y2="${p.y(ks1)}"/>`;
+    if(st.shock){ const ks2 = M.steady(st.s2, a, L); g += `<line class="guide" x1="${p.x(T_SHOCK)}" x2="${p.x(T_MAX)}" y1="${p.y(ks2)}" y2="${p.y(ks2)}"/><line class="guide" x1="${p.x(T_SHOCK)}" x2="${p.x(T_SHOCK)}" y1="${p.m.t}" y2="${p.m.t + p.ih}"/>`; }
+    const curve = k0c => { const pts = []; for(let i = 0; i <= 300; i++){ const tt = T_MAX * i / 300; pts.push([p.x(tt), p.y(path(k0c, tt))]); } return poly(pts); };
+    for(const f of [.1, .3, .55, .8, 1]) if(Math.abs(K * f - k0) > K * .03) g += `<path class="sol" d="${curve(K * f * .98)}"/>`;
+    g += `<path class="sol-main" d="${curve(k0)}"/>`;
+    const eu = eulerPath();
+    if(eu){
+      g += `<path class="euler" d="${poly(eu.map(q => [p.x(q[0]), p.y(q[1])]))}"/>`;
+      for(const q of eu) g += `<circle class="euler-pt" cx="${p.x(q[0])}" cy="${p.y(q[1])}" r="3.4"/>`;
+    }
+    g += `<line class="now" x1="${p.x(t)}" x2="${p.x(t)}" y1="${p.m.t}" y2="${p.m.t + p.ih}"/>`;
+    g += '</g>';
+    if(yIn(p, p.y(ks1))) g += `<text class="note" x="${p.x(2)}" y="${p.y(ks1) - 6}">k* = ${num(ks1)}</text>`;
+    if(st.shock){ const ks2 = M.steady(st.s2, a, L); if(yIn(p, p.y(ks2))) g += `<text class="note" x="${p.x(T_MAX) - 4}" y="${p.y(ks2) - 6}" text-anchor="end">new k* = ${num(ks2)}</text>`; }
+    const k = kNow();
+    g += `<circle class="pt" cx="${p.x(t)}" cy="${p.y(k)}" r="5.5"/>`;
+    const Ls = labelSide(p, p.x(t));
+    g += `<text class="note" x="${p.x(t) + Ls.d}" y="${p.y(k) + 18}" text-anchor="${Ls.a}">k = ${num(k)}</text>`;
+
+    const right = p.m.l + p.iw, bw = 90, bx = right - 34 - bw;
+    g += `<text class="note" x="${bx - 22}" y="17" text-anchor="end">k′</text>` +
+         `<text class="note" x="${bx - 5}" y="17" text-anchor="end">falling</text>` +
+         `<rect x="${bx}" y="9" width="${bw}" height="9" rx="2" fill="url(#so-g2)"/>` +
+         `<text class="note" x="${bx + bw + 5}" y="17">rising</text>`;
+    if(eu) g += `<line class="sol-main" x1="${p.m.l}" x2="${p.m.l + 18}" y1="13" y2="13"/><text class="note" x="${p.m.l + 24}" y="17">exact</text>` +
+                `<line class="euler" x1="${p.m.l + 70}" x2="${p.m.l + 88}" y1="13" y2="13"/><text class="note" x="${p.m.l + 94}" y="17">Euler, h = ${st.h}</text>`;
+    $('p2').setAttribute('aria-label', `Slope field of k prime over 100 years with the path from k zero ${num(k0)} approaching k star ${num(ks1)}${st.shock ? `, then the new k star ${num(M.steady(st.s2, a, L))} after year ${T_SHOCK}` : ''}.${eu ? ` Euler's method with step ${st.h} is overlaid.` : ''}`);
+    $('p2').innerHTML = g;
+  }
+
+  // ---- plot 3: golden rule ------------------------------------------------
+  function draw3(){
+    const {a, t} = st, L = lam(), s = sAt(t), S_HI = .95;
+    const peak = M.steadyConsumption(M.goldenRule(a), a, L), top = peak * 1.18;
+    const p = makeP(720, 250, {l:58, r:16, t:16, b:42}, [0, 1], [0, top]);
+    let g = `<defs>${clip('so-c3', p)}</defs>`;
+    g += axes(p, niceTicks(0, 1), niceTicks(0, top, 4), 's, saving rate', 'c*');
+    const pts = []; for(let i = 1; i <= 240; i++){ const x = S_HI * i / 240; pts.push([p.x(x), p.y(M.steadyConsumption(x, a, L))]); }
+    g += `<g clip-path="url(#so-c3)"><path class="curve" d="${poly([[p.x(0), p.y(0)], ...pts])}"/></g>`;
+    g += `<line class="guide" x1="${p.x(a)}" x2="${p.x(a)}" y1="${p.y(peak)}" y2="${p.y(0)}"/>` +
+         `<circle class="mark" cx="${p.x(a)}" cy="${p.y(peak)}" r="4.5"/>` +
+         `<text class="note" x="${p.x(a)}" y="${p.y(peak) - 10}" text-anchor="middle">golden rule s = α = ${num(a)}</text>`;
+    const marks = st.shock ? [[st.s, 'before'], [st.s2, 'after']] : [[s, '']];
+    for(const [sv, tag] of marks){
+      const c = M.steadyConsumption(sv, a, L), cls = sv === s ? 'pt' : 'mark';
+      g += `<circle class="${cls}" cx="${p.x(sv)}" cy="${p.y(c)}" r="5.5"/>`;
+      const Ls = labelSide(p, p.x(sv));
+      g += `<text class="note" x="${p.x(sv) + Ls.d}" y="${p.y(c) + 18}" text-anchor="${Ls.a}">${tag ? tag + ': ' : ''}c* = ${num(c, 3)}</text>`;
+    }
+    $('p3').setAttribute('aria-label', `Steady-state consumption against the saving rate: a hump with its maximum ${num(peak, 3)} at s equals alpha ${num(a)}. The current saving rate ${num(s)} gives ${num(M.steadyConsumption(s, a, L), 3)}.`);
+    $('p3').innerHTML = g;
+  }
+
+  // ---- wiring ---------------------------------------------------------------
+  function update(){
+    st.s = +$('in-s').value; st.a = +$('in-a').value; st.n = +$('in-n').value; st.d = +$('in-d').value;
+    st.k0 = +$('in-k').value; st.t = +$('in-t').value;
+    st.shock = $('in-shock').checked; st.s2 = +$('in-s2').value;
+    st.euler = $('in-euler').checked; st.h = +$('in-h').value;
+    $('out-s').textContent = num(st.s); $('out-a').textContent = num(st.a); $('out-n').textContent = num(st.n, 3);
+    $('out-d').textContent = num(st.d, 3); $('out-k').textContent = num(st.k0, 1); $('out-t').textContent = num(st.t, 1);
+    $('out-s2').textContent = num(st.s2);
+    $('in-s2').disabled = !st.shock; $('shock-group').classList.toggle('so-off', !st.shock);
+    $('in-h').disabled = !st.euler; $('euler-group').classList.toggle('so-off', !st.euler);
+
+    const L = lam(), s = sAt(st.t), ks = M.steady(s, st.a, L), k = kNow();
+    $('r-ks').textContent = num(ks); $('r-ys').textContent = num(M.output(ks, st.a));
+    $('r-cs').textContent = num(M.steadyConsumption(s, st.a, L), 3); $('r-gr').textContent = num(M.goldenRule(st.a));
+    $('r-hl').textContent = num(M.halfLife(st.a, L), 1) + ' yr';
+    $('r-k').textContent = num(k); $('r-g').textContent = pct(M.outputGrowth(k, s, st.a, L), 2) + ' / yr';
+    for(const row of document.querySelectorAll('#so-explorer [data-euler]')) row.hidden = !st.euler;
+    if(st.euler){
+      $('r-ef').textContent = num(M.eulerFactor(st.h, st.a, L), 2);
+      const ke = eulerAt(eulerPath(), st.t);
+      $('r-ee').textContent = Number.isFinite(ke) ? num(Math.abs(ke - k), 3) : 'stopped';
+    }
+    draw1(); draw2(); draw3();
+  }
+  let queued = false;
+  const schedule = () => { if(queued) return; queued = true; requestAnimationFrame(() => { queued = false; update(); }); };
+
+  // ---- playback: advance t; reduced motion jumps in discrete steps instead ----
+  let playing = false, last = 0;
+  const setPlaying = on => { playing = on; $('play').setAttribute('aria-pressed', String(on)); $('play').textContent = on ? 'Pause' : 'Play'; };
+  function frame(now){
+    if(!playing) return;
+    const dt = last ? Math.min(.1, (now - last) / 1000) : 0; last = now;
+    const tin = $('in-t'), next = Math.min(T_MAX, +tin.value + 12 * dt);
+    tin.value = next; update();
+    if(next >= T_MAX) setPlaying(false); else requestAnimationFrame(frame);
+  }
+  $('play').addEventListener('click', () => {
+    const tin = $('in-t');
+    if(reduceMotion.matches){ tin.value = +tin.value >= T_MAX ? 0 : Math.min(T_MAX, +tin.value + 10); update(); return; }
+    if(playing){ setPlaying(false); return; }
+    if(+tin.value >= T_MAX) tin.value = 0;
+    setPlaying(true); last = 0; requestAnimationFrame(frame);
+  });
+  for(const id of ['in-s', 'in-a', 'in-n', 'in-d', 'in-k', 'in-s2', 'in-t']) $(id).addEventListener('input', () => { setPlaying(false); schedule(); });
+  for(const id of ['in-shock', 'in-euler', 'in-h']) $(id).addEventListener('change', () => { setPlaying(false); schedule(); });
+  document.addEventListener('visibilitychange', () => { if(document.hidden) setPlaying(false); });
+  for(const b of document.querySelectorAll('#so-explorer [data-preset]')) b.addEventListener('click', () => {
+    const P = PRESETS[b.dataset.preset];
+    $('in-s').value = P.s; $('in-a').value = P.a; $('in-n').value = P.n; $('in-d').value = P.d; $('in-k').value = P.k;
+    $('in-shock').checked = P.shock; if(P.s2) $('in-s2').value = P.s2;
+    $('in-euler').checked = P.euler; if(P.h) $('in-h').value = P.h;
+    $('in-t').value = 0; setPlaying(false); update();
+  });
+  update();
+})();
+</script>
+</main>
+<nav class="site-example-nav" aria-label="Student project navigation"><a href="../bass-diffusion/"><small>Previous student project</small>← Bass diffusion of a new product</a><a class="site-all-examples" href="../../#student-labs">All student projects</a><span></span></nav>
+    <footer class="site-footer"><span>University of Washington · Autumn 2026</span><div><a href="https://shzhang3.github.io/#teaching">Shiheng Zhang · Teaching</a><a href="https://github.com/shzhang3/amath351-lab" target="_blank" rel="noopener">Contribute on GitHub ↗</a></div></footer>
+  </div>
+
+</body>
+</html>
